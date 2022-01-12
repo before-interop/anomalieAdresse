@@ -1,0 +1,15 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+Customer -> "AnomalieIPE API" : **POST /anomalieIpe** Création de l'anomalie souhaitée
+"AnomalieIPE API" --> Customer : **HTTP 201** Identifiant de l'anomalie
+... ...
+Customer -> "AnomalieIPE API" : **GET /anomalieIpe/{id}** Récupération de l'anomalie\n et de ses informations
+"AnomalieIPE API" --> Customer : **HTTP 200** Anomalie
+... ...
+Customer -> "AnomalieIPE API" : **GET /anomalieIpe?type=Creation** Recherche des anomalieIpe de Creation
+"AnomalieIPE API" --> Customer : **HTTP 200** Liste des tickets
+
+@enduml

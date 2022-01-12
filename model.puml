@@ -1,0 +1,92 @@
+@startuml
+hide circle
+hide methods
+hide stereotype
+show <<Enumeration>> stereotype
+skinparam class {
+   BackgroundColor<<Enumeration>> #E6F5F7
+   BackgroundColor<<Ref>> #FFFFE0
+   BackgroundColor<<Pivot>> #FFFFFFF
+   BackgroundColor #FCF2E3
+}
+
+class Anomalie <<Pivot>> {
+    id: String
+    href: String
+    commentaire_oc: String
+    commande_client_final_oc: String
+    creationDate: Datetime
+    type: String
+}
+
+class Creation {
+    adresse: Adresse
+}
+Anomalie <|-- Creation
+
+class Modification {
+    adresseInitiale: AdresseRef
+    adresseCible: Adresse
+}
+Anomalie <|-- Modification
+
+class Adresse {
+    code_adresse_immeuble: String
+    code_insee_immeuble: String
+    code_voie_rivoli_immeuble: String
+    numero_voie_immeuble: integer
+    complement_numero_voie_immeuble: String
+    type_voie_immeuble: String
+    nom_voie_immeuble: String
+    code_postal_immeuble: String
+    commune_immeuble: String
+    batiment_immeuble: String
+    nombre_logements_adresse_ipe: integer
+    type_immeuble: String
+    type_projection_geographique: String
+    coordonnée_immeuble_x: number
+    coordonnée_immeuble_y: number
+    immeuble_neuf: integer
+    reference_pm: String
+    code_ban: String
+    code_hexacle_voie: String
+    information_complementaire_adresse: String
+}
+
+Adresse <|-- AdresseComplementsSpecifiques
+
+class AdresseRef {
+    identifiant_immeuble: String
+}
+note left: Seul l'identifiant d'immeuble\n est obligatoire sur \n l'adresse initiale
+
+
+Creation *-- "1" Adresse
+
+class CreationImmeuble {
+adresse: AdresseComplementsSpecifiques
+}
+CreationImmeuble *-- "1" AdresseComplementsSpecifiques
+
+note top: Une creation d'imb neuf aura une adresse de creation \net des complements
+Creation <|-- CreationImmeuble
+
+Modification *-- "1" Adresse
+Modification *-- "1" AdresseRef
+
+class AdresseComplementsSpecifiques {
+    promoteur_immeuble: String
+    organisme_bailleur: String
+    adresse_bailleur: String
+    cp_bailleur: Integer
+    ville_bailleur: String
+    tel_bailleur: String
+    signature_convention: String
+    date_signature_convention: Datetime
+    reference_pbo: String
+    adresse_pm: String
+    coordonnee_pm_x: number
+    coordonnee_pm_y: number
+}
+
+@enduml

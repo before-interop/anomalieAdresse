@@ -1,0 +1,520 @@
+openapi: 3.0.0
+info:
+  title: Interop Anomalie IPE
+  version: 0.0.2
+tags:
+  - name: anomalieIpe
+servers:
+  - url: https://serverRoot/anomalieIpe/v1
+paths:
+  /anomalieIpe:
+    get:
+      operationId: listAnomalieIpe
+      summary: List or find AnomalieIpe objects
+      description: This operation list or find AnomalieIpe entities
+      tags:
+        - anomalieIpe
+      parameters:
+        - name: fields
+          description: Comma-separated properties to be provided in response
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: type
+          in: query
+          description: Filter type
+          schema:
+            type: string
+          style: form
+        - name: type[]
+          in: query
+          description: Filter type[]
+          schema:
+            type: array
+            items:
+              type: string
+              description: Filter status[]
+          style: form
+        - name: creationDate[before]
+          in: query
+          description: Filter creationDate[before]
+          schema:
+            type: string
+          style: form
+        - name: creationDate[strictly_before]
+          in: query
+          description: Filter creationDate[strictly_before]
+          schema:
+            type: string
+          style: form
+        - name: creationDate[after]
+          in: query
+          description: Filter creationDate[after]
+          schema:
+            type: string
+          style: form
+        - name: creationDate[strictly_after]
+          in: query
+          description: Filter creationDate[strictly_after]
+          schema:
+            type: string
+          style: form
+        - name: offset
+          description: Requested index for start of resources to be provided in response
+          required: false
+          in: query
+          schema:
+            type: integer
+        - name: limit
+          description: Requested number of resources to be provided in response
+          required: false
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Success
+          headers:
+            X-Result-Count:
+              description: Actual number of items returned in the response body
+              schema:
+                type: integer
+            X-Total-Count:
+              description: Total number of items matching criteria
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Anomalie_Get"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "405":
+          description: Method Not allowed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createAnomalieIpe
+      summary: Creates an AnomalieIpe
+      description: This operation creates a AnomalieIpe entity.
+      tags:
+        - anomalieIpe
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/Creation"
+                - $ref: "#/components/schemas/CreationImmeubleNeuf"
+                - $ref: "#/components/schemas/Modification"
+        description: The AnomalieIpe to be created
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Anomalie_Get"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "405":
+          description: Method Not allowed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  "/anomalieIpe/{id}":
+    get:
+      operationId: retrieveAnomalie
+      summary: Retrieves a Anomalie by ID
+      description: This operation retrieves a Anomalie entity. Attribute selection is
+        enabled for all first level attributes.
+      tags:
+        - AnomalieIpe
+      parameters:
+        - name: id
+          description: Identifier of the Anomalie
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: fields
+          description: Comma-separated properties to provide in response
+          required: false
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Anomalie_Get"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "405":
+          description: Method Not allowed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    Anomalie:
+      type: object
+      properties:
+        commentaire_oc:
+          type: string
+        commande_client_final_oc:
+          type: string
+          maxLength: 1
+          description: Si O, signalement suite à une demande client final, avec ou sans commande à l OI.\nObligatoire
+          enum: [O,N]
+        type:
+          type: string
+        creationDate:
+          type: string
+          format: date-time
+      discriminator:
+        propertyName: type
+
+    Anomalie_Get:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/Creation'
+        - $ref: '#/components/schemas/CreationImmeubleNeuf'
+        - $ref: '#/components/schemas/Modification'
+      properties:
+         id:
+           type: string
+           description: Unique-Identifier for this Anomalie
+         href:
+           type: string
+           description: URL serving as reference for this Anomalie
+      required:
+        - id
+        - href
+
+    Creation:
+      allOf:
+        - $ref: '#/components/schemas/Anomalie'
+      type: object
+      description: AnomalieIpe posted by customer
+      properties:
+        adresse:
+          $ref: "#/components/schemas/Adresse"
+
+    CreationImmeubleNeuf:
+      allOf:
+        - $ref: '#/components/schemas/Creation'
+      type: object
+      properties:
+        adresse:
+          $ref: "#/components/schemas/AdresseComplementsSpecifiques"
+
+    Modification:
+      allOf:
+        - $ref: '#/components/schemas/Anomalie'
+      type: object
+      description: L'adresse cible peut décrire une modification simple d'adresse, ou avec compléments
+      properties:
+        adresseInitiale:
+          $ref: "#/components/schemas/AdresseRef"
+        adresseCible:
+          $ref: "#/components/schemas/Adresse"
+
+    Adresse:
+      type: object
+      properties:
+        code_adresse_immeuble:
+          type: string
+          maxLength: 10
+          description: Code hexacle numero.
+        code_insee_immeuble:
+          type: string
+          maxLength: 5
+          description: Code Insee Immeuble.
+        code_voie_rivoli_immeuble:
+          type: string
+          maxLength: 4
+          description: Code Rivoli Immeuble.
+        numero_voie_immeuble:
+          type: integer
+          minimum: 0
+          maximum: 99999
+          description: Numero Voie Immeuble.
+        complement_numero_voie_immeuble:
+          type: string
+          maxLength: 2
+          description: Complement du Numero Voie Immeuble.
+        type_voie_immeuble:
+          type: string
+          maxLength: 255
+          description: Type Voie Immeuble.
+        nom_voie_immeuble:
+          type: string
+          maxLength: 255
+          description: Nom Voie Immeuble.
+        code_postal_immeuble:
+          type: integer
+          maxLength: 5
+          description: Code Postal Immeuble.
+        commune_immeuble:
+          type: string
+          maxLength: 255
+          description: Commune Immeuble.
+        batiment_immeuble:
+          type: string
+          maxLength: 255
+          description: Batiment Immeuble.
+        nombre_logements_adresse_ipe:
+          type: integer
+          description: Nombre Locaux Immeuble.
+        type_immeuble:
+          type: string
+          maxLength: 20
+          description: Type Immeuble.
+          enum: [PAVILLON,IMMEUBLE,LOTISSEMENT]
+        type_projection_geographique:
+          type: string
+          maxLength: 10
+          description: Type Projection geographique.\nExplication des valeurs
+            - RGF93 (Lambert93) =   métropole
+            - WGS84 (UTM 20N) =Guadeloupe, Martinique
+            - RGFG95 (UTM 22N) = Guyane
+            - RGR92 (UTM 40S) = Réunion
+            - RGM 04 (UTM 38 S) = Mayotte
+            - RGSPM 06 (UTM 21 N) = Saint Pierre et Miquelon
+          enum: [RGF93,WGS84,RGFG95,RGR92,RGM,RGSPM]
+        coordonnée_immeuble_x:
+          type: number
+          description: Longitude ou coordonnee X Immeuble.
+        coordonnée_immeuble_y:
+          type: number
+          description: Latitude ou coordonnee Y Immeuble.
+        immeuble_neuf:
+          type: integer
+          description: Caractere neuf Immeuble.\nObligatoire\nA remplir avec la valeur cible  si type_demande = CREATION, sinon 0\nExplication des valeurs 0=Ne sait pas ; 1=Oui (avec cuivre) ; 2=Oui (ZLIN=sans cuivre) ; 3=Non
+          enum: [0,1,2,3]
+          default: 0
+        reference_pm:
+          type: string
+          maxLength: 20
+          description: PM Immmeuble.
+        code_ban:
+          type: string
+          maxLength: 30
+          description: Code BAN Immeuble.
+        code_hexacle_voie:
+          type: string
+          maxLength: 10
+          description: Code Hexacle du 0 de la voie.
+        information_complementaire_adresse:
+          type: string
+          maxLength: 255
+          description: ligne 5 du SNA par exemple.
+        "@type":
+           type: string
+      discriminator:
+        propertyName: "@type"
+
+    AdresseRef:
+      type: object
+      properties:
+        identifiant_immeuble:
+          type: string
+          maxLength: 10
+
+    AdresseComplementsSpecifiques:
+      allOf:
+        - $ref: "#/components/schemas/Adresse"
+        - type: object
+          properties:
+            promoteur_immeuble:
+              type: string
+              maxLength: 255
+              description: Informations a fournir si possible pour les immeubles neufs.
+            organisme_bailleur:
+              type: string
+              maxLength: 255
+              description: Informations a fournir si possible pour les immeubles neufs.
+            adresse_bailleur:
+              type: string
+              maxLength: 255
+              description: Informations a fournir si possible pour les immeubles neufs.
+            cp_bailleur:
+              type: integer
+              maxLength: 5
+              description: Informations a fournir si possible pour les immeubles neufs.
+            ville_bailleur:
+              type: string
+              maxLength: 255
+              description: Informations a fournir si possible pour les immeubles neufs.
+            tel_bailleur:
+              type: string
+              maxLength: 255
+              description: Informations a fournir si possible pour les immeubles neufs.
+            signature_convention:
+              type: string
+              maxLength: 255
+              description: Informations a fournir si possible pour les immeubles neufs.
+            date_signature_convention:
+              type: string
+              format: date
+              maxLength: 255
+              description: Informations a fournir si possible pour les immeubles neufs.
+            reference_pbo:
+              type: string
+              maxLength: 255
+              description: Informations a fournir si possible pour les immeubles neufs.
+            adresse_pm:
+              type: string
+              maxLength: 255
+              description: Informations a fournir si possible pour les immeubles neufs.
+            coordonnee_pm_x:
+              type: number
+              description: Informations a fournir si possible pour les immeubles neufs.
+            coordonnee_pm_y:
+              type: number
+              description: Informations a fournir si possible pour les immeubles neufs.
+
+    Error:
+      description: Used when an API throws an Error, typically with a HTTP error
+        response-code (3xx, 4xx, 5xx)
+      type: object
+      required:
+        - code
+        - reason
+      properties:
+        code:
+          type: string
+          description: Application relevant detail, defined in the API or a common list.
+        reason:
+          type: string
+          description: Explanation of the reason for the error which can be shown to a
+            client user.
+        message:
+          type: string
+          description: More details and corrective actions related to the error which can
+            be shown to a client user.
+        status:
+          type: string
+          description: HTTP Error code extension
+        referenceError:
+          type: string
+          format: uri
+          description: URI of documentation describing the error.
+        "@baseType":
+          type: string
+          description: When sub-classing, this defines the super-class.
+        "@schemaLocation":
+          type: string
+          format: uri
+          description: A URI to a JSON-Schema file that defines additional attributes and
+            relationships
+        "@type":
+          type: string
+          description: When sub-classing, this defines the sub-class entity name.
