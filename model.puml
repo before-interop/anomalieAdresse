@@ -63,13 +63,13 @@ note left: Seul l'identifiant d'immeuble\n est obligatoire sur \n l'adresse init
 
 Creation *-- "1" Adresse
 
-class CreationImmeuble {
+class CreationImmeubleNeuf {
 adresse: AdresseComplementsSpecifiques
 }
-CreationImmeuble *-- "1" AdresseComplementsSpecifiques
+CreationImmeubleNeuf *-- "1" AdresseComplementsSpecifiques
 
 note top: Une creation d'imb neuf aura une adresse de creation \net des complements
-Creation <|-- CreationImmeuble
+Creation <|-- CreationImmeubleNeuf
 
 Modification *-- "1" Adresse
 Modification *-- "1" AdresseRef

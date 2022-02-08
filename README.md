@@ -2,11 +2,15 @@
 
 ## Modèle de données
 
-![](model.png)
+![](image/model.png)
 
 ## Description d'une séquence d'appels
 
-![](sequence.png)
+![](image/sequence.png)
+
+## Description du cycle de vie d'un ticket (API Ticketing) rattaché à une anomalie d'adresse
+
+![](image/lifecycle.png)
 
 ---
 **TODO**
