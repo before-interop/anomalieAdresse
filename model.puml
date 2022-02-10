@@ -25,8 +25,8 @@ class Creation {
 Anomalie <|-- Creation
 
 class Modification {
-    adresseInitiale: AdresseRef
-    adresseCible: Adresse
+    adresse_initiale: AdresseRef
+    adresse_cible: Adresse
 }
 Anomalie <|-- Modification
 
