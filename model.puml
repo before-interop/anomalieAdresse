@@ -4,10 +4,12 @@ hide methods
 hide stereotype
 show <<Enumeration>> stereotype
 skinparam class {
-   BackgroundColor<<Enumeration>> #E6F5F7
-   BackgroundColor<<Ref>> #FFFFE0
+   BackgroundColor<<Enumeration>> #Thistle
+   BackgroundColor<<Ref>> #LightGrey
    BackgroundColor<<Pivot>> #FFFFFFF
-   BackgroundColor #FCF2E3
+   BackgroundColor #Grey
+   BorderColor #Black
+   ArrowColor #Black
 }
 
 class Anomalie <<Pivot>> {
@@ -19,74 +21,84 @@ class Anomalie <<Pivot>> {
     type: String
 }
 
-class Creation {
+class Creation <<Pivot>> {
     adresse: Adresse
 }
 Anomalie <|-- Creation
+Creation *-- "1" Adresse
 
-class Modification {
+class CreationImmeubleNeuf <<Pivot>> {
+    adresse: AdresseComplementsSpecifiques
+}
+note left:  Une creation d'imb neuf aura une adresse de creation \net des complements
+CreationImmeubleNeuf *-- "1" AdresseComplementsSpecifiques
+Creation <|-- CreationImmeubleNeuf
+
+class Modification <<Pivot>> {
     adresse_initiale: AdresseRef
     adresse_cible: Adresse
 }
 Anomalie <|-- Modification
+Modification *-- "1" Adresse
+Modification *-- "1" AdresseRef
 
 class Adresse {
-    code_adresse_immeuble: String
-    code_insee_immeuble: String
-    code_voie_rivoli_immeuble: String
-    numero_voie_immeuble: integer
-    complement_numero_voie_immeuble: String
-    type_voie_immeuble: String
-    nom_voie_immeuble: String
-    code_postal_immeuble: String
-    commune_immeuble: String
-    batiment_immeuble: String
+    code_adresse: String
+    code_insee: String
+    code_voie_rivoli: String
+    numero_voie: integer
+    complement_numero_voie: String
+    type_voie: String
+    nom_voie: String
+    code_postal: String
+    commune: String
+    batiment: String
     nombre_logements_adresse_ipe: integer
     type_immeuble: String
     type_projection_geographique: String
-    coordonnée_immeuble_x: number
-    coordonnée_immeuble_y: number
+    coordonnees: CoordonnesXY
     immeuble_neuf: integer
     reference_pm: String
     code_ban: String
     code_hexacle_voie: String
     information_complementaire_adresse: String
 }
-
-Adresse <|-- AdresseComplementsSpecifiques
+Adresse *--"1" CoordonnesXY
 
 class AdresseRef {
     identifiant_immeuble: String
 }
-note left: Seul l'identifiant d'immeuble\n est obligatoire sur \n l'adresse initiale
-
-
-Creation *-- "1" Adresse
-
-class CreationImmeubleNeuf {
-adresse: AdresseComplementsSpecifiques
-}
-CreationImmeubleNeuf *-- "1" AdresseComplementsSpecifiques
-
-note top: Une creation d'imb neuf aura une adresse de creation \net des complements
-Creation <|-- CreationImmeubleNeuf
-
-Modification *-- "1" Adresse
-Modification *-- "1" AdresseRef
+note right of AdresseRef: Seul l'identifiant d'immeuble\n est obligatoire sur \n l'adresse initiale
 
 class AdresseComplementsSpecifiques {
-    promoteur_immeuble: String
+    promoteur: String
     organisme_bailleur: String
     adresse_bailleur: String
     cp_bailleur: Integer
     ville_bailleur: String
     tel_bailleur: String
+    siret_bailleur: String
     signature_convention: String
     date_signature_convention: Datetime
     reference_pbo: String
     adresse_pm: String
-    coordonnee_pm_x: number
-    coordonnee_pm_y: number
+    coordonnees_pm: CoordonnesXY
 }
+Adresse <|-- AdresseComplementsSpecifiques
+AdresseComplementsSpecifiques *--"1" CoordonnesXY
+
+class CoordonnesXY {
+    x: String
+    y: String
+    type: projection
+}
+
+legend
+    |= Color |= Description |
+    |<#Thistle>| Enumération de constantes|
+    |<#FFFFFF>| Ressource exposée par l'API |
+    |<#LightGrey>| Objet pointant vers une API (via id et href) |
+    |<#Grey>| Objet propre à l'API  |
+endlegend
 
 @enduml

@@ -1,19 +1,19 @@
 openapi: 3.0.0
 info:
-  title: Interop Anomalie IPE
-  version: 0.0.2
+  title: Interop Anomalie Adresse
+  version: 1.0.0
 tags:
-  - name: anomalieIpe
+  - name: AnomalieAdresse
 servers:
-  - url: https://serverRoot/anomalieIpe/v1
+  - url: https://serverRoot/api/anomalieAdresse/v1
 paths:
-  /anomalieIpe:
+  /anomalieAdresse:
     get:
-      operationId: listAnomalieIpe
-      summary: List or find AnomalieIpe objects
-      description: This operation list or find AnomalieIpe entities
+      operationId: listAnomalie
+      summary: List or find Anomalie objects
+      description: This operation list or find Anomalie entities
       tags:
-        - anomalieIpe
+        - AnomalieAdresse
       parameters:
         - name: fields
           description: Comma-separated properties to be provided in response
@@ -21,42 +21,39 @@ paths:
           in: query
           schema:
             type: string
-        - name: type
+        - name: "@type"
           in: query
           description: Filter type
           schema:
             type: string
           style: form
-        - name: type[]
+        - name: creationDate
           in: query
-          description: Filter type[]
-          schema:
-            type: array
-            items:
-              type: string
-              description: Filter status[]
-          style: form
-        - name: creationDate[before]
-          in: query
-          description: Filter creationDate[before]
+          description: Filter creationDate
           schema:
             type: string
           style: form
-        - name: creationDate[strictly_before]
+        - name: creationDate.lte
           in: query
-          description: Filter creationDate[strictly_before]
+          description: Filter creationDate before
           schema:
             type: string
           style: form
-        - name: creationDate[after]
+        - name: creationDate.lt
           in: query
-          description: Filter creationDate[after]
+          description: Filter creationDate strictly_before
           schema:
             type: string
           style: form
-        - name: creationDate[strictly_after]
+        - name: creationDate.gte
           in: query
-          description: Filter creationDate[strictly_after]
+          description: Filter creationDate after
+          schema:
+            type: string
+          style: form
+        - name: creationDate.gt
+          in: query
+          description: Filter creationDate strictly_after
           schema:
             type: string
           style: form
@@ -89,7 +86,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Anomalie_Get"
+                  $ref: "#/components/schemas/Anomalie"
         "400":
           description: Bad Request
           content:
@@ -120,12 +117,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        "409":
-          description: Conflict
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
         "500":
           description: Internal Server Error
           content:
@@ -133,28 +124,30 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     post:
-      operationId: createAnomalieIpe
-      summary: Creates an AnomalieIpe
-      description: This operation creates a AnomalieIpe entity.
+      operationId: createAnomalie
+      summary: Creates an Anomalie
+      description: This operation creates a Anomalie entity.
       tags:
-        - anomalieIpe
+        - AnomalieAdresse
       requestBody:
         content:
           application/json:
             schema:
-              oneOf:
-                - $ref: "#/components/schemas/Creation"
-                - $ref: "#/components/schemas/CreationImmeubleNeuf"
-                - $ref: "#/components/schemas/Modification"
-        description: The AnomalieIpe to be created
+              $ref: "#/components/schemas/Anomalie-Create"
+        description: The Anomalie to be created
         required: true
       responses:
         "201":
           description: Created
+          headers:
+            Location:
+              schema:
+                type: string
+              description: "URI of the newly created resource"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Anomalie_Get"
+                $ref: "#/components/schemas/Anomalie"
         "400":
           description: Bad Request
           content:
@@ -179,26 +172,20 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        "409":
-          description: Conflict
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
         "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  "/anomalieIpe/{id}":
+  "/anomalieAdresse/{id}":
     get:
       operationId: retrieveAnomalie
       summary: Retrieves a Anomalie by ID
       description: This operation retrieves a Anomalie entity. Attribute selection is
         enabled for all first level attributes.
       tags:
-        - AnomalieIpe
+        - AnomalieAdresse
       parameters:
         - name: id
           description: Identifier of the Anomalie
@@ -218,7 +205,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Anomalie_Get"
+                $ref: "#/components/schemas/Anomalie"
         "400":
           description: Bad Request
           content:
@@ -249,12 +236,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        "409":
-          description: Conflict
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
         "500":
           description: Internal Server Error
           content:
@@ -263,30 +244,27 @@ paths:
                 $ref: "#/components/schemas/Error"
 components:
   schemas:
-    Anomalie:
+    Anomalie-Create:
       type: object
       properties:
         commentaire_oc:
           type: string
         commande_client_final_oc:
-          type: string
-          maxLength: 1
-          description: Si O, signalement suite à une demande client final, avec ou sans commande à l OI.\nObligatoire
-          enum: [O,N]
-        type:
+          type: boolean
+          description: Si 1, signalement suite à une demande client final
+        "@type":
           type: string
         creationDate:
           type: string
           format: date-time
       discriminator:
-        propertyName: type
+        propertyName: "@type"
 
-    Anomalie_Get:
+    Anomalie:
       type: object
-      oneOf:
-        - $ref: '#/components/schemas/Creation'
-        - $ref: '#/components/schemas/CreationImmeubleNeuf'
-        - $ref: '#/components/schemas/Modification'
+      required:
+        - id
+        - href
       properties:
          id:
            type: string
@@ -294,83 +272,131 @@ components:
          href:
            type: string
            description: URL serving as reference for this Anomalie
-      required:
-        - id
-        - href
+         commentaire_oc:
+           type: string
+         commande_client_final_oc:
+           type: boolean
+           description: Si 1, signalement suite à une demande client final
+         "@type":
+           type: string
+         creationDate:
+           type: string
+           format: date-time
+      discriminator:
+        propertyName: "@type"
 
     Creation:
-      allOf:
-        - $ref: '#/components/schemas/Anomalie'
       type: object
-      description: AnomalieIpe posted by customer
+      description: L'adresse cible correspond à une adresse simple à créer
+      required:
+        - "@type"
       properties:
+        "@type":
+          type: string
         adresse:
           $ref: "#/components/schemas/Adresse"
+
+    Creation-Get:
+      allOf:
+        - $ref: "#/components/schemas/Anomalie"
+        - $ref: "#/components/schemas/Creation"
+
+    Creation-Create:
+      allOf:
+        - $ref: "#/components/schemas/Anomalie-Create"
+        - $ref: "#/components/schemas/Creation"
 
     CreationImmeubleNeuf:
       allOf:
         - $ref: '#/components/schemas/Creation'
-      type: object
-      properties:
-        adresse:
-          $ref: "#/components/schemas/AdresseComplementsSpecifiques"
+        - type: object
+          description: L'adresse cible correspond à un immeuble neuf à créer
+          required:
+            - "@type"
+          properties:
+            "@type":
+              type: string
+            adresse:
+              $ref: "#/components/schemas/AdresseComplementsSpecifiques"
+
+    CreationImmeubleNeuf-Get:
+      allOf:
+        - $ref: "#/components/schemas/Anomalie"
+        - $ref: "#/components/schemas/CreationImmeubleNeuf"
+
+    CreationImmeubleNeuf-Create:
+      allOf:
+        - $ref: "#/components/schemas/Anomalie-Create"
+        - $ref: "#/components/schemas/CreationImmeubleNeuf"
 
     Modification:
-      allOf:
-        - $ref: '#/components/schemas/Anomalie'
       type: object
       description: L'adresse cible peut décrire une modification simple d'adresse, ou avec compléments
+      required:
+        - "@type"
       properties:
-        adresseInitiale:
+        "@type":
+          type: string
+        adresse_initiale:
           $ref: "#/components/schemas/AdresseRef"
-        adresseCible:
+        adresse_cible:
           $ref: "#/components/schemas/Adresse"
+
+    Modification-Get:
+      allOf:
+        - $ref: "#/components/schemas/Anomalie"
+        - $ref: "#/components/schemas/Modification"
+
+    Modification-Create:
+      allOf:
+        - $ref: "#/components/schemas/Anomalie-Create"
+        - $ref: "#/components/schemas/Modification"
 
     Adresse:
       type: object
       properties:
-        code_adresse_immeuble:
+        code_adresse:
           type: string
           maxLength: 10
           description: Code hexacle numero.
-        code_insee_immeuble:
+        code_insee:
           type: string
           maxLength: 5
           description: Code Insee Immeuble.
-        code_voie_rivoli_immeuble:
+        code_voie_rivoli:
           type: string
           maxLength: 4
           description: Code Rivoli Immeuble.
-        numero_voie_immeuble:
+        numero_voie:
           type: integer
           minimum: 0
           maximum: 99999
           description: Numero Voie Immeuble.
-        complement_numero_voie_immeuble:
+        complement_numero_voie:
           type: string
           maxLength: 2
           description: Complement du Numero Voie Immeuble.
-        type_voie_immeuble:
+        type_voie:
           type: string
           maxLength: 255
           description: Type Voie Immeuble.
-        nom_voie_immeuble:
+        nom_voie:
           type: string
           maxLength: 255
           description: Nom Voie Immeuble.
-        code_postal_immeuble:
-          type: integer
+        code_postal:
+          type: string
           maxLength: 5
           description: Code Postal Immeuble.
-        commune_immeuble:
+        commune:
           type: string
           maxLength: 255
           description: Commune Immeuble.
-        batiment_immeuble:
+        batiment:
           type: string
           maxLength: 255
           description: Batiment Immeuble.
-        nombre_logements_adresse_ipe:
+        nombre_logements:
           type: integer
           description: Nombre Locaux Immeuble.
         type_immeuble:
@@ -378,23 +404,8 @@ components:
           maxLength: 20
           description: Type Immeuble.
           enum: [PAVILLON,IMMEUBLE,LOTISSEMENT]
-        type_projection_geographique:
-          type: string
-          maxLength: 10
-          description: Type Projection geographique.\nExplication des valeurs
-            - RGF93 (Lambert93) =   métropole
-            - WGS84 (UTM 20N) =Guadeloupe, Martinique
-            - RGFG95 (UTM 22N) = Guyane
-            - RGR92 (UTM 40S) = Réunion
-            - RGM 04 (UTM 38 S) = Mayotte
-            - RGSPM 06 (UTM 21 N) = Saint Pierre et Miquelon
-          enum: [RGF93,WGS84,RGFG95,RGR92,RGM,RGSPM]
-        coordonnée_immeuble_x:
-          type: number
-          description: Longitude ou coordonnee X Immeuble.
-        coordonnée_immeuble_y:
-          type: number
-          description: Latitude ou coordonnee Y Immeuble.
+        coordonnees:
+          $ref: "#/components/schemas/CoordonnesXY"
         immeuble_neuf:
           type: integer
           description: Caractere neuf Immeuble.\nObligatoire\nA remplir avec la valeur cible  si type_demande = CREATION, sinon 0\nExplication des valeurs 0=Ne sait pas ; 1=Oui (avec cuivre) ; 2=Oui (ZLIN=sans cuivre) ; 3=Non
@@ -412,7 +423,7 @@ components:
           type: string
           maxLength: 10
           description: Code Hexacle du 0 de la voie.
-        information_complementaire_adresse:
+        information_complementaire:
           type: string
           maxLength: 255
           description: ligne 5 du SNA par exemple.
@@ -426,14 +437,14 @@ components:
       properties:
         identifiant_immeuble:
           type: string
-          maxLength: 10
+          maxLength: 30
 
     AdresseComplementsSpecifiques:
       allOf:
         - $ref: "#/components/schemas/Adresse"
         - type: object
           properties:
-            promoteur_immeuble:
+            promoteur:
               type: string
               maxLength: 255
               description: Informations a fournir si possible pour les immeubles neufs.
@@ -457,6 +468,10 @@ components:
               type: string
               maxLength: 255
               description: Informations a fournir si possible pour les immeubles neufs.
+            siret_bailleur:
+              type: string
+              maxLength: 14
+              description: Siret du bailleur à fournir si possible pour les immeubles neufs.
             signature_convention:
               type: string
               maxLength: 255
@@ -474,12 +489,32 @@ components:
               type: string
               maxLength: 255
               description: Informations a fournir si possible pour les immeubles neufs.
-            coordonnee_pm_x:
-              type: number
-              description: Informations a fournir si possible pour les immeubles neufs.
-            coordonnee_pm_y:
-              type: number
-              description: Informations a fournir si possible pour les immeubles neufs.
+            coordonnees_pm:
+              $ref: "#/components/schemas/CoordonnesXY"
+
+    CoordonnesXY:
+      required:
+        - x
+        - y
+        - projection
+      type: "object"
+      description: Coordonnées géographiques avec le type de projection
+      properties:
+        x:
+          type: number
+        y:
+          type: number
+        projection:
+          type: string
+          maxLength: 10
+          description: Type Projection geographique.\nExplication des valeurs
+            - RGF93 (Lambert93) =   métropole
+            - WGS84 (UTM 20N) =Guadeloupe, Martinique
+            - RGFG95 (UTM 22N) = Guyane
+            - RGR92 (UTM 40S) = Réunion
+            - RGM 04 (UTM 38 S) = Mayotte
+            - RGSPM 06 (UTM 21 N) = Saint Pierre et Miquelon
+          enum: [RGF93,WGS84,RGFG95,RGR92,RGM,RGSPM]
 
     Error:
       description: Used when an API throws an Error, typically with a HTTP error

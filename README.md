@@ -12,9 +12,3 @@
 
 ![](image/lifecycle.png)
 
----
-**TODO**
-
-Ajouter les RG fonctionnelles qui ne peuvent être décrites dans l'API ici
-
----
