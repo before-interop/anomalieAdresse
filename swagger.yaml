@@ -259,6 +259,14 @@ components:
           format: date-time
       discriminator:
         propertyName: "@type"
+        mapping:
+          creation: '#/components/schemas/Creation-Create'
+          modification: '#/components/schemas/Modification-Create'
+          creationImmeubleNeuf: '#/components/schemas/CreationImmeubleNeuf-Create'
+          anomalieEnMasse: '#/components/schemas/AnomalieEnMasse-Create'
+
+
+
 
     Anomalie:
       type: object
@@ -279,11 +287,16 @@ components:
            description: Si 1, signalement suite à une demande client final
          "@type":
            type: string
-         creationDate:
+         creation_date:
            type: string
            format: date-time
       discriminator:
         propertyName: "@type"
+        mapping:
+          creation: '#/components/schemas/Creation-Get'
+          modification: '#/components/schemas/Modification-Get'
+          creationImmeubleNeuf: '#/components/schemas/CreationImmeubleNeuf-Get'
+          anomalieEnMasse: '#/components/schemas/AnomalieEnMasse-Get'
 
     Creation:
       type: object
@@ -492,6 +505,29 @@ components:
             coordonnees_pm:
               $ref: "#/components/schemas/CoordonnesXY"
 
+    AnomalieEnMasse:
+      type: object
+      properties:
+        "@type":
+          type: string
+        champ_anomalie:
+          type: string
+        adresses_initiales:
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/AdresseRef"
+      required:
+        - "@type"
+        - "champ_anomalie"
+    AnomalieEnMasse-Get:
+      allOf:
+        - $ref: "#/components/schemas/Anomalie"
+        - $ref: "#/components/schemas/AnomalieEnMasse"
+    AnomalieEnMasse-Create:
+      allOf:
+        - $ref: "#/components/schemas/Anomalie-Create"
+        - $ref: "#/components/schemas/AnomalieEnMasse"
     CoordonnesXY:
       required:
         - x
