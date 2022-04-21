@@ -510,8 +510,11 @@ components:
       properties:
         "@type":
           type: string
-        champ_anomalie:
-          type: string
+        champs_anomalie:
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/ChampAdresse"
         adresses_initiales:
           type: array
           minItems: 1
@@ -552,6 +555,36 @@ components:
             - RGSPM 06 (UTM 21 N) = Saint Pierre et Miquelon
           enum: [RGF93,WGS84,RGFG95,RGR92,RGM,RGSPM]
 
+    ChampAdresse:
+      type: "string"
+      enum:
+        - "code_adresse"
+        - "code_insee"
+        - "code_voie_rivoli"
+        - "numero_voie"
+        - "complement_numero_voie"
+        - "type_voie"
+        - "nom_voie"
+        - "code_postal"
+        - "batiment"
+        - "nombre_logements"
+        - "type_immeuble"
+        - "coordonnees"
+        - "immeuble_neuf"
+        - "reference_pm"
+        - "code_ban"
+        - "code_hexacle_voie"
+        - "information_complementaire"
+        - "promoteur"
+        - "organisme_bailleur"
+        - "adresse_bailleur"
+        - "cp_bailleur"
+        - "ville_bailleur"
+        - "tel_bailleur"
+        - "siret_bailleur"
+        - "signature_convention"
+        - "date_signature_convention"
+        - "reference_pbo"
     Error:
       description: Used when an API throws an Error, typically with a HTTP error
         response-code (3xx, 4xx, 5xx)
