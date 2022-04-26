@@ -290,6 +290,9 @@ components:
          creation_date:
            type: string
            format: date-time
+         complexite:
+           type: string
+           enum: [Simple,Complexe]
       discriminator:
         propertyName: "@type"
         mapping:
