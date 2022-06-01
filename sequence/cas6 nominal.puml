@@ -1,0 +1,60 @@
+@startuml
+
+skinparam ParticipantFontColor automatic
+
+title: CAS 6 : cas nominal SIMPLE Mais interruption du process en interne OI
+
+autonumber
+
+participant OC #Blue
+participant OI #Green
+
+OC->OI: je dépose la pièce jointe
+OC->OI: je crée l'anomalie d'adresse \n POST /anomalieIPE
+OI->OC: HTTP 201 indentifiant de l'anomalie
+OC->OI: je crée le trouble ticket anomalie adresse \n POST /troubleTicket {\n "@baseType":"anomalieAdresse", \n "@Type":"anomalieAdresse"", \n  "ticketType": "anomalie adresse",\n"description": "ajout d’une adresse connue de la BAN mais manquante dans l’IPE de l’OI, maison oubliée sans impact capacitaire il s’agit juste d’ajouter le Pavillon dans l’IPE.",\n"externalId": "2022-500",\n"href":"https://myOC.com:8080/tmf-api/troubleTicket/v4/troubleTicket/500",\n"id":"500",\n"priority": "High",\n"requestedResolutionDate": "2022-11-17T20:00:00-04:00",\n"severity": "normal"}
+
+note right 	#ff9966
+  ne faut il pas mettre le type anomalie
+  adresse au niveau de "@baseType" ou "@Type"
+endnote
+
+OI->OI: contrôles de surface
+
+OI->OC: acquitement technique du dépot de ticket \n http201"troubleTicket": \n{"id":"100", "href":"https://myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/100", "Status":"acknoledged"}
+alt abonnement aux notifications TT (n'est pas nécessaire à chaque ticket)
+OC->OI:  \n POST https:\//myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/hub?Accept:application/json,{"callback":"http://OC.in.listner.com"}
+OI->OC: acquitement de la souscription (avec son ID) \n http201:"Created, Content-Type: application/json, Location: /troubleTicket/hub/42{"id":"42","callback":"http://OC.in.listner.com","query":null}"
+
+end
+
+
+OI->OI: contrôler l'accessibilité de la pj. et la recevabilité du ticket
+
+OI->OC: acquitement fonctionnel du dépot de ticket (inProgress) \n { "eventId":"00002", "eventTime":"2022-10-12T11:42:25-04:00", "eventType":"TroubleTicketStatusChangeEvent", "event": \n{ "troubleTicket": \n{"ID":"100", "href":"https://myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/100", "troubleTicketTicketStatusType":"inProgress"}\n} \n}
+
+OI->OI: passage de l'état du ticket à Held suite à un problème \n exemple: : demande de création de adresses \n qui sont en cours de ré-adressage connu côté Mairie \n\n PATCH /troubleTicket {\n"ID":"100",\n"status":"held",\n"statusChangeDate":"[horodatage]",\n"statusChangeReason":"detai pb"}
+OI->OC: notification de mise en attente: \n { "eventId":"00003", "eventTime":"2022-11-16T16:42:25-04:00", "eventType":"TroubleTicketResolvedEvent", "event": \n{ "troubleTicket": \n{"ID":"100", "href":"https://myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/100", "status":"held"}\n} \n}
+
+note over OI,OC
+une fois le problème technique est résolu
+endnote
+
+OI->OI: résolu, adresse ajoutée \n PATCH /troubleTicket {\n"ID":"100",\n"status":"resolved",\n"statusChangeDate":"[horodatage]",\n"statusChangeReason":"résolu adresse ajoutée"}
+
+
+OI->OC: notification de résolution: \n { "eventId":"00003", "eventTime":"2022-11-16T16:42:25-04:00", "eventType":"TroubleTicketResolvedEvent", "event": \n{ "troubleTicket": \n{"ID":"100", "href":"https://myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/100", "troubleTicketTicketStatusType":"resolved"}\n} \n}
+
+
+
+note over OI,  OC
+On reprend le traitement du cas 1.
+endnote
+
+
+@enduml
+
+
+
+
+
