@@ -9,46 +9,36 @@ autonumber
 participant OC #Blue
 participant OI #Green
 
-OC->OI: je dépose la pièce jointe
-OC->OI: je crée l'anomalie d'adresse \n POST /anomalieIPE
+== depot de fichier ==
+OC->OI: Depot de la pièce jointe POST /tmf-api/attachment
+OI --> OC: Identifiant du document
+== creation anomalie adress ==
+OC->OI: Création d'anomalie d'adresse \n POST /tmf-api/anomalieIPE
 OI->OC: HTTP 201 indentifiant de l'anomalie
-OC->OI: je crée le trouble ticket anomalie adresse \n POST /troubleTicket {\n "@baseType":"anomalieAdresse", \n "@Type":"anomalieAdresse"", \n  "ticketType": "anomalie adresse",\n"description": "ajout d’une adresse connue de la BAN mais manquante dans l’IPE de l’OI, maison oubliée sans impact capacitaire il s’agit juste d’ajouter le Pavillon dans l’IPE.",\n"externalId": "2022-500",\n"href":"https://myOC.com:8080/tmf-api/troubleTicket/v4/troubleTicket/500",\n"id":"500",\n"priority": "High",\n"requestedResolutionDate": "2022-11-17T20:00:00-04:00",\n"severity": "normal"}
-
-note right 	#ff9966
-  ne faut il pas mettre le type anomalie
-  adresse au niveau de "@baseType" ou "@Type"
-endnote
+== creation du TT ==
+OC->OI: Creation Trouble Ticket \n POST /tmf-api/troubleTicket/v4/troubleTicket \n {\n"name": "Compliant over last bill",\n"requestedResolutionDate": "2019-05-31T07:34:45.968Z",\n"severity": "Urgent",\n"ticketType": "Anomalie adresse",\n  "attachment": [\n    {\n      "mimeType": "image/png",\n      "name": "March Bill",\n      "url": "https://mycsp.com:7070/docloader?docnum=3534555"\n    }\n  ],\n  "relatedEntity": [\n    {\n      "id": "3472",\n      "href": "https://mycsp.com:8080/tmf-api/anomalieIPE297",\n      "@type": "RelatedEntity",\n      "@referredType": "AnomalieAdressCreation"\n    }\n  ],\n  "@type": "TroubleTicket"\n}
 
 OI->OI: contrôles de surface
 
-OI->OC: acquitement technique du dépot de ticket \n http201"troubleTicket": \n{"id":"100", "href":"https://myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/100", "Status":"acknoledged"}
+OI->OC: acquitement technique du dépot de ticket \n http201   {"ID":"100", "href":"https://myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/100", "Status":"acknoledged"}
 
 alt abonnement aux notifications TT (n'est pas nécessaire à chaque ticket)
 OC->OI:  \n POST https:\//myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/hub?Accept:application/json,{"callback":"http://OC.in.listner.com"}
-OI->OC: acquitement de la souscription (avec son ID) \n http201:"Created, Content-Type: application/json, Location: /troubleTicket/hub/42{"id":"42","callback":"http://OC.in.listner.com","query":null}"
+OI->OC: acquittement de la souscription (avec son ID) \n http201:"Created, Content-Type: application/json, Location: /troubleTicket/hub/42{"id":"42","callback":"http://OC.in.listner.com","query":null}"
 
 end
+== Traitement du Ticket chez OI ==
 
 OI->OI: contrôler l'accessibilité de la pj. et la recevabilité du ticket
+OI->OI: in progress,  \n PATCH /troubleTicket {\n"ID":"100",\n"troubleTicketTicketStatusType":"inProgress",\n"statusChangeDate":"[horodatage]",\n"statusChangeReason":"ticket pris en charge"}
 
-OI->OC: acquitement fonctionnel du dépot de ticket (inProgress) \n { "eventId":"00002", "eventTime":"2022-10-12T11:42:25-04:00", "eventType":"TroubleTicketStatusChangeEvent", "event": \n{ "troubleTicket": \n{"ID":"100", "href":"https://myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/100", "troubleTicketTicketStatusType":"inProgress"}\n} \n}
+OI->OC: acquitement fonctionnel du dépot de ticket (inProgress) \n POST http://OC.in.listner.com/tmf-api/troubleTicket/v4/listener/troubleTicketStatusChangeEvent \n{ "eventId":"00002", "eventTime":"2022-10-12T11:42:25-04:00", "eventType":"TroubleTicketStatusChangeEvent", "event": \n{ "troubleTicket": \n{"ID":"100", "href":"https://myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/100", "troubleTicketTicketStatusType":"inProgress"}\n} \n}
 
-hnote over OC : OC souhaite annuler la commande
+== OC souhaite annuler le ticket ==
 
-OC->OI: Changement d'etat de la commande à Held \n \n PATCH /troubleTicket\n {\n"ID":"100",\n"status":"held",\n"statusChangeDate":"[horodatage]",\n"statusChangeReason":"une erreur de saisie"}
-note right
-    est ce que OC a le droit de passer le ticket
-     à Held et Cancelled?
-     ou il envoie une \note pour demander
-     l'annulation
-endnote
 
+OC->OI: Changement d'etat de la commande à Cancelled \n \n PATCH /tmf-api/troubleTicket/v4/troubleTicket/100 \n {\n"ID":"100",\n"status":"cancelled",\n"statusChangeDate":"[horodatage]",\n"statusChangeReason":"une erreur de saisie"}
 OI->OC: HTTP 200
-
-OC->OI: Changement d'etat de la commande à Cancelled \n \n PATCH /troubleTicket\n {\n"ID":"100",\n"status":"cancelled",\n"statusChangeDate":"[horodatage]",\n"statusChangeReason":"une erreur de saisie"}
-OI->OC: HTTP 200
-
-OI->OC: notifier suite changement d'état du ticket Held\n  { "eventId":"00003", "eventTime":"2022-10-12T11:42:25-04:00", "eventType":"TroubleTicketStatusChangeEvent", "event": \n{ "troubleTicket": \n{"ID":"100", "href":"https://myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/100", "status":"held"}\n  } \n}
 
 OI->OC: notifier suite changement d'état du ticket cancelled\n  { "eventId":"00003", "eventTime":"2022-10-12T11:42:25-04:00", "eventType":"TroubleTicketStatusChangeEvent", "event": \n{ "troubleTicket": \n{"ID":"100", "href":"https://myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/100", "status":"cancelled"}\n  } \n}
 @enduml
