@@ -1,0 +1,95 @@
+@startuml
+
+skinparam ParticipantFontColor automatic
+
+title: CAS 7 : cas nominal SIMPLE résolution contestée par l’OC
+
+autonumber
+participant ORT #Blue
+participant ApiAuth2 #Green
+participant Attachment #Green
+participant TroubleTicketSollicationSpecificaion #Green
+participant TroubleTicket621 #Green
+
+participant ServeurMediation #Green
+participant GesoloBack #Green
+participant Scorpion #Green
+== authentification ==
+ORT -> ApiAuth2: demande de token
+ApiAuth2 --> ORT: Token
+
+== recupération des characteristics de la sollicitation ==
+group recupération des domaines
+ORT -> TroubleTicketSollicationSpecificaion: https://api-trouble-ticket/tmf-api/troubleTicket/v4/troubleTicket/sollicitation/schema/domaines/
+TroubleTicketSollicationSpecificaion -> GesoloBack: API GestDispoDomaines
+GesoloBack  --> TroubleTicketSollicationSpecificaion : liste des domaines autorisés par ORT connecté
+TroubleTicketSollicationSpecificaion -> TroubleTicketSollicationSpecificaion: Formatage des données sous format TMF
+TroubleTicketSollicationSpecificaion --> ORT : liste des domaines autorisés par ORT connecté
+end
+
+group recupération des sous  domaines
+ORT -> TroubleTicketSollicationSpecificaion: https://api-trouble-ticket/tmf-api/troubleTicket/v4/troubleTicket/sollicitation/schema/domaines/{domaineId}/sousDomaines
+TroubleTicketSollicationSpecificaion -> GesoloBack: API GestDispoSousDomaines
+GesoloBack  --> TroubleTicketSollicationSpecificaion : liste des sous domaines autorisés par ORT connecté
+TroubleTicketSollicationSpecificaion -> TroubleTicketSollicationSpecificaion: Formatage des données sous format TMF
+TroubleTicketSollicationSpecificaion --> ORT : liste des sous domaines autorisés par ORT connecté
+end
+
+group recupération des demandes
+ORT -> TroubleTicketSollicationSpecificaion: https://api-trouble-ticket/tmf-api/troubleTicket/v4/troubleTicket/sollicitation/schema/domaines{domaineId}/sousDomaines/{sousDomainesID}/demandes
+TroubleTicketSollicationSpecificaion -> GesoloBack: API GestTypeDemandeSousDomaines
+GesoloBack  --> TroubleTicketSollicationSpecificaion : liste de type de demandes autorisés
+TroubleTicketSollicationSpecificaion -> TroubleTicketSollicationSpecificaion: Formatage des données sous format TMF
+TroubleTicketSollicationSpecificaion --> ORT : liste de type de demandes autorisés
+end
+
+group recupération des characteristics
+ORT -> TroubleTicketSollicationSpecificaion: https://api-trouble-ticket/tmf-api/troubleTicket/v4/troubleTicket/sollicitation/schema/domaines{domaineId}/sousDomaines/{sousDomainesID}/demandes/{demandeId}/characteristics
+TroubleTicketSollicationSpecificaion -> GesoloBack: API getTYpeDemandeFields
+GesoloBack  --> TroubleTicketSollicationSpecificaion : liste des champs
+TroubleTicketSollicationSpecificaion -> TroubleTicketSollicationSpecificaion: Formatage des données sous format TMF
+TroubleTicketSollicationSpecificaion --> ORT : liste de champs
+end
+
+
+
+
+
+== création du api-trouble-ticket ==
+ORT -> Attachment: depot de fichier
+Attachment --> ORT: id document
+ORT -> TroubleTicket621 : creation du Ticket  POST https://api-trouble-ticket/tmf-api/troubleTicket/v4/troubleTicket
+TroubleTicket621 -> TroubleTicket621: verification role et permission
+TroubleTicket621 -> TroubleTicket621: validation des données liées au TMf 621 ( pas de controle sur les characteristics)
+
+alt dans le cas d'une
+TroubleTicket621 --> ORT: 200 OK TroubleTicketID
+else cas d'erreur
+TroubleTicket621 --> ORT: 4xx
+end
+
+
+== Traitement Ticket ==
+TroubleTicket621 -> TroubleTicket621: Prise en change du ticket :passage à l'état InProgress
+note right
+Qui va declencher cette action?
+endnote
+TroubleTicket621 -> TroubleTicket621: identification du systeme de resolution adéquant ( cas Gesolo)
+TroubleTicket621 -> ServeurMediation: POST nouvelle sollicitation
+ServeurMediation-> ServeurMediation: Formmatage des données sous format GesoloBack
+ServeurMediation -> GesoloBack: demande de création de ticket
+
+GesoloBack -> GesoloBack: validation des données
+alt données valides
+GesoloBack -> Scorpion: Création du tikcet
+Scorpion --> GesoloBack: 201 OK
+GesoloBack --> ServeurMediation: 201 OK
+ServeurMediation --> TroubleTicket621: 201 OK
+else validation KO
+ GesoloBack --> ServeurMediation: 4xx
+
+end
+
+
+@enduml
+
