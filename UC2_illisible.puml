@@ -1,0 +1,49 @@
+@startuml
+
+skinparam ParticipantFontColor automatic
+
+title: CAS 2 rejet du ticket par l'OI car pièce jointe illisible
+autonumber
+
+participant OC #Blue
+participant OI #Green
+
+
+OC->OC: je crée le trouble ticket OC anomalie adresse pour traçage interne \n POST /troubleTicket {\n"ticketType": "anomalie adresse",\n"description": "ajout d’une adresse connue de la BAN mais manquante dans l’IPE de l’OI, maison oubliée sans impact capacitaire il s’agit juste d’ajouter le Pavillon dans l’IPE."}
+OC->OC: contrôles de surface
+OC->OC: acquitement technique du dépot de ticket \n http201"troubleTicket": \n{"ID":"500", "href":"https://myOC.com:8080/tmf-api/troubleTicket/v4/troubleTicket/500", "Status":"acknoledged"}
+
+OC->OI: je dépose la pièce jointe chez l'OI
+OI->OC: HTTP 201 indentifiant de la PJ. <PJId>
+OC->OI: je crée l'anomalie d'adresse chez l'OI \n POST /anomalieIPE
+OI->OC: HTTP 201 indentifiant de l'anomalie <anomalieId>
+
+
+OC->OI: je crée le trouble ticket OI anomalie adresse \n POST /troubleTicket {\n"ticketType": "anomalie adresse",\n"description": "ajout d’une adresse connue de la BAN mais manquante dans l’IPE de l’OI, maison oubliée sans impact capacitaire il s’agit juste d’ajouter le Pavillon dans l’IPE.",\n"externalId": "500",\n"priority": "High",\n"requestedResolutionDate": "2022-11-17T20:00:00-04:00",\n"severity": "normal"}
+
+OI->OI: contrôles de surface
+
+OI->OC: acquitement technique du dépot de ticket \n http201"troubleTicket": \n{"ID":"100", "href":"https://myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/100", "Status":"acknoledged"}
+
+
+OC->OI: [ALT] abonnement aux notifications TT (n'est pas nécessaire à chaque ticket) \n POST https:\//myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/hub?Accept:application/json,{"callback":"http://OC.in.listner.com"}
+
+OI->OC: acquitement de la souscription (avec son ID) \n http201:"Created, Content-Type: application/json, Location: /troubleTicket/hub/42{"id":"42","callback":"http://OC.in.listner.com","query":null}"
+
+
+OI->OI: contrôler l'accessibilité de la pj. et la recevabilité du ticket
+
+OI->OI: je patche le trouble ticket OI car la pj. n'est pas lisible \n PATCH /troubleTicket {\n "troubleTicketId":"100",\n"externalId": "500",\n "troubleTicketTicketStatusType":"rejected",\n"statusChangeDate":"[horodatage]",\n"statusChangeReason":"pièce jointe illisable"}
+
+OI->OC: notification du refus de ticket pour pj illisible \n { "eventId":"00002", "eventTime":"2022-10-12T11:42:25-04:00", "eventType":"TroubleTicketStatusChangeEvent", "event": \n{ "troubleTicket": \n{"ID":"100", "href":"https://myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/100", "troubleTicketTicketStatusType":"rejected"}\n} \n}
+
+OC->OC: je patche le trouble ticket OC pour référencer le ticket OI \n PATCH /troubleTicket {\n "troubleTicketId":"500",\n"externalId": "100",\n "troubleTicketTicketStatusType":"rejected",\n"statusChangeDate":"[horodatage]",\n"statusChangeReason":"refus du ticket par l'OI pour PJ illisible"}
+
+
+
+@enduml
+
+
+
+
+
