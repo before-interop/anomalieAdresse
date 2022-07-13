@@ -1,0 +1,73 @@
+@startuml
+
+skinparam ParticipantFontColor automatic
+
+title: CAS 3 : cas nominal incomplet
+autonumber
+
+participant OC #Blue
+participant OI #Green
+
+
+OC->OC: je crée le trouble ticket OC anomalie adresse pour traçage interne \n POST /troubleTicket {\n"ticketType": "anomalie adresse",\n"description": "ajout d’une adresse connue de la BAN mais manquante dans l’IPE de l’OI, maison oubliée sans impact capacitaire il s’agit juste d’ajouter le Pavillon dans l’IPE."}
+OC->OC: contrôles de surface
+OC->OC: acquitement technique du dépot de ticket \n http201"troubleTicket": \n{"ID":"500", "href":"https://myOC.com:8080/tmf-api/troubleTicket/v4/troubleTicket/500", "Status":"acknoledged"}
+
+OC->OI: je dépose la pièce jointe chez l'OI
+OI->OC: HTTP 201 indentifiant de la PJ. <PJId>
+OC->OI: je crée l'anomalie d'adresse chez l'OI \n POST /anomalieIPE
+OI->OC: HTTP 201 indentifiant de l'anomalie <anomalieId>
+
+
+OC->OI: je crée le trouble ticket OI anomalie adresse \n POST /troubleTicket {\n"ticketType": "anomalie adresse",\n"description": "ajout d’une adresse connue de la BAN mais manquante dans l’IPE de l’OI, maison oubliée sans impact capacitaire il s’agit juste d’ajouter le Pavillon dans l’IPE.",\n"externalId": "500",\n"priority": "High",\n"requestedResolutionDate": "2022-11-17T20:00:00-04:00",\n"severity": "normal"}
+
+OI->OI: contrôles de surface
+
+OI->OC: acquitement technique du dépot de ticket \n http201"troubleTicket": \n{"ID":"100", "href":"https://myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/100", "Status":"acknoledged"}
+
+
+OC->OI: [ALT] abonnement aux notifications TT (n'est pas nécessaire à chaque ticket) \n POST https:\//myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/hub?Accept:application/json,{"callback":"http://OC.in.listner.com"}
+
+OI->OC: acquitement de la souscription (avec son ID) \n http201:"Created, Content-Type: application/json, Location: /troubleTicket/hub/42{"id":"42","callback":"http://OC.in.listner.com","query":null}"
+
+
+OI->OI: contrôler l'accessibilité de la pj. et la recevabilité du ticket
+
+OI->OC: acquitement fonctionnel du dépot de ticket (inProgress) \n { "eventId":"00002", "eventTime":"2022-10-12T11:42:25-04:00", "eventType":"TroubleTicketStatusChangeEvent", "event": \n{ "troubleTicket": \n{"ID":"100", "href":"https://myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/100", "troubleTicketTicketStatusType":"inProgress"}\n} \n}
+
+OC->OC: je patche le trouble ticket OC pour référencer le ticket OI \n PATCH /troubleTicket {\n "troubleTicketId":"500",\n"externalId": "100",\n "troubleTicketTicketStatusType":"inProgress",\n"statusChangeDate":"<horodatage>",\n"statusChangeReason":"référence du ticket OI ajoutée"}
+
+OI->OI: formaliser la demande d'informations complémentaires \n PATCH /troubleTicket {\n"ID":"100",\n"troubleTicketTicketStatusType":"pending",\n"statusChangeDate":"<horodatage>",\n"statusChangeReason":"<demande d'information complémentaire>"}
+OI->OC: notification de la demande d'informations : \n { "eventId":<eventId>, "eventTime":"<horodatage>", "eventType":"TroubleTicketInformationRequiredEvent", "event": \n{ "troubleTicket": \n{"ID":"100", "href":"https://myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/100", "troubleTicketTicketStatusType":"pending"}\n} \n}
+
+OC->OC: acquitter la demande d'information et renseingner les notes en réponse \n PATCH /troubleTicket {\n"ID":"500",\n"troubleTicketTicketStatusType":"held",\n"statusChangeDate":"<horodatage>",\n"statusChangeReason":"<demande d'information complémentaire de l'OI>", "note":"{"author":"OC","id":<id>,"date":<horodatage>,"text":"mes informations en complément"}}
+OC->OI: notification d'acquitement de la demande d'information \n { "eventId":<eventId>, "eventTime":"<horodatage>", "eventType":"TroubleTicketStatusChangeEvent", "event": \n{ "troubleTicket": \n{"ID":"500", "href":"https://myOC.com:8080/tmf-api/troubleTicket/v4/troubleTicket/500", "troubleTicketTicketStatusType":"held", "note":"{"author":"OC","id":<id>,"date":<horodatage>,"text":"mes informations en complément"}}\n} \n}
+
+OI->OI: intégrer l'information complémentaire \n PATCH /troubleTicket {\n"ID":"100",\n"troubleTicketTicketStatusType":"inProgress",\n"statusChangeDate":"<horodatage>",\n"statusChangeReason":"<demande d'information complémentaire>", \n"note":"{"author":"OC","id":<id>,"date":<horodatage>,"text":"mes informations en complément"}}
+
+OI->OC: notification de "reprise" du ticket OI (inProgress) \n { "eventId":"00003", "eventTime":"2022-10-12T11:45:25-04:00", "eventType":"TroubleTicketStatusChangeEvent", "event": \n{ "troubleTicket": \n{"ID":"100", "href":"https://myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/100", "troubleTicketTicketStatusType":"inProgress"}\n} \n}
+
+OC->OC: je patche le trouble ticket OC pour mise à jour \n PATCH /troubleTicket {\n "troubleTicketId":"500",\n"externalId": "100",\n "troubleTicketTicketStatusType":"inProgress",\n"statusChangeDate":"<horodatage>",\n"statusChangeReason":"montexte"}
+
+
+OI->OI: résolu, adresse ajoutée \n PATCH /troubleTicket {\n"ID":"100",\n"troubleTicketTicketStatusType":"resolved",\n"statusChangeDate":"<horodatage>",\n"statusChangeReason":"résolu adresse ajoutée"}
+
+OI->OC: notification de résolution: \n { "eventId":"00006", "eventTime":"2022-11-16T16:42:25-04:00", "eventType":"TroubleTicketResolvedEvent", "event": \n{ "troubleTicket": \n{"ID":"100", "href":"https://myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/100", "troubleTicketTicketStatusType":"resolved"}\n} \n}
+
+
+OC->OC: résolu \n PATCH /troubleTicket {\n"ID":"500",\n"troubleTicketTicketStatusType":"resolved",\n"statusChangeDate":"<horodatage>",\n"statusChangeReason":"résolution soumise"}
+OC->OC: contrôler la résolution
+OC->OC: résolution ok PATCH /troubleTicket {\n"ID":"500",\n"troubleTicketTicketStatusType":"closed",\n"statusChangeDate":"<horodatage>",\n"statusChangeReason":"résolution acceptée"}
+OC->OI: notification de résolution acceptée: \n { "eventId":<eventId>, "eventTime":<horodatage>, "eventType":"TroubleTicketResolvedEvent", "event": \n{ "troubleTicket": \n{"ID":"500", "href":"https://myOC.com:8080/tmf-api/troubleTicket/v4/troubleTicket/500", "troubleTicketTicketStatusType":"closed"}\n} \n}
+
+
+
+OI->OI: clore le ticket \n PATCH /troubleTicket {\n"ID":"100",\n"troubleTicketTicketStatusType":"closed",\n"statusChangeDate":"<horodatage>",\n"statusChangeReason":"résolu"}
+
+
+@enduml
+
+
+
+
+
