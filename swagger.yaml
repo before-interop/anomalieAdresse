@@ -526,7 +526,7 @@ components:
         adresseRef:
           $ref: '#/components/schemas/AdresseRef'
         isValid:
-          type: bool
+          type: boolean
 
     AdresseComplementsSpecifiques:
       allOf:
