@@ -56,6 +56,32 @@ paths:
           description: Filter creationDate strictly_after
           schema:
             type: string
+
+        - name: updateDate.lte
+          in: query
+          description: Filter updateDate before
+          schema:
+            type: string
+          style: form
+        - name: updateDate.lt
+          in: query
+          description: Filter updateDate strictly_before
+          schema:
+            type: string
+          style: form
+        - name: updateDate.gte
+          in: query
+          description: Filter updateDate after
+          schema:
+            type: string
+          style: form
+        - name: updateDate.gt
+          in: query
+          description: Filter updateDate strictly_after
+          schema:
+            type: string
+
+
           style: form
         - name: offset
           description: Requested index for start of resources to be provided in response
@@ -259,6 +285,15 @@ components:
           format: date-time
       discriminator:
         propertyName: "@type"
+        mapping:
+          creation: '#/components/schemas/Creation-Create'
+          modification: '#/components/schemas/Modification-Create'
+          creationImmeubleNeuf: '#/components/schemas/CreationImmeubleNeuf-Create'
+          anomalieEnMasse: '#/components/schemas/AnomalieEnMasse-Create'
+          lecture: '#/components/schemas/Lecture-Create-Request'
+
+
+
 
     Anomalie:
       type: object
@@ -279,11 +314,20 @@ components:
            description: Si 1, signalement suite à une demande client final
          "@type":
            type: string
-         creationDate:
+         creation_date:
            type: string
            format: date-time
+         complexite:
+           type: string
+           enum: [Simple,Complexe]
       discriminator:
         propertyName: "@type"
+        mapping:
+          creation: '#/components/schemas/Creation-Get'
+          modification: '#/components/schemas/Modification-Get'
+          creationImmeubleNeuf: '#/components/schemas/CreationImmeubleNeuf-Get'
+          anomalieEnMasse: '#/components/schemas/AnomalieEnMasse-Get'
+          lecture: '#/components/schemas/Lecture-Get-Response'
 
     Creation:
       type: object
@@ -352,6 +396,34 @@ components:
         - $ref: "#/components/schemas/Anomalie-Create"
         - $ref: "#/components/schemas/Modification"
 
+    Lecture-Create:
+      type: object
+      description: Problème de cohérence entre des couples d'adresse, adresseRef founis par les données d'iPE
+      properties:
+        adressesAdressesRef:
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/Adresse_AdresseRef_Create"
+    Lecture-Get:
+      type: object
+      description: Problème de cohérence entre des couples d'adresse, adresseRef founis par les données d'iPE
+      properties:
+        adressesAdressesRef:
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/Adresse_AdresseRef_Get"
+
+    Lecture-Get-Response:
+      allOf:
+        - $ref: "#/components/schemas/Anomalie"
+        - $ref: "#/components/schemas/Lecture-Get"
+
+    Lecture-Create-Request:
+      allOf:
+        - $ref: "#/components/schemas/Anomalie-Create"
+        - $ref: "#/components/schemas/Lecture-Create"
     Adresse:
       type: object
       properties:
@@ -428,7 +500,7 @@ components:
           maxLength: 255
           description: ligne 5 du SNA par exemple.
         "@type":
-           type: string
+          type: string
       discriminator:
         propertyName: "@type"
 
@@ -438,6 +510,23 @@ components:
         identifiant_immeuble:
           type: string
           maxLength: 30
+
+    Adresse_AdresseRef_Create:
+      type: object
+      properties:
+        adresse:
+          $ref: "#/components/schemas/Adresse"
+        adresseRef:
+          $ref: '#/components/schemas/AdresseRef'
+    Adresse_AdresseRef_Get:
+      type: object
+      properties:
+        adresse:
+          $ref: "#/components/schemas/Adresse"
+        adresseRef:
+          $ref: '#/components/schemas/AdresseRef'
+        isValid:
+          type: bool
 
     AdresseComplementsSpecifiques:
       allOf:
@@ -492,6 +581,32 @@ components:
             coordonnees_pm:
               $ref: "#/components/schemas/CoordonnesXY"
 
+    AnomalieEnMasse:
+      type: object
+      properties:
+        "@type":
+          type: string
+        champs_anomalie:
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/ChampAdresse"
+        adresses_initiales:
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/AdresseRef"
+      required:
+        - "@type"
+        - "champ_anomalie"
+    AnomalieEnMasse-Get:
+      allOf:
+        - $ref: "#/components/schemas/Anomalie"
+        - $ref: "#/components/schemas/AnomalieEnMasse"
+    AnomalieEnMasse-Create:
+      allOf:
+        - $ref: "#/components/schemas/Anomalie-Create"
+        - $ref: "#/components/schemas/AnomalieEnMasse"
     CoordonnesXY:
       required:
         - x
@@ -516,6 +631,36 @@ components:
             - RGSPM 06 (UTM 21 N) = Saint Pierre et Miquelon
           enum: [RGF93,WGS84,RGFG95,RGR92,RGM,RGSPM]
 
+    ChampAdresse:
+      type: "string"
+      enum:
+        - "code_adresse"
+        - "code_insee"
+        - "code_voie_rivoli"
+        - "numero_voie"
+        - "complement_numero_voie"
+        - "type_voie"
+        - "nom_voie"
+        - "code_postal"
+        - "batiment"
+        - "nombre_logements"
+        - "type_immeuble"
+        - "coordonnees"
+        - "immeuble_neuf"
+        - "reference_pm"
+        - "code_ban"
+        - "code_hexacle_voie"
+        - "information_complementaire"
+        - "promoteur"
+        - "organisme_bailleur"
+        - "adresse_bailleur"
+        - "cp_bailleur"
+        - "ville_bailleur"
+        - "tel_bailleur"
+        - "siret_bailleur"
+        - "signature_convention"
+        - "date_signature_convention"
+        - "reference_pbo"
     Error:
       description: Used when an API throws an Error, typically with a HTTP error
         response-code (3xx, 4xx, 5xx)
