@@ -290,6 +290,7 @@ components:
           modification: '#/components/schemas/Modification-Create'
           creationImmeubleNeuf: '#/components/schemas/CreationImmeubleNeuf-Create'
           anomalieEnMasse: '#/components/schemas/AnomalieEnMasse-Create'
+          lecture: '#/components/schemas/Lecture-Create-Request'
 
 
 
@@ -326,6 +327,7 @@ components:
           modification: '#/components/schemas/Modification-Get'
           creationImmeubleNeuf: '#/components/schemas/CreationImmeubleNeuf-Get'
           anomalieEnMasse: '#/components/schemas/AnomalieEnMasse-Get'
+          lecture: '#/components/schemas/Lecture-Get-Response'
 
     Creation:
       type: object
@@ -394,6 +396,34 @@ components:
         - $ref: "#/components/schemas/Anomalie-Create"
         - $ref: "#/components/schemas/Modification"
 
+    Lecture-Create:
+      type: object
+      description: Problème de cohérence entre des couples d'adresse, adresseRef founis par les données d'iPE
+      properties:
+        adressesAdressesRef:
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/Adresse_AdresseRef_Create"
+    Lecture-Get:
+      type: object
+      description: Problème de cohérence entre des couples d'adresse, adresseRef founis par les données d'iPE
+      properties:
+        adressesAdressesRef:
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/Adresse_AdresseRef_Get"
+
+    Lecture-Get-Response:
+      allOf:
+        - $ref: "#/components/schemas/Anomalie"
+        - $ref: "#/components/schemas/Lecture-Get"
+
+    Lecture-Create-Request:
+      allOf:
+        - $ref: "#/components/schemas/Anomalie-Create"
+        - $ref: "#/components/schemas/Lecture-Create"
     Adresse:
       type: object
       properties:
@@ -470,7 +500,7 @@ components:
           maxLength: 255
           description: ligne 5 du SNA par exemple.
         "@type":
-           type: string
+          type: string
       discriminator:
         propertyName: "@type"
 
@@ -480,6 +510,23 @@ components:
         identifiant_immeuble:
           type: string
           maxLength: 30
+
+    Adresse_AdresseRef_Create:
+      type: object
+      properties:
+        adresse:
+          $ref: "#/components/schemas/Adresse"
+        adresseRef:
+          $ref: '#/components/schemas/AdresseRef'
+    Adresse_AdresseRef_Get:
+      type: object
+      properties:
+        adresse:
+          $ref: "#/components/schemas/Adresse"
+        adresseRef:
+          $ref: '#/components/schemas/AdresseRef'
+        isValid:
+          type: bool
 
     AdresseComplementsSpecifiques:
       allOf:
