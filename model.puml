@@ -20,20 +20,16 @@ class Anomalie <<Pivot>> {
     creationDate: Datetime
     type: String
 }
+note right of Anomalie: impossibilité d'ajouter de nouvelles anomalies passé n minutes après création du ticket 
 
 class Creation <<Pivot>> {
     adresse: Adresse
-    adresse_cree: AdresseRef
+    adresse_creee: AdresseRef
 }
 Anomalie <|-- Creation
 Creation *-- "1" Adresse
+Creation *-- "n" AdresseRef
 
-class CreationImmeubleNeuf <<Pivot>> {
-    adresse: AdresseComplementsSpecifiques
-}
-note left:  Une creation d'imb neuf aura une adresse de creation \net des complements
-CreationImmeubleNeuf *-- "1" AdresseComplementsSpecifiques
-Creation <|-- CreationImmeubleNeuf
 
 class Modification <<Pivot>> {
     adresse_initiale: AdresseRef
@@ -56,20 +52,20 @@ class Adresse {
     batiment: String
     nombre_logements_adresse_ipe: integer
     type_immeuble: String
-    type_projection_geographique: String
     coordonnees: CoordonnesXY
     immeuble_neuf: integer
     reference_pm: String
     code_ban: String
     code_hexacle_voie: String
-    information_complementaire_adresse: String
+    information_complementaire_adresse: AdresseComplementsSpecifiques
 }
 Adresse *--"1" CoordonnesXY
+Adresse *--"1" AdresseComplementsSpecifiques
 
 class AdresseRef {
     identifiant_immeuble: String
 }
-note right of AdresseRef: Seul l'identifiant d'immeuble\n est obligatoire sur \n l'adresse initiale
+note left of AdresseRef: Seul l'identifiant d'immeuble\n est obligatoire sur \n l'adresse initiale \n ou résultat d'une création d'adresse 
 
 class AdresseComplementsSpecifiques {
     promoteur: String
@@ -79,13 +75,11 @@ class AdresseComplementsSpecifiques {
     ville_bailleur: String
     tel_bailleur: String
     siret_bailleur: String
-    signature_convention: String
     date_signature_convention: Datetime
     reference_pbo: String
     adresse_pm: String
     coordonnees_pm: CoordonnesXY
 }
-Adresse <|-- AdresseComplementsSpecifiques
 AdresseComplementsSpecifiques *--"1" CoordonnesXY
 
 class CoordonnesXY {
