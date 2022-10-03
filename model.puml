@@ -19,6 +19,7 @@ class Anomalie <<Pivot>> {
     commande_client_final_oc: String
     creationDate: Datetime
     type: String
+    complexite: String
 }
 
 class Creation <<Pivot>> {
@@ -38,9 +39,15 @@ class Modification <<Pivot>> {
     adresse_initiale: AdresseRef
     adresse_cible: Adresse
 }
+class AnomalieEnMasse <<Pivot>> {
+    adresses_initiales: AdresseRef[]
+    champs_anomalie: string[]
+}
 Anomalie <|-- Modification
+Anomalie <|-- AnomalieEnMasse
 Modification *-- "1" Adresse
 Modification *-- "1" AdresseRef
+AnomalieEnMasse *-- "1-*" AdresseRef
 
 class Adresse {
     code_adresse: String
