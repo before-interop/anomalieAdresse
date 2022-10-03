@@ -2,7 +2,7 @@
 
 ## Modèle de données
 
-![](image/model.png)
+
 
 ## Description d'une séquence d'appels
 
