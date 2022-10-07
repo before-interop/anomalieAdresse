@@ -64,7 +64,6 @@ class Adresse {
     batiment: String
     nombre_logements_adresse_ipe: integer
     type_immeuble: String
-    type_projection_geographique: String
     coordonnees: CoordonnesXY
     immeuble_neuf: integer
     reference_pm: String
