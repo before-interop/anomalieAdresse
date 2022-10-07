@@ -24,7 +24,7 @@ class Anomalie <<Pivot>> {
 
 class Creation <<Pivot>> {
     adresse: Adresse
-    adresse_creee: AdresseRef[]
+    adresse_creee: AdresseRef
 }
 Anomalie <|-- Creation
 Creation *-- "1" Adresse
@@ -33,7 +33,7 @@ Creation *-- "n" AdresseRef
 class CreationImmeubleNeuf <<Pivot>> {
     adresse: AdresseComplementsSpecifiques
 }
-note left:  Une creation d'imb neuf aura une adresse de creation \net des complements
+note left:  Une creation d'imb neuf aura une adresse de creation \net des complements\net l'info de l'adresse créée héritée du model Creation
 CreationImmeubleNeuf *-- "1" AdresseComplementsSpecifiques
 Creation <|-- CreationImmeubleNeuf
 
