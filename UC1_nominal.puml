@@ -16,7 +16,7 @@ OC->OC: acquitement technique du dépot de ticket \n http201"troubleTicket": \n{
 
 OC->OI: je dépose la pièce jointe chez l'OI
 OI->OC: HTTP 201 indentifiant de la PJ. <PJId>
-OC->OI: je crée l'anomalie d'adresse chez l'OI \n POST /anomalieIPE
+OC->OI: je crée l'anomalie d'adresse chez l'OI \n POST /Anomalie
 OI->OC: HTTP 201 indentifiant de l'anomalie <anomalieId>
 
 
@@ -38,10 +38,13 @@ OI->OC: acquitement fonctionnel du dépot de ticket (inProgress) \n { "eventId":
 
 OC->OC: je patche le trouble ticket OC pour référencer le ticket OI \n PATCH /troubleTicket {\n "troubleTicketId":"500",\n"externalId": "100",\n "troubleTicketTicketStatusType":"inProgress",\n"statusChangeDate":"<horodatage>",\n"statusChangeReason":"référence du ticket OI ajoutée"}
 
-OI->OI: résolu, adresse ajoutée \n PATCH /troubleTicket {\n"ID":"100",\n"troubleTicketTicketStatusType":"resolved",\n"statusChangeDate":"<horodatage>",\n"statusChangeReason":"résolu adresse ajoutée:<référenceImmeuble>"}
+OI->OI:résolu, je patche l'anomalie adresse pour ajouter les adresses créees \n PATCH /Anomalie.Creation \n {"ID":<anomalieID>, \n"adresse_cree":[AdresseRef]}
+OI->OI: résolu, adresse ajoutée \n PATCH /troubleTicket {\n"ID":"100",\n"troubleTicketTicketStatusType":"resolved",\n"statusChangeDate":"<horodatage>",\n"statusChangeReason":"résolu adresse ajoutée"}
 
-OI->OC: notification de résolution: \n { "eventId":"00003", "eventTime":"2022-11-16T16:42:25-04:00", "eventType":"TroubleTicketResolvedEvent", "event": \n{ "troubleTicket": \n{"ID":"100", "href":"https://myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/100", "troubleTicketTicketStatusType":"resolved"}\n "statusChangeReason":"résolu adresse ajoutée:<référenceImmeuble>"\n}}
+OI->OC: notification de résolution: \n { "eventId":"00003", "eventTime":"2022-11-16T16:42:25-04:00", "eventType":"TroubleTicketResolvedEvent", "event": \n{ "troubleTicket": \n{"ID":"100", "href":"https://myOI.com:8080/tmf-api/troubleTicket/v4/troubleTicket/100", "troubleTicketTicketStatusType":"resolved"}\n "statusChangeReason":"résolu adresse ajoutée"\n}}
 
+OC->OI: récupérer les références d'immeubles crées \n GET /Anomalie?id=<anomalieID>
+OI->OC: HTTP 201 structure données dont adresse_cree:[AdresseRef]
 
 OC->OC: clore le ticket \n PATCH /troubleTicket {\n"ID":"500",\n"troubleTicketTicketStatusType":"closed",\n"statusChangeDate":"<horodatage>",\n"statusChangeReason":"résolu"}
 
