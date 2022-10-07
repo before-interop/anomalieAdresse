@@ -24,7 +24,7 @@ class Anomalie <<Pivot>> {
 
 class Creation <<Pivot>> {
     adresse: Adresse
-    adresse_Creee: AdresseRef[]
+    adresse_creee: AdresseRef[]
 }
 Anomalie <|-- Creation
 Creation *-- "1" Adresse
