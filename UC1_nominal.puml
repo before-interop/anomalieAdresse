@@ -20,7 +20,7 @@ OC->OI: je crée l'anomalie d'adresse chez l'OI \n POST /anomalieAdresse
 OI->OC: HTTP 201 indentifiant de l'anomalie <anomalieId>
 
 
-OC->OI: je crée le trouble ticket OI anomalie adresse \n POST /troubleTicket {\n"ticketType": "anomalie adresse",\n"description": "ajout d’une adresse connue de la BAN mais manquante dans l’IPE de l’OI, maison oubliée sans impact capacitaire il s’agit juste d’ajouter le Pavillon dans l’IPE.",\n"externalId": "500",\n"relatedEntity":{"href":"<référence de l'anomalie adresse chez l'OI>","id":"<idAnomalie>"},\n"priority": "High",\n"requestedResolutionDate": "2022-11-17T20:00:00-04:00",\n"severity": "normal"}
+OC->OI: je crée le trouble ticket OI anomalie adresse \n POST /troubleTicket {\n"ticketType": "anomalie adresse",\n"description": "ajout d’une adresse connue de la BAN mais manquante dans l’IPE de l’OI, maison oubliée sans impact capacitaire il s’agit juste d’ajouter le Pavillon dans l’IPE.",\n"externalId": "500",\n"relatedEntity":{"href":"<référence de l'anomalie adresse chez l'OI>","id":"<anomalieId>"},\n"priority": "High",\n"requestedResolutionDate": "2022-11-17T20:00:00-04:00",\n"severity": "normal"}
 
 OI->OI: contrôles de surface
 
