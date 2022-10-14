@@ -56,33 +56,6 @@ paths:
           description: Filter creationDate strictly_after
           schema:
             type: string
-
-        - name: updateDate.lte
-          in: query
-          description: Filter updateDate before
-          schema:
-            type: string
-          style: form
-        - name: updateDate.lt
-          in: query
-          description: Filter updateDate strictly_before
-          schema:
-            type: string
-          style: form
-        - name: updateDate.gte
-          in: query
-          description: Filter updateDate after
-          schema:
-            type: string
-          style: form
-        - name: updateDate.gt
-          in: query
-          description: Filter updateDate strictly_after
-          schema:
-            type: string
-
-
-          style: form
         - name: offset
           description: Requested index for start of resources to be provided in response
           required: false
@@ -344,6 +317,12 @@ components:
       allOf:
         - $ref: "#/components/schemas/Anomalie"
         - $ref: "#/components/schemas/Creation"
+      properties:
+        adresse_creee:
+          type: array
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/AdresseRef"
 
     Creation-Create:
       allOf:
