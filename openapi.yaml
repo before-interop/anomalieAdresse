@@ -11,7 +11,7 @@ info:
     indiquée dans la [Décision Arcep n° 2020-1432].
 
     Il permet le traitement d’une demande de création ou de modification d’adresses
-    dans les IPE grâce à des flux normalisés. 
+    dans les IPE grâce à des flux normalisés.
 
     **Extrait de la [Décision Arcep n° 2020-1432]:**
 
@@ -62,7 +62,7 @@ info:
     * **Signalement en masse**:
       par exemple liste d’anomalies détectées par contrôles informatisés ayant un critère commun (anomalie sur un même champ).
       Il s’agit d’un signalement unitaire impactant deux lignes IPE ou plus.
-      Certains critères devront concerner la même zone géographique. 
+      Certains critères devront concerner la même zone géographique.
 
       La liste des critères communs n’est pas fermée et pourra être complétée
       à la demande d’un opérateur suite à la validation par consensus du groupe de travail Infrastructure.
@@ -70,6 +70,149 @@ info:
     ## Workflow
 
     ![Workflow](./status.drawio.svg)
+
+    **Possibilités de changement de status:**
+
+    * `CREATING` -> `ACKNOWLEDGED`: L'OC a finalisé la création du tickets.
+
+      **Ce changement de status ne peux être effectué que par l'OC.**
+
+      Ce status est optionel. Certains OI peuvent ne pas offrir la possibilité de créer des tickets en mode *DRAFT*.
+
+
+    * `CREATING` -> `CANCELLED`: Le délai de création du ticket est expiré.
+
+      **Ce changement de status ne peux être effectué que par l'OI.**
+
+      Le délai de création est de **2 jours**.
+
+      Le champ `statusChangeReason` doit être renseigné avec la valeur `DELAY_CREATION_EXPIRED`.
+
+
+    * `ACKNOWLEDGED` -> `REJECTED`: Le ticket n'est pas recevable.
+
+      **Ce changement de status ne peux être effectué que par l'OI.**
+
+      Les raisons (`statusChangeReason`) possibles sont:
+
+      * `UNKNOWN_RESOURCE`: la ressource n'existe pas chez l'OI
+
+      * `UNKNOWN_ZONE`: la zone géographique n'est pas couverte par l'OI
+
+      * `CONFLICT`: le ticket est en conflit avec un autre ticket (2 demandes actives sur la même adresse)
+
+        Le champ `statusChangeDetails` est obligatoire avec la référence du ou des tickets en conflit.
+
+      * `ALREADY_RESOLVED`: la resource existe déjà chez l'OI
+
+        Le champ `statusChangeDetails` est obligatoire avec la référence de la ressource existante.
+
+      * `INVALID`: le ticket est invalide (champ manquant, valeur incorrecte, etc.)
+
+        Le champ `statusChangeDetails` est obligatoire.
+
+      * `OTHER`: autre raison non référencée par le protocole
+
+        Le champ `statusChangeDetails` est obligatoire.
+
+      L'OI doit fournir la durée d'analyse dans le champ `analysisDelay`.
+
+
+    * `ACKNOWLEDGED` -> `IN_PROGRESS`: Le ticket est recevable.
+
+      **Ce changement de status ne peux être effectué que par l'OI.**
+
+      Le temps de traitement est décompté à partir de ce changement de status (`resolutionDelay`).
+
+      L'OI doit fournir:
+
+      * une date de résolution prévisionnelle dans le champ `expectedResolutionDate`.
+
+      * le qualification du ticket dans le champ `complexity`.
+
+      * la durée d'analyse dans le champ `analysisDelay`.
+
+
+    * `IN_PROGRESS` -> `PENDING`: demande d'information complémentaire
+
+      **Ce changement de status ne peux être effectué que par l'OI.**
+
+      Le temps de traitement est suspendu à partir de ce changement de status.
+
+      L'OC doit fournir:
+
+      * la liste des informations complémentaires attendues dans le champ `statusChangeDetails`.
+
+        Ces informations peuvents être fournies dans une note ou un attachement.
+
+
+    * `IN_PROGRESS` -> `RESOLVED`: résolution du ticket
+
+      **Ce changement de status ne peux être effectué que par l'OI.**
+
+      L'OI doit fournir:
+
+      * la durée de résolution dans le champ `resolutionDelay`.
+
+      * la référence de la ressource créée ou modifiée dans le champ `statusChangeDetails`.
+
+      L'OC peut accepter la résolution du ticket en passant le status à `CLOSED`
+      ou la refuser en passant le status à `IN_PROGRESS`.
+
+      Le temps de traitement est suspendu à partir de ce changement de status.
+
+
+    * `PENDING` -> `IN_PROGRESS`: réponse à une demande d'information complémentaire
+
+      **Ce changement de status ne peux être effectué que par l'OC.**
+
+
+    * `PENDING` -> `CLOSED`: annulation du ticket
+
+      **Ce changement de status ne peux être effectué que par l'OI.**
+
+      Le ticket est annulé car l'OC n'a pas répondu à la demande d'information complémentaire
+      dans les délais impartis (2 semaines).
+
+      L'OI doit au préalable avoir notifié une relance de la demande d'information complémentaire
+      **4 jours** avant l'annulation du ticket.
+
+      Le champ `statusChangeReason` doit être renseigné avec la valeur `DELAY_ANSWER_EXPIRED`.
+
+
+    * `RESOLVED` -> `CLOSED`: validation de la résolution du ticket.
+
+      **Ce changement de status ne peux être effectué que par l'OC ou l'OI.**
+
+      Le ticket est clos.
+
+      * Si ce changement est effectué par l'OC, le ticket est clos par validation de la résolution.
+
+        Le champ `statusChangeReason` doit être renseigné avec la valeur `RESOLUTION_ACCEPTED`.
+
+      * Si le changement est effectué par l'OI, le ticket est clos
+        car l'OC n'a pas répondu à la résolution après un délai de **2 semaines**.
+
+        Le champ `statusChangeReason` doit être renseigné avec la valeur `DELAY_VALIDATION_EXPIRED`.
+
+
+    * `RESOLVED` -> `IN_PROGRESS`: refus de la résolution du ticket.
+
+      **Ce changement de status ne peux être effectué que par l'OC.**
+
+      La résolution du ticket est refusée par l'OC.
+
+      Le temps de traitement est repris à partir de ce changement de status.
+
+
+    * `ACKNOWLEDGED|IN_PROGRESS|PENDING` -> `CANCELLED`: annulation du ticket par l'OC.
+
+      **Ce changement de status ne peux être effectué que par l'OC.**
+
+      Le ticket est annulé par l'OC.
+
+      Le temps de traitement est annulé à partir de ce changement de status.
+
 
     ## Délais de traitement
 
@@ -621,7 +764,7 @@ paths:
         "502":
           $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-502'
         "503":
-          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-503'        
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-503'
 
   /{AnomalieAdresseId}/event:
     parameters:
@@ -693,7 +836,7 @@ paths:
         "502":
           $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-502'
         "503":
-          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-503'        
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-503'
 
 
     post:
@@ -800,10 +943,6 @@ components:
 
               L'OI a besoin d'informations complémentaires pour traiter le ticket.
 
-              L'OI à la possibilité de passer le ticket au status `CANCELLED`
-              si celui-ci reste trop longtemps dans cet état.
-              Ce délai est défini par l'OI.
-
             * `RESOLVED`: Le ticket est résolu et en attente de validation par l'OC.
 
             * `CLOSED`: Le ticket est clos et validé par l'OC.
@@ -815,27 +954,16 @@ components:
 
             **Notes:**
 
-            * Lors de la création, l'OC ne peut choisir que les valeurs `CREATING` ou `ACKNOWLEDGED`.
-              Si l'OC ne fournit pas de valeur, la valeur `ACKNOWLEDGED` est utilisée par défaut.
-
             * Le changement de status peut être accompagné d'une raison dans `statusChangeReason`.
 
+            * Le changement de status peut être accompagné d'une description dans `statusChangeDetails`.
 
-            **Possibilités de changement de status par l'OC:**
-
-            * `CREATING` -> `ACKNOWLEDGED`: finalisation de la création du ticket
-            * `ACKNOWLEDGED` -> `REJECTED`: TODO
-            * `PENDING` -> `IN_PROGRESS`: réponse à une demande d'information complémentaire
-            * `RESOLVED` -> `CLOSED`: validation de la résolution du ticket
-            * `RESOLVED` -> `IN_PROGRESS`: refus de la résolution du ticket
-            * `CREATING|ACKNOWLEDGED|IN_PROGRESS|PENDING` -> `CANCELLED`: annulation du ticket
           default: ACKNOWLEDGED
           enum:
           - CREATING
           - ACKNOWLEDGED
           - IN_PROGRESS
           - PENDING
-          - HELD
           - RESOLVED
           - CLOSED
           - REJECTED
