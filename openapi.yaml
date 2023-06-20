@@ -67,6 +67,10 @@ info:
       La liste des critères communs n’est pas fermée et pourra être complétée
       à la demande d’un opérateur suite à la validation par consensus du groupe de travail Infrastructure.
 
+    ## Type de signalement
+
+    ![Type de signalement](./type.drawio.svg)
+
     ## Workflow
 
     ![Workflow](./status.drawio.svg)
