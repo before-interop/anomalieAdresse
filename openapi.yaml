@@ -71,6 +71,24 @@ info:
 
     ![Type de signalement](./type.drawio.svg)
 
+    ### AnomalieAdresseUpdate
+
+    * **AnomalieAdresseUpdateImb**
+
+      Anomalie qui permet de mettre à jour un ou plusieurs attributs sur un ou plusieurs immeubles.
+
+    * **AnomalieAdresseUpdateNbLogements**
+
+      Anomalie qui permet de mettre à jour le nombre de logement cible d'un immeuble.
+
+    * **AnomalieAdresseUpdateLocalization**
+
+      Anomalie qui permet de mettre à jour la localisation d'un immeuble
+
+    ### AnomalieAdresseCreation
+
+
+
     ## Workflow
 
     ![Workflow](./status.drawio.svg)
