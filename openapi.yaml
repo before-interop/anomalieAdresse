@@ -73,14 +73,14 @@ info:
 
     **Possibilités de changement de status:**
 
-    * `CREATING` -> `ACKNOWLEDGED`: L'OC a finalisé la création du tickets.
+    * `CREATING` → `ACKNOWLEDGED`: L'OC a finalisé la création du tickets.
 
       **Ce changement de status ne peux être effectué que par l'OC.**
 
       Ce status est optionel. Certains OI peuvent ne pas offrir la possibilité de créer des tickets en mode *DRAFT*.
 
 
-    * `CREATING` -> `CANCELLED`: Le délai de création du ticket est expiré.
+    * `CREATING` → `CANCELLED`: Le délai de création du ticket est expiré.
 
       **Ce changement de status ne peux être effectué que par l'OI.**
 
@@ -89,7 +89,7 @@ info:
       Le champ `statusChangeReason` doit être renseigné avec la valeur `DELAY_CREATION_EXPIRED`.
 
 
-    * `ACKNOWLEDGED` -> `REJECTED`: Le ticket n'est pas recevable.
+    * `ACKNOWLEDGED` → `REJECTED`: Le ticket n'est pas recevable.
 
       **Ce changement de status ne peux être effectué que par l'OI.**
 
@@ -118,7 +118,7 @@ info:
       L'OI doit fournir la durée d'analyse dans le champ `analysisDelay`.
 
 
-    * `ACKNOWLEDGED` -> `IN_PROGRESS`: Le ticket est recevable.
+    * `ACKNOWLEDGED` → `IN_PROGRESS`: Le ticket est recevable.
 
       **Ce changement de status ne peux être effectué que par l'OI.**
 
@@ -133,7 +133,7 @@ info:
       * la durée d'analyse dans le champ `analysisDelay`.
 
 
-    * `IN_PROGRESS` -> `PENDING`: demande d'information complémentaire
+    * `IN_PROGRESS` → `PENDING`: demande d'information complémentaire
 
       **Ce changement de status ne peux être effectué que par l'OI.**
 
@@ -146,7 +146,7 @@ info:
         Ces informations peuvents être fournies dans une note ou un attachement.
 
 
-    * `IN_PROGRESS` -> `RESOLVED`: résolution du ticket
+    * `IN_PROGRESS` → `RESOLVED`: résolution du ticket
 
       **Ce changement de status ne peux être effectué que par l'OI.**
 
@@ -162,12 +162,12 @@ info:
       Le temps de traitement est suspendu à partir de ce changement de status.
 
 
-    * `PENDING` -> `IN_PROGRESS`: réponse à une demande d'information complémentaire
+    * `PENDING` → `IN_PROGRESS`: réponse à une demande d'information complémentaire
 
       **Ce changement de status ne peux être effectué que par l'OC.**
 
 
-    * `PENDING` -> `CLOSED`: annulation du ticket
+    * `PENDING` → `CLOSED`: annulation du ticket
 
       **Ce changement de status ne peux être effectué que par l'OI.**
 
@@ -180,7 +180,7 @@ info:
       Le champ `statusChangeReason` doit être renseigné avec la valeur `DELAY_ANSWER_EXPIRED`.
 
 
-    * `RESOLVED` -> `CLOSED`: validation de la résolution du ticket.
+    * `RESOLVED` → `CLOSED`: validation de la résolution du ticket.
 
       **Ce changement de status ne peux être effectué que par l'OC ou l'OI.**
 
@@ -196,7 +196,7 @@ info:
         Le champ `statusChangeReason` doit être renseigné avec la valeur `DELAY_VALIDATION_EXPIRED`.
 
 
-    * `RESOLVED` -> `IN_PROGRESS`: refus de la résolution du ticket.
+    * `RESOLVED` → `IN_PROGRESS`: refus de la résolution du ticket.
 
       **Ce changement de status ne peux être effectué que par l'OC.**
 
@@ -205,7 +205,7 @@ info:
       Le temps de traitement est repris à partir de ce changement de status.
 
 
-    * `ACKNOWLEDGED|IN_PROGRESS|PENDING` -> `CANCELLED`: annulation du ticket par l'OC.
+    * `ACKNOWLEDGED|IN_PROGRESS|PENDING` → `CANCELLED`: annulation du ticket par l'OC.
 
       **Ce changement de status ne peux être effectué que par l'OC.**
 
@@ -278,7 +278,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/OneOfAnomalieAdresse"
+                  $ref: "#/components/schemas/AnyOfAnomalieAdresse"
         "400":
           $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-400"
         "401":
@@ -891,17 +891,19 @@ components:
         example: 123e4567-e89b-12d3-a456-426614174000
 
   schemas:
-    AnomalieAdresse:
-      anyOf:
-        - $ref: "#/components/schemas/AnomalieAdresseCreation"
-        - $ref: "#/components/schemas/AnomalieAdresseUpdate"
-        - $ref: "#/components/schemas/AnomalieAdresseMulti"
-
     OneOfAnomalieAdresse:
       oneOf:
         - $ref: "#/components/schemas/AnomalieAdresseCreation"
-        - $ref: "#/components/schemas/AnomalieAdresseUpdate"
-        - $ref: "#/components/schemas/AnomalieAdresseMulti"
+        - $ref: "#/components/schemas/AnomalieAdresseUpdateImb"
+        - $ref: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
+        - $ref: "#/components/schemas/AnomalieAdresseUpdateLocalization"
+
+    AnyOfAnomalieAdresse:
+      anyOf:
+        - $ref: "#/components/schemas/AnomalieAdresseCreation"
+        - $ref: "#/components/schemas/AnomalieAdresseUpdateImb"
+        - $ref: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
+        - $ref: "#/components/schemas/AnomalieAdresseUpdateLocalization"
 
     AnomalieAdresseBase:
       allOf:
