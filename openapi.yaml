@@ -906,7 +906,6 @@ components:
     AnomalieAdresseBase:
       allOf:
         - $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/schemas/TroubleTicket.openapi.yaml#/components/schemas/TroubleTicket"
-        - $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/schemas/StatusEntity.openapi.yaml#/components/schemas/StatusEntity"
       required:
         - code_oi
         - code_oc
@@ -969,14 +968,26 @@ components:
         expectedResolutionDate:
           description: Date prévisionnelle de résolution du ticket.
             La valeur est renseignée par l'OI lors du passage à l'état `IN_PROGRESS`.
-        duration_analyze:
+        analysisDelay:
           type: integer
           readOnly: true
           description: Temps culmulé du ticket dans le status `ACKNOWLEDGED`.
-        duration_treatment:
+        resolutionDelay:
           type: integer
           readOnly: true
           description: Temps cumulé du ticket dans le status `IN_PROGRESS`.
+        statusChangeReason:
+          enum:
+            - ALREADY_RESOLVED
+            - CONFLICT
+            - DELAY_ANSWER_EXPIRED
+            - DELAY_CREATION_EXPIRED
+            - DELAY_VALIDATION_EXPIRED
+            - INVALID
+            - OTHER
+            - RESOLUTION_ACCEPTED
+            - UNKNOWN_RESOURCE
+            - UNKNOWN_ZONE
         priority:
           readOnly: false
           enum:
