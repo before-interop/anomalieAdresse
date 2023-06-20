@@ -1,0 +1,1044 @@
+openapi: 3.0.1
+
+info:
+  title: AnomalieAdresse API
+  version: 2.0.0
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  description: |
+    Cet outil a été créé afin de respecter l’obligation réglementaire
+    indiquée dans la [Décision Arcep n° 2020-1432].
+
+    Il permet le traitement d’une demande de création ou de modification d’adresses
+    dans les IPE grâce à des flux normalisés. 
+
+    **Extrait de la [Décision Arcep n° 2020-1432]:**
+
+      *«
+      Compte tenu de l’importance des fichiers IPE qui permettent de connaître l’éligibilité sur les réseaux FttH,
+      il apparaît raisonnable d’imposer aux opérateurs d’infrastructure la mise en place d’un processus inter-opérateurs
+      afin de permettre aux opérateurs commerciaux de leur signaler ces immeubles manquants ou erronés.
+      Comme pour les autres processus inter-opérateurs, il serait souhaitable qu’un tel processus de signalement
+      soit identique chez l’ensemble des opérateurs d’infrastructure
+      afin de permettre aux opérateurs commerciaux de mutualiser les développements nécessaires.
+      »*
+
+    ## Lexique
+
+    #### OI
+
+    Opérateur d’immeuble:
+    Toute personne chargée de l’établissement ou de la gestion d’une ou plusieurs lignes dans un immeuble bâti,
+    notamment dans le cadre d’une convention d’installation, d’entretien, de remplacement ou de gestion
+    des lignes signée avec le propriétaire ou le syndicat de copropriétaires,
+    en application de l’article [L33-6] du code des postes et des communications électroniques;
+    l’opérateur d’immeuble n’est pas nécessairement un opérateur au sens de l’article [L33-1] du même code.
+
+    #### OC
+
+    Opérateur Commercial
+    Opérateur choisi par le client final pour la fourniture d'un service de télécommunications
+    ou par un fournisseur d’accès au service pour la fourniture d’un service de télécommunications
+    à son propre client final.
+
+    ## Processus
+
+    Les délais de traitement sont fixés par typologie dans la [Décision Arcep n° 2020-1432]:
+
+    * Dans le cas d’un signalement unitaire, la correction de l’IPE par l’OI devra intervenir
+      dans un délai d’une semaine après le signalement de l’OC pour les cas simples
+      et de trois semaines maximum pour les cas complexes.
+
+    * Dans le cas d’un signalement en masse, la correction de l’IPE par l’OI devra intervenir
+      dans un délai de 2 mois maximum après le signalement de l’OC.
+
+    Le processus doit prendre en compte deux catégories de signalements des anomalies de référencement d’adresses:
+
+    * **Signalement unitaire**:
+      par exemple anomalie détectée à partir d’une réclamation client.
+      Il s’agit d’un signalement impactant une seule ligne de l’IPE.
+
+    * **Signalement en masse**:
+      par exemple liste d’anomalies détectées par contrôles informatisés ayant un critère commun (anomalie sur un même champ).
+      Il s’agit d’un signalement unitaire impactant deux lignes IPE ou plus.
+      Certains critères devront concerner la même zone géographique. 
+
+      La liste des critères communs n’est pas fermée et pourra être complétée
+      à la demande d’un opérateur suite à la validation par consensus du groupe de travail Infrastructure.
+
+    ## Workflow
+
+    ![Workflow](./status.drawio.svg)
+
+    ## Délais de traitement
+
+    Les délais de traitement sont fixés par typologie:
+
+    * cas simple: 1 semaine
+    * cas complexe: 3 semaines
+    * signalement en masse: 8 semaines
+
+
+    [Décision Arcep n° 2020-1432]: https://www.arcep.fr/uploads/tx_gsavis/20-1432.pdf
+    [L33-1]: https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000047293234
+    [L33-6]: https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000037671945
+
+servers:
+- url: '{protocol}://{host}:{port}{basePath}/annomalie-adresse/'
+  variables:
+    protocol:
+      enum:
+        - https
+        - http
+      default: https
+    host:
+      default: localhost
+    port:
+      default: '8080'
+    basePath:
+      default: /api/v2
+
+tags:
+- name: TroubleTicket
+  description: TroubleTicket management
+- name: Note
+  description: Note management
+- name: Attachment
+  description: Attachment management
+- name: Event
+  description: Event management
+
+paths:
+  /:
+    get:
+      tags:
+      - TroubleTicket
+      summary: Get all trouble tickets
+      description: Get all trouble tickets
+      parameters:
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/limit'
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/offset'
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/sort'
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/fields.openapi.yaml#/components/parameters/fields'
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/filters.openapi.yaml#/components/parameters/filters'
+      responses:
+        "200":
+          description: The list of trouble tickets
+          headers:
+            X-Total-Count:
+              $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count'
+            X-Result-Count:
+              $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Result-Count'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OneOfAnomalieAdresse'
+        "400":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-400'
+        "401":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-401'
+        "403":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-403'
+        "500":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-500'
+        "501":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-501'
+        "502":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-502'
+        "503":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-503'
+
+    head:
+      tags:
+      - TroubleTicket
+      summary: Count the number of trouble tickets
+      description: Count the number of trouble tickets matching the given criteria.
+      parameters:
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/filters.openapi.yaml#/components/parameters/filters'
+      responses:
+        "200":
+          description: The number of trouble tickets.
+          headers:
+            X-Total-Count:
+              $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count'
+        "400":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-400'
+        "401":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-401'
+        "403":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-403'
+        "500":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-500'
+        "501":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-501'
+        "502":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-502'
+        "503":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-503'
+
+    post:
+      tags:
+      - TroubleTicket
+      summary: Create a trouble ticket
+      description: Create a trouble ticket
+      requestBody:
+        description: The trouble ticket to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OneOfAnomalieAdresse'
+      responses:
+        "201":
+          description: The created trouble ticket
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OneOfAnomalieAdresse'
+
+  /{AnomalieAdresseId}:
+    parameters:
+    - $ref: '#/components/parameters/anomalieAdresseId'
+
+    get:
+      tags:
+      - TroubleTicket
+      summary: Get a trouble ticket
+      description: Get a trouble ticket
+      responses:
+        "200":
+          description: The trouble ticket
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OneOfAnomalieAdresse'
+        "401":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-401'
+        "403":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-403'
+        "404":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-404'
+        "500":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-500'
+        "501":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-501'
+        "502":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-502'
+        "503":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-503'
+
+    put:
+      tags:
+      - TroubleTicket
+      summary: Update a trouble ticket
+      description: Update a trouble ticket
+      requestBody:
+        description: The trouble ticket to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OneOfAnomalieAdresse'
+      responses:
+        "200":
+          description: The updated trouble ticket
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OneOfAnomalieAdresse'
+        "400":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-400'
+        "401":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-401'
+        "403":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-403'
+        "404":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-404'
+        "406":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-406'
+        "409":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-409'
+        "500":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-500'
+        "501":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-501'
+        "502":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-502'
+        "503":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-503'
+
+    patch:
+      tags:
+      - TroubleTicket
+      summary: Partially update a trouble ticket
+      description: Partially update a trouble ticket
+      requestBody:
+        description: The trouble ticket to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OneOfAnomalieAdresse'
+      responses:
+        "200":
+          description: The updated trouble ticket
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OneOfAnomalieAdresse'
+        "400":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-400'
+        "401":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-401'
+        "403":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-403'
+        "404":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-404'
+        "406":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-406'
+        "409":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-409'
+        "500":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-500'
+        "501":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-501'
+        "502":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-502'
+        "503":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-503'
+
+  /{AnomalieAdresseId}/note:
+    parameters:
+    - $ref: '#/components/parameters/anomalieAdresseId'
+
+    get:
+      tags:
+      - Note
+      summary: Get all notes of a trouble ticket
+      description: Get all notes of a trouble ticket
+      parameters:
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/limit'
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/offset'
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/sort'
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/fields.openapi.yaml#/components/parameters/fields'
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/filters.openapi.yaml#/components/parameters/filters'
+      responses:
+        "200":
+          description: The list of notes
+          headers:
+            X-Total-Count:
+              $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count'
+            X-Result-Count:
+              $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Result-Count'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Note'
+        "400":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-400'
+        "401":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-401'
+        "403":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-403'
+        "404":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-404'
+        "406":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-406'
+        "409":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-409'
+        "500":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-500'
+        "501":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-501'
+        "502":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-502'
+        "503":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-503'
+
+    head:
+      tags:
+      - Note
+      summary: Count the number of notes of a trouble ticket
+      description: Count the number of notes of a trouble ticket matching the given criteria.
+      parameters:
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/filters.openapi.yaml#/components/parameters/filters'
+      responses:
+        "200":
+          description: The number of notes
+          headers:
+            X-Total-Count:
+              $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count'
+
+    post:
+      tags:
+      - Note
+      summary: Create a note for a trouble ticket
+      description: Create a note for a trouble ticket
+      requestBody:
+        description: The note to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Note'
+      responses:
+        "201":
+          description: The created malfacon
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Note'
+        "400":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-400'
+        "401":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-401'
+        "403":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-403'
+        "406":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-406'
+        "409":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-409'
+        "500":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-500'
+        "501":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-501'
+        "502":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-502'
+        "503":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-503'
+
+  /{AnomalieAdresseId}/attachment:
+    parameters:
+    - $ref: '#/components/parameters/anomalieAdresseId'
+
+    get:
+      tags:
+      - Attachment
+      summary: Get all attachments of a trouble ticket
+      description: Get all attachments of a trouble ticket
+      parameters:
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/limit'
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/offset'
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/sort'
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/fields.openapi.yaml#/components/parameters/fields'
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/filters.openapi.yaml#/components/parameters/filters'
+      responses:
+        "200":
+          description: The list of attachments
+          headers:
+            X-Total-Count:
+              $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count'
+            X-Result-Count:
+              $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Result-Count'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Attachment'
+        "400":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-400'
+        "401":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-401'
+        "403":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-403'
+        "500":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-500'
+        "501":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-501'
+        "502":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-502'
+        "503":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-503'
+
+    head:
+      tags:
+      - Attachment
+      summary: Count the number of attachments of a trouble ticket
+      description: Count the number of attachments of a trouble ticket matching the given criteria.
+      parameters:
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/filters.openapi.yaml#/components/parameters/filters'
+      responses:
+        "200":
+          description: The number of attachments
+          headers:
+            X-Total-Count:
+              $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count'
+        "400":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-400'
+        "401":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-401'
+        "403":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-403'
+        "500":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-500'
+        "501":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-501'
+        "502":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-502'
+        "503":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-503'
+
+    post:
+      tags:
+      - Attachment
+      summary: Create an attachment for a trouble ticket
+      description: Create an attachment for a trouble ticket
+      requestBody:
+        description: The attachment to create
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AttachmentFormData'
+      responses:
+        "201":
+          description: The created attachment
+          content:
+            application/json:
+              schema:
+                $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Attachment.openapi.yaml#/components/schemas/Attachment'
+        "400":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-400'
+        "401":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-401'
+        "403":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-403'
+        "406":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-406'
+        "409":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-409'
+        "500":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-500'
+        "501":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-501'
+        "502":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-502'
+        "503":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-503'
+
+  /{AnomalieAdresseId}/attachment/{AttachmentId}/content:
+    parameters:
+    - $ref: '#/components/parameters/anomalieAdresseId'
+    - $ref: '#/components/parameters/attachmentId'
+
+    get:
+      tags:
+      - Attachment
+      summary: Download an attachment of a trouble ticket
+      description: Download an attachment of a trouble ticket
+      responses:
+        "200":
+          description: The content of the attachment
+          content:
+            application/octet-stream: {}
+        "401":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-401'
+        "403":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-403'
+        "404":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-404'
+        "406":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-406'
+        "500":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-500'
+        "501":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-501'
+        "502":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-502'
+        "503":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-503'
+
+  /event:
+    get:
+      tags:
+      - Event
+      summary: Get all events of all trouble tickets
+      description: Get all events of all trouble tickets
+      parameters:
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/limit'
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/offset'
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/sort'
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/fields.openapi.yaml#/components/parameters/fields'
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/filters.openapi.yaml#/components/parameters/filters'
+      responses:
+        "200":
+          description: The list of events
+          headers:
+            X-Total-Count:
+              $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count'
+            X-Result-Count:
+              $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Result-Count'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+        "400":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-400'
+        "401":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-401'
+        "403":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-403'
+        "500":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-500'
+        "501":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-501'
+        "502":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-502'
+        "503":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-503'
+
+    head:
+      tags:
+      - Event
+      summary: Count the number of events of all trouble tickets
+      description: Count the number of events of all trouble tickets matching the given criteria.
+      parameters:
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/filters.openapi.yaml#/components/parameters/filters'
+      responses:
+        "200":
+          description: The number of events
+          headers:
+            X-Total-Count:
+              $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count'
+        "400":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-400'
+        "401":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-401'
+        "403":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-403'
+        "500":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-500'
+        "501":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-501'
+        "502":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-502'
+        "503":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-503'        
+
+  /{AnomalieAdresseId}/event:
+    parameters:
+    - $ref: '#/components/parameters/anomalieAdresseId'
+
+    get:
+      tags:
+      - Event
+      summary: Get all events of a trouble ticket
+      description: Get all events of a trouble ticket
+      parameters:
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/limit'
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/offset'
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/sort'
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/fields.openapi.yaml#/components/parameters/fields'
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/filters.openapi.yaml#/components/parameters/filters'
+      responses:
+        "200":
+          description: The list of events
+          headers:
+            X-Total-Count:
+              $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count'
+            X-Result-Count:
+              $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Result-Count'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+        "400":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-400'
+        "401":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-401'
+        "403":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-403'
+        "500":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-500'
+        "501":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-501'
+        "502":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-502'
+        "503":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-503'
+
+    head:
+      tags:
+      - Event
+      summary: Count the number of events of a trouble ticket
+      description: Count the number of events of a trouble ticket matching the given criteria.
+      parameters:
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/filters.openapi.yaml#/components/parameters/filters'
+      responses:
+        "200":
+          description: The number of events
+          headers:
+            X-Total-Count:
+              $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count'
+        "400":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-400'
+        "401":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-401'
+        "403":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-403'
+        "500":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-500'
+        "501":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-501'
+        "502":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-502'
+        "503":
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-503'        
+
+
+    post:
+      tags:
+      - Event
+      summary: Receive an event for a trouble ticket
+      description: Receive an event for a trouble ticket
+      requestBody:
+        description: The event to receive
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+      responses:
+        "200":
+          description: |
+            L'événement a été reçu avec succès.
+
+            La réponse n'a pas l'obligation de contenir un body.
+            Si l'OC retourne un body, celui-ci pourra être enregistré dans le journal de l'OI.
+        default:
+          description: |
+            Erreur lors de la réception de l'event.
+
+            **Notes:**
+
+            * Si le code d'erreur est dans la plage `4xx`, l'événement ne sera pas retransmis.
+            * Si le code d'erreur est dans la plage `5xx`, l'événement pourra être retransmis par l'OI.
+            * La réponse n'a pas l'obligation de contenir un body.
+              Si l'OC retourne un body, celui-ci pourra être enregistré dans le journal de l'OI.
+
+components:
+
+  parameters:
+    anomalieAdresseId:
+      name: AnomalieAdresseId
+      in: path
+      description: The id of the trouble ticket
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: 123e4567-e89b-12d3-a456-426614174000
+
+    attachmentId:
+      name: AttachmentId
+      in: path
+      description: The id of the attachment
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: 123e4567-e89b-12d3-a456-426614174000
+
+  schemas:
+    AnomalieAdresse:
+      anyOf:
+      - $ref: '#/components/schemas/AnomalieAdresseCreation'
+      - $ref: '#/components/schemas/AnomalieAdresseUpdate'
+      - $ref: '#/components/schemas/AnomalieAdresseMulti'
+
+    OneOfAnomalieAdresse:
+      oneOf:
+      - $ref: '#/components/schemas/AnomalieAdresseCreation'
+      - $ref: '#/components/schemas/AnomalieAdresseUpdate'
+      - $ref: '#/components/schemas/AnomalieAdresseMulti'
+
+    AnomalieAdresseBase:
+      allOf:
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/schemas/TroubleTicket.openapi.yaml#/components/schemas/TroubleTicket'
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/schemas/StatusEntity.openapi.yaml#/components/schemas/StatusEntity'
+      required:
+      - code_oi
+      - code_oc
+      - '@type'
+      properties:
+        '@type':
+          type: string
+          readOnly: false
+        status:
+          description: |
+            Le status du ticket.
+
+            Les valeurs possibles sont:
+
+            * `CREATING`: Le ticket est en cours de création.
+
+              Ce statut est positionné lorsque la création du ticket est démarrée mais pas encore terminée.
+
+              Exemple:
+              Pour finir la création du ticket, une ou plusieurs pièces jointes doivent être téléversées.
+              Dans ce cas, un *PATCH* ou un *PUT* doit être effectué pour mettre à jour le ticket avec le status `ACKNOWLEDGED`.
+
+            * `ACKNOWLEDGED`: Le ticket peut être traité par l'OI.
+
+              Ce status est positionné lorsque la création du ticket est terminée.
+
+            * `IN_PROGRESS`: Qualification du ticket par l'OI (cas simple ou complexe).
+
+              L'OC est autorisé à modifier la sévérité du ticket.
+
+            * `PENDING`: Le ticket est en attente d'une action de l'OC.
+
+              L'OI a besoin d'informations complémentaires pour traiter le ticket.
+
+              L'OI à la possibilité de passer le ticket au status `CANCELLED`
+              si celui-ci reste trop longtemps dans cet état.
+              Ce délai est défini par l'OI.
+
+            * `RESOLVED`: Le ticket est résolu et en attente de validation par l'OC.
+
+            * `CLOSED`: Le ticket est clos et validé par l'OC.
+
+            * `REJECTED`: Le ticket est rejeté par l'OI.
+
+            * `CANCELLED`: Le ticket est annulé par l'OC.
+
+
+            **Notes:**
+
+            * Lors de la création, l'OC ne peut choisir que les valeurs `CREATING` ou `ACKNOWLEDGED`.
+              Si l'OC ne fournit pas de valeur, la valeur `ACKNOWLEDGED` est utilisée par défaut.
+
+            * Le changement de status peut être accompagné d'une raison dans `statusChangeReason`.
+
+
+            **Possibilités de changement de status par l'OC:**
+
+            * `CREATING` -> `ACKNOWLEDGED`: finalisation de la création du ticket
+            * `ACKNOWLEDGED` -> `REJECTED`: TODO
+            * `PENDING` -> `IN_PROGRESS`: réponse à une demande d'information complémentaire
+            * `RESOLVED` -> `CLOSED`: validation de la résolution du ticket
+            * `RESOLVED` -> `IN_PROGRESS`: refus de la résolution du ticket
+            * `CREATING|ACKNOWLEDGED|IN_PROGRESS|PENDING` -> `CANCELLED`: annulation du ticket
+          default: ACKNOWLEDGED
+          enum:
+          - CREATING
+          - ACKNOWLEDGED
+          - IN_PROGRESS
+          - PENDING
+          - HELD
+          - RESOLVED
+          - CLOSED
+          - REJECTED
+          - CANCELLED
+        expectedResolutionDate:
+          description: Date prévisionnelle de résolution du ticket.
+            La valeur est renseignée par l'OI lors du passage à l'état `IN_PROGRESS`.
+        duration_analyze:
+          type: integer
+          readOnly: true
+          description: Temps culmulé du ticket dans le status `ACKNOWLEDGED`.
+        duration_treatment:
+          type: integer
+          readOnly: true
+          description: Temps cumulé du ticket dans le status `IN_PROGRESS`.
+        priority:
+          readOnly: false
+          enum:
+            - LOW
+            - MEDIUM
+            - HIGH
+          default: LOW
+        complexity:
+          type: string
+          readOnly: true
+          enum:
+            - SIMPLE
+            - COMPLEX
+          description: Complexité du ticket.
+            La valeur est renseignée par l'OI lors du passage à l'état `IN_PROGRESS`.
+        code_oi:
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Arcep.openapi.yaml#/components/schemas/codeOperateurArcep'
+          description: Code ARCEP de l'OI.
+
+            La valeur est renseignée par l'OC à la création du ticket.
+
+            L'OI peut choisir de renseigner ou modifier ce code lors de la création du ticket,
+            et donc rendre ce paramètre en lecture seule.
+        code_oc:
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Arcep.openapi.yaml#/components/schemas/codeOperateurArcep'
+          description: Code ARCEP de l'OC.
+
+            La valeur est renseignée par l'OC à la création du ticket.
+
+            L'OI peut choisir de renseigner ou modifier ce code lors de la création du ticket,
+            et donc rendre ce paramètre en lecture seule.
+        externalId:
+          description: Référence interne du ticket de l'OC.
+        ticketType:
+          enum:
+          - OC_REQUEST
+          - CUSTUMER_REQUEST
+
+    Address:
+      allOf:
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Entity.openapi.yaml#/components/schemas/Entity'
+      properties:
+        '@baseType':
+          example: Address
+          enum:
+          - Address
+          readOnly: true
+        '@type':
+          example: Address
+          enum:
+          - Address
+          readOnly: true
+
+    AnomalieAdresseCreation:
+      allOf:
+      - $ref: '#/components/schemas/AnomalieAdresseBase'
+
+    AnomalieAdresseUpdate:
+      allOf:
+      - $ref: '#/components/schemas/AnomalieAdresseBase'
+      properties:
+        '@baseType':
+          enum:
+          - AnomalieAdresseUpdate
+
+    AnomalieAdresseUpdateImb:
+      description: |
+        *AnomalieAdresseUpdateImb* est une anomalie de type `AnomalieAdresseUpdate`
+        qui permet de mettre à jour un des attributs en masse d'un ou plusieurs immeubles.
+      allOf:
+      - $ref: '#/components/schemas/AnomalieAdresseUpdate'
+      required:
+        - issues
+        - refs
+      properties:
+        refs:
+          type: array
+          minLength: 1
+          items:
+            allOf:
+              - $ref: '#/components/schemas/RefImb'
+            required:
+              - codeImb
+        issues:
+          type: array
+          minLength: 1
+          items:
+            allOf:
+              - $ref: '#/components/schemas/Issue'
+        '@type':
+          enum:
+            - AnomalieAdresseUpdateImb
+
+    AnomalieAdresseUpdateNbLogements:
+      description: |
+        *AnomalieAdresseUpdateNbLogements* est une anomalie de type `AnomalieAdresseUpdate`
+        qui permet de mettre à jour le nombre de logements cible d'un immeuble.
+
+        Cette anomalie est unitaire et ne peut contenir qu'un seul immeuble.
+      allOf:
+      - $ref: '#/components/schemas/AnomalieAdresseUpdate'
+      required:
+        - refImb
+        - nbLogementsCible
+      properties:
+        refImb:
+          allOf:
+          - $ref: '#/components/schemas/RefImb'
+        nbLogementsCible:
+          type: integer
+        '@type':
+          enum:
+            - AnomalieAdresseUpdateNbLogements
+
+    AnomalieAdresseUpdateLocalization:
+      description: |
+        *AnomalieAdresseUpdateLocalization* est une anomalie de type `AnomalieAdresseUpdate`
+        qui permet de mettre à jour la localisation d'un immeuble.
+
+        Cette anomalie est unitaire et ne peut contenir qu'un seul immeuble.
+      allOf:
+      - $ref: '#/components/schemas/AnomalieAdresseUpdate'
+      required:
+        - refImb
+        - localization
+      properties:
+        refImb:
+          allOf:
+          - $ref: '#/components/schemas/RefImb'
+        localization:
+          $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/schemas/GeographicPoint.openapi.yaml#/components/schemas/GeographicPoint'
+        '@type':
+          enum:
+            - AnomalieAdresseUpdateNbLogements
+
+    AnomalieAdresseMulti:
+      allOf:
+      - $ref: '#/components/schemas/AnomalieAdresseBase'
+
+    RefImb:
+      type: object
+      required:
+      - codeImb
+      properties:
+        codeImb:
+          type: string
+          description: Identifiant de l'immeuble IPE.
+
+    Issue:
+      type: object
+      required:
+        - key
+      properties:
+        key:
+          type: string
+          description: |
+            Nom de la propritété en erreur.
+
+            Les attributs imbriqués sont séparé par le caractère `.`.
+          example: 'address.streetName'
+        description:
+          type: string
+          description: Explication simple du problème lié à l'attribut en erreur.
+        value:
+          type: string
+          description: Proposition de valeur de remplacement pour l'attribut en erreur.
+
+    Note:
+      allOf:
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Note.openapi.yaml#/components/schemas/Note'
+
+    Attachment:
+      allOf:
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Attachment.openapi.yaml#/components/schemas/Attachment'
+
+    AttachmentFormData:
+      allOf:
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/tools/attachment/attachment.openapi.yaml#/components/schemas/AttachmentFormData'
+      properties:
+        attachment:
+          $ref: '#/components/schemas/Attachment'
+
+    Event:
+      allOf:
+      - $ref: 'https://raw.githubusercontent.com/before-interop/common/main/common/schemas/CloudEvent.openapi.yaml#/components/schemas/CloudEvent'
+      properties:
+        data:
+          oneOf:
+          - $ref: '#/components/schemas/AnomalieAdresseCreation'
+          - $ref: '#/components/schemas/AnomalieAdresseUpdate'
+          - $ref: '#/components/schemas/AnomalieAdresseMulti'
