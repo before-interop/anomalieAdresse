@@ -345,6 +345,23 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/OneOfAnomalieAdresse"
+          headers:
+            ETag:
+              $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/utils/update.openapi.yaml#/components/headers/ETag"
+        "400":
+          $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-400"
+        "401":
+          $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-401"
+        "403":
+          $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-403"
+        "500":
+          $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-500"
+        "501":
+          $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-501"
+        "502":
+          $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-502"
+        "503":
+          $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-503"
 
   /{AnomalieAdresseId}:
     parameters:
@@ -362,6 +379,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/OneOfAnomalieAdresse"
+          headers:
+            ETag:
+              $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/utils/update.openapi.yaml#/components/headers/ETag"
         "401":
           $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-401"
         "403":
@@ -389,6 +409,8 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/OneOfAnomalieAdresse"
+      parameters:
+        - $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/utils/update.openapi.yaml#/components/parameters/If-Match"
       responses:
         "200":
           description: The updated trouble ticket
@@ -408,6 +430,8 @@ paths:
           $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-406"
         "409":
           $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-409"
+        "412":
+          $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-412"
         "500":
           $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-500"
         "501":
@@ -429,6 +453,8 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/OneOfAnomalieAdresse"
+      parameters:
+        - $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/utils/update.openapi.yaml#/components/parameters/If-Match"
       responses:
         "200":
           description: The updated trouble ticket
@@ -448,6 +474,8 @@ paths:
           $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-406"
         "409":
           $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-409"
+        "412":
+          $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-412"
         "500":
           $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-500"
         "501":
@@ -540,6 +568,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Note"
+          headers:
+            ETag:
+              $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/utils/update.openapi.yaml#/components/headers/ETag"
         "400":
           $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-400"
         "401":
@@ -650,6 +681,9 @@ paths:
             application/json:
               schema:
                 $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Attachment.openapi.yaml#/components/schemas/Attachment"
+          headers:
+            ETag:
+              $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/utils/update.openapi.yaml#/components/headers/ETag"
         "400":
           $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-400"
         "401":
