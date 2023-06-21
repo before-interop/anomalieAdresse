@@ -226,12 +226,6 @@ curl "https://localhost/api/anomalie-adresse?status=PENDING"
 curl "https://localhost/api/anomalie-adresse?status=RESOLVED&resolutionDelay[gt]=4838400"
 ```
 
-### Lister les anomalies d'un immeuble spécifique de type `AnomalieAdresseUpdateImb`
-
-```bash
-curl "https://localhost/api/anomalie-adresse?%40type=AnomalieAdresseUpdateImb&refs.codeImb=ID-75120000012C"
-```
-
 ### Lister les tickets en cours car la résolution n'a pas été acceptée
 
 ```bash

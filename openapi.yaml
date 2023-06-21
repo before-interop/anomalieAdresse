@@ -137,14 +137,14 @@ info:
 
         Le champ `statusChangeDetails` est obligatoire.
 
-      L'OI doit fournir la durée d'analyse dans le champ `analysisDelay`.
+      L'OI doit fournir la durée d'analyse dans le champ `acknowledgeDuration`.
 
 
     * `ACKNOWLEDGED` → `IN_PROGRESS`: Le ticket est recevable.
 
       **Ce changement de status ne peut être effectué que par l'OI.**
 
-      Le temps de traitement est décompté à partir de ce changement de status (`resolutionDelay`).
+      Le temps de traitement est décompté à partir de ce changement de status (`totalInProgressDuration`).
 
       L'OI doit fournir:
 
@@ -152,7 +152,7 @@ info:
 
       * le qualification du ticket dans le champ `complexity`.
 
-      * la durée d'analyse dans le champ `analysisDelay`.
+      * la durée d'analyse dans le champ `acknowledgeDuration`.
 
 
     * `IN_PROGRESS` → `PENDING`: demande d'information complémentaire
@@ -174,7 +174,7 @@ info:
 
       L'OI doit fournir:
 
-      * la durée de résolution dans le champ `resolutionDelay`.
+      * la durée de résolution dans le champ `totalInProgressDuration`.
 
       * la référence de la ressource créée ou modifiée dans le champ `statusChangeDetails`.
 
@@ -191,15 +191,12 @@ info:
       Le temps de traitement est repris à partir de ce changement de status.
 
 
-    * `PENDING` → `CLOSED`: annulation du ticket
+    * `PENDING` → `RESOLVED`: annulation du ticket
 
       **Ce changement de status ne peut être effectué que par l'OI.**
 
       Le ticket est annulé car l'OC n'a pas répondu à la demande d'information complémentaire
       dans les délais impartis (2 semaines).
-
-      L'OI doit au préalable avoir notifié une relance de la demande d'information complémentaire
-      **4 jours** avant l'annulation du ticket.
 
       Le champ `statusChangeReason` doit être renseigné avec la valeur `DELAY_ANSWER_EXPIRED`.
 
@@ -1028,14 +1025,22 @@ components:
         expectedResolutionDate:
           description: Date prévisionnelle de résolution du ticket.
             La valeur est renseignée par l'OI lors du passage à l'état `IN_PROGRESS`.
-        analysisDelay:
+        acknowledgeDuration:
           type: integer
           readOnly: true
           description: Temps culmulé du ticket dans le status `ACKNOWLEDGED`.
-        resolutionDelay:
+        totalInProgressDuration:
           type: integer
           readOnly: true
           description: Temps cumulé du ticket dans le status `IN_PROGRESS`.
+        totalPendingDuration:
+          type: integer
+          readOnly: true
+          description: Temps cumulé du ticket dans le status `PENDING`.
+        totalDuration:
+          type: integer
+          readOnly: true
+          description: Temps cumulé du ticket dans tous les status.
         statusChangeReason:
           enum:
             - ALREADY_RESOLVED
@@ -1071,7 +1076,7 @@ components:
               pas d’intervention sur le réseau ou de réalignement de référentiels.
             * `COMPLEX`: cas qui n’est pas un cas simple
         code_oi:
-          $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Arcep.openapi.yaml#/components/schemas/codeOperateurArcep"
+          $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Arcep.openapi.yaml#/components/schemas/CodeOperateurArcep"
           description: Code ARCEP de l'OI.
 
             La valeur est renseignée par l'OC à la création du ticket.
@@ -1079,7 +1084,7 @@ components:
             L'OI peut choisir de renseigner ou modifier ce code lors de la création du ticket,
             et donc rendre ce paramètre en lecture seule.
         code_oc:
-          $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Arcep.openapi.yaml#/components/schemas/codeOperateurArcep"
+          $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Arcep.openapi.yaml#/components/schemas/CodeOperateurArcep"
           description: Code ARCEP de l'OC.
 
             La valeur est renseignée par l'OC à la création du ticket.
@@ -1103,21 +1108,6 @@ components:
           enum:
             - OC_REQUEST
             - CUSTUMER_REQUEST
-
-    Address:
-      allOf:
-        - $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Entity.openapi.yaml#/components/schemas/Entity"
-      properties:
-        "@baseType":
-          example: Address
-          enum:
-            - Address
-          readOnly: true
-        "@type":
-          example: Address
-          enum:
-            - Address
-          readOnly: true
 
     AnomalieAdresseCreation:
       allOf:
@@ -1162,20 +1152,24 @@ components:
     AnomalieAdresseUpdateNbLogements:
       description: |
         *AnomalieAdresseUpdateNbLogements* est une anomalie de type `AnomalieAdresseUpdate`
-        qui permet de mettre à jour le nombre de logements cible d'un immeuble.
+        qui permet de mettre à jour le nombre de logements cibles d'un immeuble.
 
         Cette anomalie est unitaire et ne peut contenir qu'un seul immeuble.
+
+        Cette anomalie ne peut contenir qu'une seule [Issue](#/components/schemas/Issue)
+        dont la propriété `key` est `nbLogements`.
       allOf:
-        - $ref: "#/components/schemas/AnomalieAdresseUpdate"
-      required:
-        - refImb
-        - nbLogementsCible
+        - $ref: "#/components/schemas/AnomalieAdresseUpdateImb"
       properties:
-        refImb:
-          allOf:
-            - $ref: "#/components/schemas/RefImb"
-        nbLogementsCible:
-          type: integer
+        refs:
+          maxItems: 1
+        issues:
+          maxItems: 1
+          items:
+            properties:
+              key:
+                enum:
+                  - nbLogements
         "@type":
           enum:
             - AnomalieAdresseUpdateNbLogements
@@ -1183,27 +1177,59 @@ components:
     AnomalieAdresseUpdateLocalization:
       description: |
         *AnomalieAdresseUpdateLocalization* est une anomalie de type `AnomalieAdresseUpdate`
-        qui permet de mettre à jour la localisation d'un immeuble.
+        qui permet de mettre à jour la localisation d'un ou plusieurs immeubles.
 
-        Cette anomalie est unitaire et ne peut contenir qu'un seul immeuble.
+        Cette anomalie ne peut contenir qu'une seule [Issue](#/components/schemas/Issue)
+        dont la propriété `key` est `address.geographicLocations`.
       allOf:
-        - $ref: "#/components/schemas/AnomalieAdresseUpdate"
-      required:
-        - refImb
-        - localization
+        - $ref: "#/components/schemas/AnomalieAdresseUpdateImb"
       properties:
-        refImb:
-          allOf:
-            - $ref: "#/components/schemas/RefImb"
-        localization:
-          $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/schemas/GeographicPoint.openapi.yaml#/components/schemas/GeographicPoint"
+        issues:
+          maxItems: 1
+          items:
+            properties:
+              key:
+                enum:
+                  - address.geographicLocations
         "@type":
           enum:
             - AnomalieAdresseUpdateNbLogements
 
-    AnomalieAdresseMulti:
+    Address:
       allOf:
-        - $ref: "#/components/schemas/AnomalieAdresseBase"
+        - $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress"
+      properties:
+        geographicLocations:
+          items:
+            $ref: "#/components/schemas/GeographicPoint"
+
+    GeographicPoint:
+      allOf:
+        - $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/schemas/GeographicPoint.openapi.yaml#/components/schemas/GeographicPoint"
+      properties:
+        type:
+          description: |
+            The type of the coordinates system.
+
+            Allowed values are:
+
+            * `WGS84`: World Geodetic System 1984 (Longitude/Latitude)
+                Système de coordonnées utilisé par le GPS.
+                Il est le système français de référence pour la Guadeloupe et la Martinique.
+            * `RFG93`: (Lambert 93) Réseau Français métropolitain de Géodésie 1993 (Easting/Northing).
+            * `RGFG95`: Réseau Géodésique Français Guyane 1995 (Easting/Northing)
+            * `RGR92`: Réseau Géodésique de la Réunion 1992 (Easting/Northing)
+            * `RGM04`: Réseau Géodésique de Mayotte 2004 (Easting/Northing)
+            * `RGSPM06`: Réseau Géodésique de Saint-Pierre et Miquelon 2006 (Easting/Northing)
+
+            Correspond à la propriété `typeProjection` de l'IPE.
+          enum:
+            - WGS84
+            - RFG93
+            - RGFG95
+            - RGR92
+            - RGM04
+            - RGSPM06
 
     RefImb:
       type: object
@@ -1256,4 +1282,3 @@ components:
           oneOf:
             - $ref: "#/components/schemas/AnomalieAdresseCreation"
             - $ref: "#/components/schemas/AnomalieAdresseUpdate"
-            - $ref: "#/components/schemas/AnomalieAdresseMulti"
