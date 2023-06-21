@@ -67,9 +67,9 @@ info:
       La liste des critères communs n’est pas fermée et pourra être complétée
       à la demande d’un opérateur suite à la validation par consensus du groupe de travail Infrastructure.
 
-    ## Type de signalement
+    ## Types de signalement
 
-    ![Type de signalement](./type.drawio.svg)
+    ![Types de signalement](./type.drawio.svg)
 
     ### AnomalieAdresseUpdate
 
@@ -79,7 +79,7 @@ info:
 
     * **AnomalieAdresseUpdateNbLogements**
 
-      Anomalie qui permet de mettre à jour le nombre de logement cible d'un immeuble.
+      Anomalie qui permet de mettre à jour le nombre de logements cible d'un immeuble.
 
     * **AnomalieAdresseUpdateLocalization**
 
@@ -97,14 +97,14 @@ info:
 
     * `CREATING` → `ACKNOWLEDGED`: L'OC a finalisé la création du tickets.
 
-      **Ce changement de status ne peux être effectué que par l'OC.**
+      **Ce changement de status ne peut être effectué que par l'OC.**
 
       Ce status est optionel. Certains OI peuvent ne pas offrir la possibilité de créer des tickets en mode *DRAFT*.
 
 
     * `CREATING` → `CANCELLED`: Le délai de création du ticket est expiré.
 
-      **Ce changement de status ne peux être effectué que par l'OI.**
+      **Ce changement de status ne peut être effectué que par l'OI.**
 
       Le délai de création est de **2 jours**.
 
@@ -113,7 +113,7 @@ info:
 
     * `ACKNOWLEDGED` → `REJECTED`: Le ticket n'est pas recevable.
 
-      **Ce changement de status ne peux être effectué que par l'OI.**
+      **Ce changement de status ne peut être effectué que par l'OI.**
 
       Les raisons (`statusChangeReason`) possibles sont:
 
@@ -142,7 +142,7 @@ info:
 
     * `ACKNOWLEDGED` → `IN_PROGRESS`: Le ticket est recevable.
 
-      **Ce changement de status ne peux être effectué que par l'OI.**
+      **Ce changement de status ne peut être effectué que par l'OI.**
 
       Le temps de traitement est décompté à partir de ce changement de status (`resolutionDelay`).
 
@@ -157,7 +157,7 @@ info:
 
     * `IN_PROGRESS` → `PENDING`: demande d'information complémentaire
 
-      **Ce changement de status ne peux être effectué que par l'OI.**
+      **Ce changement de status ne peut être effectué que par l'OI.**
 
       Le temps de traitement est suspendu à partir de ce changement de status.
 
@@ -165,12 +165,12 @@ info:
 
       * la liste des informations complémentaires attendues dans le champ `statusChangeDetails`.
 
-        Ces informations peuvents être fournies dans une note ou un attachement.
+        Ces informations peuvent être fournies dans une note ou un attachement.
 
 
     * `IN_PROGRESS` → `RESOLVED`: résolution du ticket
 
-      **Ce changement de status ne peux être effectué que par l'OI.**
+      **Ce changement de status ne peut être effectué que par l'OI.**
 
       L'OI doit fournir:
 
@@ -186,12 +186,14 @@ info:
 
     * `PENDING` → `IN_PROGRESS`: réponse à une demande d'information complémentaire
 
-      **Ce changement de status ne peux être effectué que par l'OC.**
+      **Ce changement de status ne peut être effectué que par l'OC.**
+
+      Le temps de traitement est repris à partir de ce changement de status.
 
 
     * `PENDING` → `CLOSED`: annulation du ticket
 
-      **Ce changement de status ne peux être effectué que par l'OI.**
+      **Ce changement de status ne peut être effectué que par l'OI.**
 
       Le ticket est annulé car l'OC n'a pas répondu à la demande d'information complémentaire
       dans les délais impartis (2 semaines).
@@ -204,7 +206,7 @@ info:
 
     * `RESOLVED` → `CLOSED`: validation de la résolution du ticket.
 
-      **Ce changement de status ne peux être effectué que par l'OC ou l'OI.**
+      **Ce changement de status ne peut être effectué que par l'OC ou l'OI.**
 
       Le ticket est clos.
 
@@ -220,7 +222,7 @@ info:
 
     * `RESOLVED` → `IN_PROGRESS`: refus de la résolution du ticket.
 
-      **Ce changement de status ne peux être effectué que par l'OC.**
+      **Ce changement de status ne peut être effectué que par l'OC.**
 
       La résolution du ticket est refusée par l'OC.
 
@@ -229,7 +231,7 @@ info:
 
     * `ACKNOWLEDGED|IN_PROGRESS|PENDING` → `CANCELLED`: annulation du ticket par l'OC.
 
-      **Ce changement de status ne peux être effectué que par l'OC.**
+      **Ce changement de status ne peut être effectué que par l'OC.**
 
       Le ticket est annulé par l'OC.
 
@@ -1059,8 +1061,15 @@ components:
           enum:
             - SIMPLE
             - COMPLEX
-          description: Complexité du ticket.
+          description: |
+            Complexité du ticket.
             La valeur est renseignée par l'OI lors du passage à l'état `IN_PROGRESS`.
+
+            Les valeurs possibles sont:
+
+            * `SIMPLE`: cas ne nécessitant pas d’intervention sur le terrain,
+              pas d’intervention sur le réseau ou de réalignement de référentiels.
+            * `COMPLEX`: cas qui n’est pas un cas simple
         code_oi:
           $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Arcep.openapi.yaml#/components/schemas/codeOperateurArcep"
           description: Code ARCEP de l'OI.
@@ -1080,6 +1089,16 @@ components:
         externalId:
           description: Référence interne du ticket de l'OC.
         ticketType:
+          description: |
+            Types de ticket.
+
+            Les valeurs possibles sont:
+
+            * `CUSTUMER_REQUEST`: Ticket créé par l'OC suite à une demande client final
+              qui souhaite passer commande.
+            * `OC_REQUEST`: Ticket créé par l'OC sans demande client final.
+
+            La valeur est renseignée par l'OC à la création du ticket.
           enum:
             - OC_REQUEST
             - CUSTUMER_REQUEST
