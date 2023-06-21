@@ -1099,6 +1099,7 @@ components:
             * `OC_REQUEST`: Ticket créé par l'OC sans demande client final.
 
             La valeur est renseignée par l'OC à la création du ticket.
+          default: OC_REQUEST
           enum:
             - OC_REQUEST
             - CUSTUMER_REQUEST
