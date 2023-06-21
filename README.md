@@ -1,27 +1,64 @@
-# API de déclaration d'Anomalie Adresse
+# API AnomalieAdresse
 
-## Modèle de données
+Cet outil a été créé afin de respecter l’obligation réglementaire indiquée dans la [Décision Arcep n° 2020-1432].
 
-![](image/model.png)
+Il permet le traitement d’une demande de création ou de modification d’adresses dans les IPE grâce à des flux normalisés.
 
-## Description d'une séquence d'appels
+## Swagger
 
-![](image/sequence.png)
+Le swagger est disponible à l'adresse suivante : https://before-interop.github.io/anomalieAdresse/
 
-## Description du cycle de vie d'un ticket (API Ticketing) rattaché à une anomalie d'adresse
+## Types d'anomalies
 
-![](image/lifecycle.png)
+![Types de signalement](./type.drawio.svg)
 
-## cas d'usage
+## Cycle de vie d'une anomalie
+
+![Workflow](./status.drawio.svg)
+
+## Cas d'utilisation
+
 ### cas nominal
-![](UC1_nominal.png)
-### cas pièce jointe illisible
-![](UC2_illisible.png)
-### cas incomplet
-![](UC3_incomplet.png)
-### cas interruption
-![](UC4_interruption.png)
-### cas refus de la résolution par l'OC
-![](UC5_refusResolution.png)
-### cas annulation par l'OC
-![](UC6_canceld.png)
+
+```mermaid
+sequenceDiagram
+
+  participant OC
+  participant OI
+
+  OC->>OI: Création d'une anomalie (ACKNOWLEDGED)
+
+  OI->>OI: Contrôles métier
+  alt Contrôles OK
+    OI->>OI: Passage en IN_PROGRESS
+    OI->>OC: Event ticket_updated
+    OI->>OI: Traitement de l'anomalie
+    OI->>OI: Passage en RESOLVED
+    OI->>OC: Event ticket_updated
+    OC->>OI: Validation de la résolution
+  else Contrôles KO
+    OI-->>OI: Passage en REJECTED
+    OI->>OC: Event ticket_updated
+  end
+```
+
+### Gestion des pièces jointes
+
+```mermaid
+sequenceDiagram
+
+  participant OC
+  participant OI
+
+  OC->>OI: Création d'une anomalie en status CREATING
+
+  loop Pour chaque pièce jointe
+
+    OC->>OI: Ajout d'une pièce jointe
+
+  end
+
+  OC->>OI: Passage en status ACKNOWLEDGED
+```
+
+[Décision Arcep n° 2020-1432]: https://www.arcep.fr/uploads/tx_gsavis/20-1432.pdf
