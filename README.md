@@ -231,3 +231,9 @@ curl "https://localhost/api/anomalie-adresse?status=RESOLVED&resolutionDelay[gt]
 ```bash
 curl "https://localhost/api/anomalie-adresse?status=IN_PROGRESS&statusChangeReason=NOT_ACCEPTED"
 ```
+
+### Lister les tickets ouverts sur un code IMB
+
+```bash
+curl "https://localhost/api/anomalie-adresse?status[in]=ACKNOWLEDGED,IN_PROGRESS,PENDING&refs.codeImb=ID-75120000012C"
+```
