@@ -1273,7 +1273,44 @@ components:
     Attachment:
       allOf:
         - $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Attachment.openapi.yaml#/components/schemas/Attachment"
+      description: |
+        An attachment is a file that is attached to an entity.
 
+        Les extensions de fichier autorisées sont:
+
+        * `csv`
+        * `jpeg`
+        * `jpg`
+        * `png`
+        * `svg`
+        * `pdf`
+        * `ods`
+        * `odt`
+        * `xlsx`
+        * `docx`
+
+        Les extensions de fichier suivantes sont interdites car elles peuvent contenir des macros:
+
+        * `doc`
+        * `dot`
+        * `docm`
+        * `dotm`
+        * `xlsm`
+        * `xltm`
+        * `xlam`
+        * `xlsb`
+      properties:
+        mimeType:
+          enum:
+            - text/csv
+            - image/jpeg
+            - image/png
+            - image/svg+xml
+            - application/pdf
+            - application/vnd.oasis.opendocument.spreadsheet
+            - application/vnd.oasis.opendocument.text
+            - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+            - application/vnd.openxmlformats-officedocument.wordprocessingml.document
     AttachmentFormData:
       allOf:
         - $ref: "https://raw.githubusercontent.com/before-interop/common/main/tools/attachment/attachment.openapi.yaml#/components/schemas/AttachmentFormData"
