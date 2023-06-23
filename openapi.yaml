@@ -81,10 +81,6 @@ info:
 
       Anomalie qui permet de mettre à jour le nombre de logements cible d'un immeuble.
 
-    * **AnomalieAdresseUpdateLocalization**
-
-      Anomalie qui permet de mettre à jour la localisation d'un immeuble
-
     ### AnomalieAdresseCreation
 
 
@@ -951,14 +947,12 @@ components:
         - $ref: "#/components/schemas/AnomalieAdresseCreation"
         - $ref: "#/components/schemas/AnomalieAdresseUpdateImb"
         - $ref: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
-        - $ref: "#/components/schemas/AnomalieAdresseUpdateLocalization"
 
     AnyOfAnomalieAdresse:
       anyOf:
         - $ref: "#/components/schemas/AnomalieAdresseCreation"
         - $ref: "#/components/schemas/AnomalieAdresseUpdateImb"
         - $ref: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
-        - $ref: "#/components/schemas/AnomalieAdresseUpdateLocalization"
 
     AnomalieAdresseBase:
       allOf:
@@ -1116,21 +1110,13 @@ components:
     AnomalieAdresseUpdate:
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseBase"
-      properties:
-        "@baseType":
-          enum:
-            - AnomalieAdresseUpdate
-
-    AnomalieAdresseUpdateImb:
-      description: |
-        *AnomalieAdresseUpdateImb* est une anomalie de type `AnomalieAdresseUpdate`
-        qui permet de mettre à jour un des attributs en masse d'un ou plusieurs immeubles.
-      allOf:
-        - $ref: "#/components/schemas/AnomalieAdresseUpdate"
       required:
         - issues
         - refs
       properties:
+        "@baseType":
+          enum:
+            - AnomalieAdresseUpdate
         refs:
           type: array
           minItems: 1
@@ -1151,6 +1137,34 @@ components:
           readOnly: true
         issues:
           type: object
+
+    AnomalieAdresseUpdateImb:
+      description: |
+        *AnomalieAdresseUpdateImb* est une anomalie de type `AnomalieAdresseUpdate`
+        qui permet de mettre à jour un des attributs en masse d'un ou plusieurs immeubles.
+      allOf:
+        - $ref: "#/components/schemas/AnomalieAdresseUpdate"
+      properties:
+        issues:
+          properties:
+            "ipe.address.geographicLocations":
+              allOf:
+                - $ref: "#/components/schemas/Issue"
+              required:
+                - values
+              properties:
+                values:
+                  description: |
+                    Liste des coordonnées géographiques de l'adresse corrigée.
+
+                    Le nombre d'éléments de la liste doit être égal à la taille du tableau `refs`
+                    et les éléments doivent être dans le même ordre que les éléments du tableau `refs`.
+
+                    Si l'OC ne souhaite pas renseigner ces valeurs, il peut renseigner une liste vide.
+                  type: array
+                  minItems: 0
+                  items:
+                    $ref: "#/components/schemas/GeographicPoint"
         "@type":
           enum:
             - AnomalieAdresseUpdateImb
@@ -1163,38 +1177,24 @@ components:
         Cette anomalie est unitaire et ne peut contenir qu'un seul immeuble.
 
         Cette anomalie ne peut contenir qu'une seule [Issue](#/components/schemas/Issue)
-        dont la propriété `key` est `nbLogements`.
+        dont la clef est `ipe.housingsNumber`.
       allOf:
-        - $ref: "#/components/schemas/AnomalieAdresseUpdateImb"
+        - $ref: "#/components/schemas/AnomalieAdresseUpdate"
       properties:
         refs:
           maxItems: 1
         issues:
           required:
-            - "ipe.nbLogements"
+            - "ipe.housingsNumber"
           properties:
-            "ipe.nbLogements":
-              $ref: "#/components/schemas/Issue"
-        "@type":
-          enum:
-            - AnomalieAdresseUpdateNbLogements
-
-    AnomalieAdresseUpdateLocalization:
-      description: |
-        *AnomalieAdresseUpdateLocalization* est une anomalie de type `AnomalieAdresseUpdate`
-        qui permet de mettre à jour la localisation d'un ou plusieurs immeubles.
-
-        Cette anomalie ne peut contenir qu'une seule [Issue](#/components/schemas/Issue)
-        dont la propriété `key` est `address.geographicLocations`.
-      allOf:
-        - $ref: "#/components/schemas/AnomalieAdresseUpdateImb"
-      properties:
-        issues:
-          properties:
-            "address.geographicLocations":
-              type: array
-              items:
-                $ref: "#/components/schemas/GeographicPoint"
+            "ipe.housingsNumber":
+              allOf:
+                - $ref: "#/components/schemas/Issue"
+              required:
+                - value
+              properties:
+                value:
+                  type: integer
         "@type":
           enum:
             - AnomalieAdresseUpdateNbLogements
