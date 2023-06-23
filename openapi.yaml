@@ -249,7 +249,7 @@ info:
     [L33-6]: https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000037671945
 
 servers:
-  - url: "{protocol}://{host}:{port}{basePath}/annomalie-adresse/"
+  - url: "{protocol}://{host}:{port}{basePath}/anomalie-adresse/"
     variables:
       protocol:
         enum:
@@ -1133,18 +1133,24 @@ components:
       properties:
         refs:
           type: array
-          minLength: 1
+          minItems: 1
           items:
             allOf:
               - $ref: "#/components/schemas/RefImb"
             required:
               - codeImb
+        sizeRefs:
+          type: integer
+          description: |
+            Nombre d'immeubles cibles de l'anomalie.
+
+            La valeur est renseignée par l'OI à la création du ticket.
+            Elle est égale à la taille du tableau `refs`.
+            Elle permet de rechercher plus efficacement les anomalies
+            et de facilement différencier les traitement unitaires et en masse.
+          readOnly: true
         issues:
-          type: array
-          minLength: 1
-          items:
-            allOf:
-              - $ref: "#/components/schemas/Issue"
+          type: object
         "@type":
           enum:
             - AnomalieAdresseUpdateImb
@@ -1164,12 +1170,11 @@ components:
         refs:
           maxItems: 1
         issues:
-          maxItems: 1
-          items:
-            properties:
-              key:
-                enum:
-                  - nbLogements
+          required:
+            - "ipe.nbLogements"
+          properties:
+            "ipe.nbLogements":
+              $ref: "#/components/schemas/Issue"
         "@type":
           enum:
             - AnomalieAdresseUpdateNbLogements
@@ -1185,15 +1190,26 @@ components:
         - $ref: "#/components/schemas/AnomalieAdresseUpdateImb"
       properties:
         issues:
-          maxItems: 1
-          items:
-            properties:
-              key:
-                enum:
-                  - address.geographicLocations
+          properties:
+            "address.geographicLocations":
+              type: array
+              items:
+                $ref: "#/components/schemas/GeographicPoint"
         "@type":
           enum:
             - AnomalieAdresseUpdateNbLogements
+
+    IPE:
+      type: object
+      properties:
+        address:
+          $ref: "#/components/schemas/Address"
+        housingsNumber:
+          type: integer
+          description: Nombre de logements cibles de l'immeuble.
+        codeImb:
+          type: string
+          description: Identifiant de l'immeuble IPE.
 
     Address:
       allOf:
@@ -1242,8 +1258,6 @@ components:
 
     Issue:
       type: object
-      required:
-        - key
       properties:
         key:
           type: string
@@ -1311,6 +1325,7 @@ components:
             - application/vnd.oasis.opendocument.text
             - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
             - application/vnd.openxmlformats-officedocument.wordprocessingml.document
+
     AttachmentFormData:
       allOf:
         - $ref: "https://raw.githubusercontent.com/before-interop/common/main/tools/attachment/attachment.openapi.yaml#/components/schemas/AttachmentFormData"
