@@ -1,4 +1,4 @@
-openapi: 3.0.1
+openapi: 3.1.0
 
 info:
   title: AnomalieAdresse API
@@ -245,7 +245,7 @@ info:
     [L33-6]: https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000037671945
 
 servers:
-  - url: "{protocol}://{host}:{port}{basePath}/anomalie-adresse/"
+  - url: "{protocol}://{host}:{port}{basePath}/anomalie-adresse"
     variables:
       protocol:
         enum:
@@ -947,12 +947,24 @@ components:
         - $ref: "#/components/schemas/AnomalieAdresseCreation"
         - $ref: "#/components/schemas/AnomalieAdresseUpdateImb"
         - $ref: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
+      discriminator:
+        propertyName: "@type"
+        mapping:
+          AnomalieAdresseCreation: "#/components/schemas/AnomalieAdresseCreation"
+          AnomalieAdresseUpdateImb: "#/components/schemas/AnomalieAdresseUpdateImb"
+          AnomalieAdresseUpdateNbLogements: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
 
     AnyOfAnomalieAdresse:
       anyOf:
         - $ref: "#/components/schemas/AnomalieAdresseCreation"
         - $ref: "#/components/schemas/AnomalieAdresseUpdateImb"
         - $ref: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
+      discriminator:
+        propertyName: "@type"
+        mapping:
+          AnomalieAdresseCreation: "#/components/schemas/AnomalieAdresseCreation"
+          AnomalieAdresseUpdateImb: "#/components/schemas/AnomalieAdresseUpdateImb"
+          AnomalieAdresseUpdateNbLogements: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
 
     AnomalieAdresseBase:
       allOf:
@@ -1166,8 +1178,7 @@ components:
                   items:
                     $ref: "#/components/schemas/GeographicPoint"
         "@type":
-          enum:
-            - AnomalieAdresseUpdateImb
+          const: AnomalieAdresseUpdateImb
 
     AnomalieAdresseUpdateNbLogements:
       description: |
