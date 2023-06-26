@@ -1046,14 +1046,14 @@ components:
         totalDuration:
           type: integer
           readOnly: true
-          description: Temps cumulé du ticket dans tous les status.
+          description: Temps cumulé du ticket dans les status `ACKNOWLEDGED` et IN_PROGRESS`.
         statusChangeReason:
           enum:
             - ALREADY_RESOLVED
-            - CONFLICT
             - DELAY_ANSWER_EXPIRED
             - DELAY_CREATION_EXPIRED
             - DELAY_VALIDATION_EXPIRED
+            - DUPLICATE
             - INVALID
             - OTHER
             - RESOLUTION_ACCEPTED
