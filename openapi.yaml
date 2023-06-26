@@ -73,11 +73,11 @@ info:
 
     ### AnomalieAdresseUpdate
 
-    * **AnomalieAdresseUpdateImb**
+    * **AnomalieAdresse.modification**
 
       Anomalie qui permet de mettre à jour un ou plusieurs attributs sur un ou plusieurs immeubles.
 
-    * **AnomalieAdresseUpdateNbLogements**
+    * **AnomalieAdresse.nbLogements**
 
       Anomalie qui permet de mettre à jour le nombre de logements cible d'un immeuble.
 
@@ -951,8 +951,8 @@ components:
         propertyName: "@type"
         mapping:
           AnomalieAdresseCreation: "#/components/schemas/AnomalieAdresseCreation"
-          AnomalieAdresseUpdateImb: "#/components/schemas/AnomalieAdresseUpdateImb"
-          AnomalieAdresseUpdateNbLogements: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
+          AnomalieAdresse.modification: "#/components/schemas/AnomalieAdresseUpdateImb"
+          AnomalieAdresse.nbLogements: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
 
     AnyOfAnomalieAdresse:
       anyOf:
@@ -963,8 +963,8 @@ components:
         propertyName: "@type"
         mapping:
           AnomalieAdresseCreation: "#/components/schemas/AnomalieAdresseCreation"
-          AnomalieAdresseUpdateImb: "#/components/schemas/AnomalieAdresseUpdateImb"
-          AnomalieAdresseUpdateNbLogements: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
+          AnomalieAdresse.modification: "#/components/schemas/AnomalieAdresseUpdateImb"
+          AnomalieAdresse.nbLogements: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
 
     AnomalieAdresseBase:
       allOf:
@@ -974,6 +974,8 @@ components:
         - code_oc
         - "@type"
       properties:
+        "@baseType":
+          const: AnomalieAdresse
         "@type":
           type: string
           readOnly: false
@@ -1178,7 +1180,7 @@ components:
                   items:
                     $ref: "#/components/schemas/GeographicPoint"
         "@type":
-          const: AnomalieAdresseUpdateImb
+          const: AnomalieAdresse.modification
 
     AnomalieAdresseUpdateNbLogements:
       description: |
@@ -1207,8 +1209,7 @@ components:
                 value:
                   type: integer
         "@type":
-          enum:
-            - AnomalieAdresseUpdateNbLogements
+          const: AnomalieAdresse.nbLogements
 
     IPE:
       type: object
