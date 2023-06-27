@@ -57,7 +57,7 @@ info:
 
     * **Signalement unitaire**:
       par exemple anomalie détectée à partir d’une réclamation client.
-      Il s’agit d’un signalement impactant une seule ligne de l’IPE.
+      Il s’agit d’un signalement impactant une seule ligne de l’building.
 
     * **Signalement en masse**:
       par exemple liste d’anomalies détectées par contrôles informatisés ayant un critère commun (anomalie sur un même champ).
@@ -89,7 +89,7 @@ info:
 
     * **AnomalieAdresse.batiment**
 
-      Rajout d'un bâtiment à une adresse existante dans l'IPE.
+      Rajout d'un bâtiment à une adresse existante dans l'building.
 
     ## Workflow
 
@@ -1157,39 +1157,44 @@ components:
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseBase"
       required:
-        - ipe
+        - building
       properties:
         "@type":
           const: AnomalieAdresse.creation
-        ipe:
+        building:
           allOf:
             - $ref: "#/components/schemas/IPE"
           required:
-            - id
             - address
-            - pm
-            - pbos
-            - housingsNumber
+            - geographicLocation
           properties:
-            pm:
+            neighbor:
+              allOf:
+                - $ref: "#/components/schemas/RefImb"
+            id:
+              description: |
+                Identifiant unique de l'immeuble.
+
+                La valeur est renseignée par l'OI à la résolution du ticket.
+              readOnly: true
+            address:
               required:
-                - id
-            pbos:
-              items:
-                allOf:
-                  - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Arcep.openapi.yaml#/components/schemas/PBO
-                required:
-                  - id
+                - city
+                - postcode
+                - code_insee
 
     AnomalieAdresseNewBuilding:
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseBase"
       required:
-        - ipe
         - refs
+        - building
       properties:
         "@type":
           const: AnomalieAdresse.batiment
+        neighbor:
+          allOf:
+            - $ref: "#/components/schemas/RefImb"
         refs:
           type: array
           minItems: 1
@@ -1197,22 +1202,20 @@ components:
           items:
             allOf:
               - $ref: "#/components/schemas/RefImb"
-        ipe:
+        building:
           allOf:
             - $ref: "#/components/schemas/IPE"
           required:
-            - id
-            - building
+            - type
+            - name
+            - geographicLocation
           properties:
-            pm:
-              required:
-                - id
-            pbos:
-              items:
-                allOf:
-                  - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Arcep.openapi.yaml#/components/schemas/PBO
-                required:
-                  - id
+            id:
+              description: |
+                Identifiant unique de l'immeuble.
+
+                La valeur est renseignée par l'OI à la résolution du ticket.
+              readOnly: true
 
     AnomalieAdresseUpdate:
       allOf:
@@ -1256,7 +1259,7 @@ components:
           const: AnomalieAdresse.modification
         issues:
           properties:
-            "ipe.address.geographicLocations":
+            "building.geographicLocations":
               allOf:
                 - $ref: "#/components/schemas/Issue"
               required:
@@ -1274,31 +1277,31 @@ components:
                   minItems: 0
                   items:
                     $ref: "#/components/schemas/GeographicPoint"
-            "ipe.address.city":
+            "building.address.city":
               $ref: "#/components/schemas/Issue"
-            "ipe.address.postcode":
+            "building.address.postcode":
               $ref: "#/components/schemas/Issue"
-            "ipe.address.streetName":
+            "building.address.streetName":
               $ref: "#/components/schemas/Issue"
-            "ipe.address.streetNr":
+            "building.address.streetNr":
               $ref: "#/components/schemas/Issue"
-            "ipe.address.streetNrSuffix":
+            "building.address.streetNrSuffix":
               $ref: "#/components/schemas/Issue"
-            "ipe.address.streetSuffix":
+            "building.address.streetSuffix":
               $ref: "#/components/schemas/Issue"
-            "ipe.address.streetType":
+            "building.address.streetType":
               $ref: "#/components/schemas/Issue"
-            "ipe.address.codeInsee":
+            "building.address.codeInsee":
               $ref: "#/components/schemas/Issue"
-            "ipe.address.code_hexacle":
+            "building.address.code_hexacle":
               $ref: "#/components/schemas/Issue"
-            "ipe.address.code_hexavia":
+            "building.address.code_hexavia":
               $ref: "#/components/schemas/Issue"
-            "ipe.address.code_rivoli":
+            "building.address.code_rivoli":
               $ref: "#/components/schemas/Issue"
-            "ipe.address.code_ban":
+            "building.address.code_ban":
               $ref: "#/components/schemas/Issue"
-            "ipe.pm.id":
+            "building.pm.id":
               $ref: "#/components/schemas/Issue"
 
     AnomalieAdresseUpdateNbLogements:
@@ -1309,7 +1312,7 @@ components:
         Cette anomalie est unitaire et ne peut contenir qu'un seul immeuble.
 
         Cette anomalie ne peut contenir qu'une seule [Issue](#/components/schemas/Issue)
-        dont la clef est `ipe.housingsNumber`.
+        dont la clef est `building.housingsNumber`.
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseUpdate"
       properties:
@@ -1319,9 +1322,9 @@ components:
           maxItems: 1
         issues:
           required:
-            - "ipe.housingsNumber"
+            - "building.housingsNumber"
           properties:
-            "ipe.housingsNumber":
+            "building.housingsNumber":
               allOf:
                 - $ref: "#/components/schemas/Issue"
               required:
@@ -1331,18 +1334,46 @@ components:
                   type: integer
 
     IPE:
-      type: object
+      allOf:
+        - $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Entity.openapi.yaml#/components/schemas/Entity"
+      description: |
+        Représente un immeuble du fichier IPE.
+
+        * L'`id` de l'immeuble est unique pour un OI. Il est unique par ligne du fichier IPE.
+        * La contrainte d'unicité d'une ligne et l'agrégation des champs suivant:
+          * `address.code_hexacle`
+          * `name` (nom du bâtiment)
       properties:
         id:
-          type: string
           maxLength: 20
           description: Identifiant unique de l'immeuble.
-            Cette identifiant est propre à l'OI.
+
+            Ce champ est nommé `IdentifiantImmeuble` dans le fichier IPE.
         address:
-          $ref: "#/components/schemas/Address"
-        building:
+          allOf:
+            - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress
+          properties:
+            code_cadastral_parcel:
+              type: string
+        geographicLocation:
+          description: |
+            Coordonnées géographiques de l'immeuble.
+
+            Les coordonnées géographiques sont exprimées dans le système de coordonnées `typeProjection`.
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/GeographicPoint"
+        name:
           type: string
           description: Nom du bâtiment.
+        type:
+          type: string
+          enum:
+            - PAVILLON
+            - IMMEUBLE
+            - LOTISSEMENT
+            - UNKNOWN
         housingsNumber:
           type: integer
           description: Nombre de logements cibles de l'immeuble.
@@ -1357,14 +1388,6 @@ components:
             Ils sont utilisés pour identifier les points de mutualisation.
           items:
             $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Arcep.openapi.yaml#/components/schemas/PBO
-
-    Address:
-      allOf:
-        - $ref: "https://raw.githubusercontent.com/before-interop/common/main/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress"
-      properties:
-        geographicLocations:
-          items:
-            $ref: "#/components/schemas/GeographicPoint"
 
     GeographicPoint:
       allOf:
@@ -1385,7 +1408,7 @@ components:
             * `RGM04`: Réseau Géodésique de Mayotte 2004 (Easting/Northing)
             * `RGSPM06`: Réseau Géodésique de Saint-Pierre et Miquelon 2006 (Easting/Northing)
 
-            Correspond à la propriété `typeProjection` de l'IPE.
+            Correspond à la propriété `typeProjection` de l'building.
           enum:
             - WGS84
             - RFG93
@@ -1401,7 +1424,7 @@ components:
       properties:
         codeImb:
           type: string
-          description: Identifiant de l'immeuble IPE.
+          description: Identifiant de l'immeuble building.
 
     Issue:
       type: object
