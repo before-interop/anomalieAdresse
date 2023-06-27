@@ -1396,13 +1396,6 @@ components:
     Issue:
       type: object
       properties:
-        key:
-          type: string
-          description: |
-            Nom de la propritété en erreur.
-
-            Les attributs imbriqués sont séparé par le caractère `.`.
-          example: "address.streetName"
         description:
           type: string
           description: Explication simple du problème lié à l'attribut en erreur.
