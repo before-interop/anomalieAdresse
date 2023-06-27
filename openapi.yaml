@@ -83,7 +83,13 @@ info:
 
     ### AnomalieAdresseCreation
 
+    * **AnomalieAdresse.creation**
 
+      Création d'une adresse existante dans l'IPE ou d'un immeuble neuf.
+
+    * **AnomalieAdresse.batiment**
+
+      Rajout d'un bâtiment à une adresse existante dans l'IPE.
 
     ## Workflow
 
@@ -142,7 +148,7 @@ info:
 
       Le temps de traitement est décompté à partir de ce changement de status (`totalInProgressDuration`).
 
-      L'OI doit fournir:
+      L'OI doit renseigner:
 
       * une date de résolution prévisionnelle dans le champ `expectedResolutionDate`.
 
@@ -157,7 +163,7 @@ info:
 
       Le temps de traitement est suspendu à partir de ce changement de status.
 
-      L'OC doit fournir:
+      L'OC doit fournir en retour:
 
       * la liste des informations complémentaires attendues dans le champ `statusChangeDetails`.
 
@@ -168,7 +174,7 @@ info:
 
       **Ce changement de status ne peut être effectué que par l'OI.**
 
-      L'OI doit fournir:
+      L'OI doit renseigner:
 
       * la durée de résolution dans le champ `totalInProgressDuration`.
 
@@ -186,13 +192,17 @@ info:
 
       Le temps de traitement est repris à partir de ce changement de status.
 
+      L'OI doit renseigner:
+
+      * La durée de gel dans le champ `totalPendingDuration`.
+
 
     * `PENDING` → `RESOLVED`: annulation du ticket
 
       **Ce changement de status ne peut être effectué que par l'OI.**
 
       Le ticket est annulé car l'OC n'a pas répondu à la demande d'information complémentaire
-      dans les délais impartis (2 semaines).
+      dans les délais impartis (**2 semaines**).
 
       Le champ `statusChangeReason` doit être renseigné avec la valeur `DELAY_ANSWER_EXPIRED`.
 
@@ -212,6 +222,9 @@ info:
 
         Le champ `statusChangeReason` doit être renseigné avec la valeur `DELAY_VALIDATION_EXPIRED`.
 
+        L'OI doit renseigner:
+
+        * La durée de gel dans le champ `totalPendingDuration`.
 
     * `RESOLVED` → `IN_PROGRESS`: refus de la résolution du ticket.
 
@@ -222,7 +235,7 @@ info:
       Le temps de traitement est repris à partir de ce changement de status.
 
 
-    * `ACKNOWLEDGED|IN_PROGRESS|PENDING` → `CANCELLED`: annulation du ticket par l'OC.
+    * `CREATING|ACKNOWLEDGED|IN_PROGRESS|PENDING` → `CANCELLED`: annulation du ticket par l'OC.
 
       **Ce changement de status ne peut être effectué que par l'OC.**
 
@@ -230,6 +243,13 @@ info:
 
       Le temps de traitement est annulé à partir de ce changement de status.
 
+
+    ## Pagination
+
+    Les listes de ressources sont paginées.
+
+    * La valeur par défaut d'une page est `limit=50` et `offset=0`.
+    * La valeur maximale de `limit` est `100`.
 
     ## Délais de traitement
 
@@ -1116,10 +1136,73 @@ components:
           enum:
             - OC_REQUEST
             - CUSTUMER_REQUEST
+        siren:
+          type: string
+          description: Numéro SIREN de l'entreprise cliente.
+        siret:
+          type: string
+          description: Numéro SIRET de l'entreprise cliente.
 
     AnomalieAdresseCreation:
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseBase"
+      required:
+        - ipe
+      properties:
+        "@type":
+          const: AnomalieAdresse.creation
+        ipe:
+          allOf:
+            - $ref: "#/components/schemas/IPE"
+          required:
+            - id
+            - address
+            - pm
+            - pbos
+            - housingsNumber
+          properties:
+            pm:
+              required:
+                - id
+            pbos:
+              items:
+                allOf:
+                  - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Arcep.openapi.yaml#/components/schemas/PBO
+                required:
+                  - id
+
+    AnomalieAdresseNewBuilding:
+      allOf:
+        - $ref: "#/components/schemas/AnomalieAdresseBase"
+      required:
+        - ipe
+        - refs
+      properties:
+        "@type":
+          const: AnomalieAdresse.batiment
+        refs:
+          type: array
+          minItems: 1
+          maxItems: 1
+          items:
+            allOf:
+              - $ref: "#/components/schemas/RefImb"
+        ipe:
+          allOf:
+            - $ref: "#/components/schemas/IPE"
+          required:
+            - id
+            - building
+          properties:
+            pm:
+              required:
+                - id
+            pbos:
+              items:
+                allOf:
+                  - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Arcep.openapi.yaml#/components/schemas/PBO
+                required:
+                  - id
 
     AnomalieAdresseUpdate:
       allOf:
@@ -1159,6 +1242,8 @@ components:
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseUpdate"
       properties:
+        "@type":
+          const: AnomalieAdresse.modification
         issues:
           properties:
             "ipe.address.geographicLocations":
@@ -1179,8 +1264,32 @@ components:
                   minItems: 0
                   items:
                     $ref: "#/components/schemas/GeographicPoint"
-        "@type":
-          const: AnomalieAdresse.modification
+            "ipe.address.city":
+              $ref: "#/components/schemas/Issue"
+            "ipe.address.postcode":
+              $ref: "#/components/schemas/Issue"
+            "ipe.address.streetName":
+              $ref: "#/components/schemas/Issue"
+            "ipe.address.streetNr":
+              $ref: "#/components/schemas/Issue"
+            "ipe.address.streetNrSuffix":
+              $ref: "#/components/schemas/Issue"
+            "ipe.address.streetSuffix":
+              $ref: "#/components/schemas/Issue"
+            "ipe.address.streetType":
+              $ref: "#/components/schemas/Issue"
+            "ipe.address.codeInsee":
+              $ref: "#/components/schemas/Issue"
+            "ipe.address.code_hexacle":
+              $ref: "#/components/schemas/Issue"
+            "ipe.address.code_hexavia":
+              $ref: "#/components/schemas/Issue"
+            "ipe.address.code_rivoli":
+              $ref: "#/components/schemas/Issue"
+            "ipe.address.code_ban":
+              $ref: "#/components/schemas/Issue"
+            "ipe.pm.id":
+              $ref: "#/components/schemas/Issue"
 
     AnomalieAdresseUpdateNbLogements:
       description: |
@@ -1194,6 +1303,8 @@ components:
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseUpdate"
       properties:
+        "@type":
+          const: AnomalieAdresse.nbLogements
         refs:
           maxItems: 1
         issues:
@@ -1208,20 +1319,34 @@ components:
               properties:
                 value:
                   type: integer
-        "@type":
-          const: AnomalieAdresse.nbLogements
 
     IPE:
       type: object
       properties:
+        id:
+          type: string
+          maxLength: 20
+          description: Identifiant unique de l'immeuble.
+            Cette identifiant est propre à l'OI.
         address:
           $ref: "#/components/schemas/Address"
+        building:
+          type: string
+          description: Nom du bâtiment.
         housingsNumber:
           type: integer
           description: Nombre de logements cibles de l'immeuble.
-        codeImb:
-          type: string
-          description: Identifiant de l'immeuble IPE.
+        pm:
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Arcep.openapi.yaml#/components/schemas/PM
+        pbos:
+          type: array
+          description: |
+            Liste des PBOS de l'immeuble.
+
+            Les PBOS sont des points de branchement optique.
+            Ils sont utilisés pour identifier les points de mutualisation.
+          items:
+            $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Arcep.openapi.yaml#/components/schemas/PBO
 
     Address:
       allOf:
