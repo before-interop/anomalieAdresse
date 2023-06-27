@@ -307,7 +307,7 @@ paths:
         - OI
       summary: Get all trouble tickets
       description: Get all trouble tickets
-      parameters:
+      parameters: &searchAndPaginateParameters
         - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/limit
         - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/offset
         - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/sort
@@ -480,12 +480,7 @@ paths:
         - OI
       summary: Get all notes of a trouble ticket
       description: Get all notes of a trouble ticket
-      parameters:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/limit
-        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/offset
-        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/sort
-        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/fields.openapi.yaml#/components/parameters/fields
-        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/filters.openapi.yaml#/components/parameters/filters
+      parameters: *searchAndPaginateParameters
       responses:
         "200":
           description: The list of notes
@@ -562,12 +557,7 @@ paths:
         - OI
       summary: Get all attachments of a trouble ticket
       description: Get all attachments of a trouble ticket
-      parameters:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/offset
-        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/limit
-        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/sort
-        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/fields.openapi.yaml#/components/parameters/fields
-        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/filters.openapi.yaml#/components/parameters/filters
+      parameters: *searchAndPaginateParameters
       responses:
         "200":
           description: The list of attachments
@@ -669,12 +659,7 @@ paths:
         - OI
       summary: Get all events of all trouble tickets
       description: Get all events of all trouble tickets
-      parameters:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/limit
-        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/offset
-        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/sort
-        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/fields.openapi.yaml#/components/parameters/fields
-        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/filters.openapi.yaml#/components/parameters/filters
+      parameters: *searchAndPaginateParameters
       responses:
         "200":
           description: The list of events
@@ -721,12 +706,7 @@ paths:
         - OI
       summary: Get all events of a trouble ticket
       description: Get all events of a trouble ticket
-      parameters:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/limit
-        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/offset
-        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/parameters/sort
-        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/fields.openapi.yaml#/components/parameters/fields
-        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/filters.openapi.yaml#/components/parameters/filters
+      parameters: *searchAndPaginateParameters
       responses:
         "200":
           description: The list of events
