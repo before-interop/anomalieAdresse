@@ -232,7 +232,13 @@ info:
 
       La résolution du ticket est refusée par l'OC.
 
+      * Le champ `statusChangeReason` doit être renseigné avec la valeur `RESOLUTION_REFUSED`.
+      * le champ `statusChangeDetails` doit être renseigné avec la raison du refus.
+
       Le temps de traitement est repris à partir de ce changement de status.
+
+      **Attention:**
+      le passage du status `RESOLVED` à `IN_PROGRESS` ne peut être effectué qu'une seule fois.
 
 
     * `CREATING|ACKNOWLEDGED|IN_PROGRESS|PENDING` → `CANCELLED`: annulation du ticket par l'OC.
