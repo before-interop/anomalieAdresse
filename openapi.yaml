@@ -965,24 +965,28 @@ components:
     OneOfAnomalieAdresse:
       oneOf:
         - $ref: "#/components/schemas/AnomalieAdresseCreation"
+        - $ref: "#/components/schemas/AnomalieAdresseNewBuilding"
         - $ref: "#/components/schemas/AnomalieAdresseUpdateImb"
         - $ref: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
       discriminator:
         propertyName: "@type"
         mapping:
           AnomalieAdresseCreation: "#/components/schemas/AnomalieAdresseCreation"
+          AnomalieAdresseNewBuilding: "#/components/schemas/AnomalieAdresseNewBuilding"
           AnomalieAdresse.modification: "#/components/schemas/AnomalieAdresseUpdateImb"
           AnomalieAdresse.nbLogements: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
 
     AnyOfAnomalieAdresse:
       anyOf:
         - $ref: "#/components/schemas/AnomalieAdresseCreation"
+        - $ref: "#/components/schemas/AnomalieAdresseNewBuilding"
         - $ref: "#/components/schemas/AnomalieAdresseUpdateImb"
         - $ref: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
       discriminator:
         propertyName: "@type"
         mapping:
           AnomalieAdresseCreation: "#/components/schemas/AnomalieAdresseCreation"
+          AnomalieAdresseNewBuilding: "#/components/schemas/AnomalieAdresseNewBuilding"
           AnomalieAdresse.modification: "#/components/schemas/AnomalieAdresseUpdateImb"
           AnomalieAdresse.nbLogements: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
 
