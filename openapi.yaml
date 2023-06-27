@@ -965,7 +965,7 @@ components:
           properties:
             neighbor:
               allOf:
-                - $ref: "#/components/schemas/RefImb"
+                - $ref: "#/components/schemas/RelatedBuilding"
             id:
               description: |
                 Identifiant unique de l'immeuble.
@@ -982,21 +982,19 @@ components:
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseBase"
       required:
-        - refs
         - building
       properties:
         "@type":
           const: AnomalieAdresse.batiment
         neighbor:
           allOf:
-            - $ref: "#/components/schemas/RefImb"
-        refs:
+            - $ref: "#/components/schemas/RelatedBuilding"
+        relatedEntity:
           type: array
           minItems: 1
           maxItems: 1
           items:
-            allOf:
-              - $ref: "#/components/schemas/RefImb"
+            $ref: "#/components/schemas/RelatedBuilding"
         building:
           allOf:
             - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/Building
@@ -1016,26 +1014,24 @@ components:
         - $ref: "#/components/schemas/AnomalieAdresseBase"
       required:
         - issues
-        - refs
+        - relatedEntity
       properties:
         "@baseType":
           enum:
             - AnomalieAdresseUpdate
-        refs:
+        relatedEntity:
           type: array
           minItems: 1
           items:
             allOf:
-              - $ref: "#/components/schemas/RefImb"
-            required:
-              - codeImb
+              - $ref: "#/components/schemas/RelatedBuilding"
         sizeRefs:
           type: integer
           description: |
             Nombre d'immeubles cibles de l'anomalie.
 
             La valeur est renseignée par l'OI à la création du ticket.
-            Elle est égale à la taille du tableau `refs`.
+            Elle est égale à la taille du tableau `relatedEntity`.
             Elle permet de rechercher plus efficacement les anomalies
             et de facilement différencier les traitement unitaires et en masse.
           readOnly: true
@@ -1063,8 +1059,8 @@ components:
                   description: |
                     Liste des coordonnées géographiques de l'adresse corrigée.
 
-                    Le nombre d'éléments de la liste doit être égal à la taille du tableau `refs`
-                    et les éléments doivent être dans le même ordre que les éléments du tableau `refs`.
+                    Le nombre d'éléments de la liste doit être égal à la taille du tableau `relatedEntity`
+                    et les éléments doivent être dans le même ordre que les éléments du tableau `relatedEntity`.
 
                     Si l'OC ne souhaite pas renseigner ces valeurs, il peut renseigner une liste vide.
                   type: array
@@ -1114,7 +1110,7 @@ components:
       properties:
         "@type":
           const: AnomalieAdresse.nbLogements
-        refs:
+        relatedEntity:
           maxItems: 1
         issues:
           required:
@@ -1128,15 +1124,6 @@ components:
               properties:
                 value:
                   type: integer
-
-    RefImb:
-      type: object
-      required:
-        - codeImb
-      properties:
-        codeImb:
-          type: string
-          description: Identifiant de l'immeuble building.
 
     Issue:
       type: object
@@ -1207,3 +1194,12 @@ components:
           oneOf:
             - $ref: "#/components/schemas/AnomalieAdresseCreation"
             - $ref: "#/components/schemas/AnomalieAdresseUpdate"
+
+    RelatedBuilding:
+      allOf:
+        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/RelatedEntity.openapi.yaml#/components/schemas/RelatedEntity
+      properties:
+        "@referredType":
+          const: "Building"
+        role:
+          const: "building"
