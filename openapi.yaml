@@ -294,12 +294,17 @@ tags:
     description: Attachment management
   - name: Event
     description: Event management
+  - name: OI
+    description: OI endpoints
+  - name: OC
+    description: OC endpoints
 
 paths:
   /:
     get:
       tags:
         - TroubleTicket
+        - OI
       summary: Get all trouble tickets
       description: Get all trouble tickets
       parameters:
@@ -340,6 +345,7 @@ paths:
     head:
       tags:
         - TroubleTicket
+        - OI
       summary: Count the number of trouble tickets
       description: Count the number of trouble tickets matching the given criteria.
       parameters:
@@ -368,6 +374,7 @@ paths:
     post:
       tags:
         - TroubleTicket
+        - OI
       summary: Create a trouble ticket
       description: Create a trouble ticket
       requestBody:
@@ -409,6 +416,7 @@ paths:
     get:
       tags:
         - TroubleTicket
+        - OI
       summary: Get a trouble ticket
       description: Get a trouble ticket
       responses:
@@ -439,6 +447,7 @@ paths:
     put:
       tags:
         - TroubleTicket
+        - OI
       summary: Update a trouble ticket
       description: Update a trouble ticket
       requestBody:
@@ -483,6 +492,7 @@ paths:
     patch:
       tags:
         - TroubleTicket
+        - OI
       summary: Partially update a trouble ticket
       description: Partially update a trouble ticket
       requestBody:
@@ -531,6 +541,7 @@ paths:
     get:
       tags:
         - Note
+        - OI
       summary: Get all notes of a trouble ticket
       description: Get all notes of a trouble ticket
       parameters:
@@ -577,6 +588,7 @@ paths:
     head:
       tags:
         - Note
+        - OI
       summary: Count the number of notes of a trouble ticket
       description: Count the number of notes of a trouble ticket matching the given criteria.
       parameters:
@@ -591,6 +603,7 @@ paths:
     post:
       tags:
         - Note
+        - OI
       summary: Create a note for a trouble ticket
       description: Create a note for a trouble ticket
       requestBody:
@@ -636,6 +649,7 @@ paths:
     get:
       tags:
         - Attachment
+        - OI
       summary: Get all attachments of a trouble ticket
       description: Get all attachments of a trouble ticket
       parameters:
@@ -676,6 +690,7 @@ paths:
     head:
       tags:
         - Attachment
+        - OI
       summary: Count the number of attachments of a trouble ticket
       description: Count the number of attachments of a trouble ticket matching the given criteria.
       parameters:
@@ -704,6 +719,7 @@ paths:
     post:
       tags:
         - Attachment
+        - OI
       summary: Create an attachment for a trouble ticket
       description: Create an attachment for a trouble ticket
       requestBody:
@@ -750,6 +766,7 @@ paths:
     get:
       tags:
         - Attachment
+        - OI
       summary: Download an attachment of a trouble ticket
       description: Download an attachment of a trouble ticket
       responses:
@@ -778,6 +795,7 @@ paths:
     get:
       tags:
         - Event
+        - OI
       summary: Get all events of all trouble tickets
       description: Get all events of all trouble tickets
       parameters:
@@ -818,6 +836,7 @@ paths:
     head:
       tags:
         - Event
+        - OI
       summary: Count the number of events of all trouble tickets
       description: Count the number of events of all trouble tickets matching the given criteria.
       parameters:
@@ -850,6 +869,7 @@ paths:
     get:
       tags:
         - Event
+        - OI
       summary: Get all events of a trouble ticket
       description: Get all events of a trouble ticket
       parameters:
@@ -890,6 +910,7 @@ paths:
     head:
       tags:
         - Event
+        - OI
       summary: Count the number of events of a trouble ticket
       description: Count the number of events of a trouble ticket matching the given criteria.
       parameters:
@@ -918,6 +939,7 @@ paths:
     post:
       tags:
         - Event
+        - OC
       summary: Receive an event for a trouble ticket
       description: Receive an event for a trouble ticket
       requestBody:
