@@ -85,11 +85,11 @@ info:
 
     * **AnomalieAdresse.creation**
 
-      Création d'une adresse existante dans l'IPE ou d'un immeuble neuf.
+      Création d'une adresse inexistante dans l'IPE ou d'un immeuble neuf.
 
     * **AnomalieAdresse.batiment**
 
-      Rajout d'un bâtiment à une adresse existante dans l'building.
+      Rajout d'un bâtiment à une adresse existante dans l'IPE.
 
     ## Workflow
 
@@ -1167,6 +1167,7 @@ components:
           required:
             - address
             - geographicLocation
+            - housingsNumber
           properties:
             neighbor:
               allOf:
@@ -1189,6 +1190,7 @@ components:
       required:
         - refs
         - building
+        - housingsNumber
       properties:
         "@type":
           const: AnomalieAdresse.batiment
@@ -1291,7 +1293,7 @@ components:
               $ref: "#/components/schemas/Issue"
             "building.address.streetType":
               $ref: "#/components/schemas/Issue"
-            "building.address.codeInsee":
+            "building.address.code_insee":
               $ref: "#/components/schemas/Issue"
             "building.address.code_hexacle":
               $ref: "#/components/schemas/Issue"
@@ -1303,6 +1305,45 @@ components:
               $ref: "#/components/schemas/Issue"
             "building.pm.id":
               $ref: "#/components/schemas/Issue"
+            "building.pm.capacity":
+              $ref: "#/components/schemas/Issue"
+              properties:
+                value:
+                  type: integer
+              type: integer
+            "building.pm.housingsNumber":
+              $ref: "#/components/schemas/Issue"
+              properties:
+                value:
+                  type: integer
+            "building.pm.address.city":
+              $ref: "#/components/schemas/Issue"
+            "building.pm.address.postcode":
+              $ref: "#/components/schemas/Issue"
+            "building.pm.address.streetName":
+              $ref: "#/components/schemas/Issue"
+            "building.pm.address.streetNr":
+              $ref: "#/components/schemas/Issue"
+            "building.pm.address.streetNrSuffix":
+              $ref: "#/components/schemas/Issue"
+            "building.pm.address.streetSuffix":
+              $ref: "#/components/schemas/Issue"
+            "building.pm.address.streetType":
+              $ref: "#/components/schemas/Issue"
+            "building.pm.address.code_insee":
+              $ref: "#/components/schemas/Issue"
+            "building.pm.address.code_hexacle":
+              $ref: "#/components/schemas/Issue"
+            "building.pm.address.code_hexavia":
+              $ref: "#/components/schemas/Issue"
+            "building.pm.address.code_rivoli":
+              $ref: "#/components/schemas/Issue"
+            "building.pm.address.code_ban":
+              $ref: "#/components/schemas/Issue"
+            "building.pbos":
+              $ref: "#/components/schemas/Issue"
+              required:
+                - description
 
     AnomalieAdresseUpdateNbLogements:
       description: |
