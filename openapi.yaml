@@ -7,20 +7,20 @@ info:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   description: |
-    Cet outil a été créé afin de respecter l’obligation réglementaire
+    Cet outil a été créé afin de respecter l'obligation réglementaire
     indiquée dans la [Décision Arcep n° 2020-1432].
 
-    Il permet le traitement d’une demande de création ou de modification d’adresses
+    Il permet le traitement d'une demande de création ou de modification d'adresses
     dans les IPE grâce à des flux normalisés.
 
     **Extrait de la [Décision Arcep n° 2020-1432]:**
 
       *«
-      Compte tenu de l’importance des fichiers IPE qui permettent de connaître l’éligibilité sur les réseaux FttH,
-      il apparaît raisonnable d’imposer aux opérateurs d’infrastructure la mise en place d’un processus inter-opérateurs
+      Compte tenu de l'importance des fichiers IPE qui permettent de connaître l'éligibilité sur les réseaux FttH,
+      il apparaît raisonnable d'imposer aux opérateurs d'infrastructure la mise en place d'un processus inter-opérateurs
       afin de permettre aux opérateurs commerciaux de leur signaler ces immeubles manquants ou erronés.
-      Comme pour les autres processus inter-opérateurs, il serait souhaitable qu’un tel processus de signalement
-      soit identique chez l’ensemble des opérateurs d’infrastructure
+      Comme pour les autres processus inter-opérateurs, il serait souhaitable qu'un tel processus de signalement
+      soit identique chez l'ensemble des opérateurs d'infrastructure
       afin de permettre aux opérateurs commerciaux de mutualiser les développements nécessaires.
       »*
 
@@ -28,44 +28,44 @@ info:
 
     #### OI
 
-    Opérateur d’immeuble:
-    Toute personne chargée de l’établissement ou de la gestion d’une ou plusieurs lignes dans un immeuble bâti,
-    notamment dans le cadre d’une convention d’installation, d’entretien, de remplacement ou de gestion
+    Opérateur d'immeuble:
+    Toute personne chargée de l'établissement ou de la gestion d'une ou plusieurs lignes dans un immeuble bâti,
+    notamment dans le cadre d'une convention d'installation, d'entretien, de remplacement ou de gestion
     des lignes signée avec le propriétaire ou le syndicat de copropriétaires,
-    en application de l’article [L33-6] du code des postes et des communications électroniques;
-    l’opérateur d’immeuble n’est pas nécessairement un opérateur au sens de l’article [L33-1] du même code.
+    en application de l'article [L33-6] du code des postes et des communications électroniques;
+    l'opérateur d'immeuble n'est pas nécessairement un opérateur au sens de l'article [L33-1] du même code.
 
     #### OC
 
     Opérateur Commercial
     Opérateur choisi par le client final pour la fourniture d'un service de télécommunications
-    ou par un fournisseur d’accès au service pour la fourniture d’un service de télécommunications
+    ou par un fournisseur d'accès au service pour la fourniture d'un service de télécommunications
     à son propre client final.
 
     ## Processus
 
     Les délais de traitement sont fixés par typologie dans la [Décision Arcep n° 2020-1432]:
 
-    * Dans le cas d’un signalement unitaire, la correction de l’IPE par l’OI devra intervenir
-      dans un délai d’une semaine après le signalement de l’OC pour les cas simples
+    * Dans le cas d'un signalement unitaire, la correction de l'IPE par l'OI devra intervenir
+      dans un délai d'une semaine après le signalement de l'OC pour les cas simples
       et de trois semaines maximum pour les cas complexes.
 
-    * Dans le cas d’un signalement en masse, la correction de l’IPE par l’OI devra intervenir
-      dans un délai de 2 mois maximum après le signalement de l’OC.
+    * Dans le cas d'un signalement en masse, la correction de l'IPE par l'OI devra intervenir
+      dans un délai de 2 mois maximum après le signalement de l'OC.
 
-    Le processus doit prendre en compte deux catégories de signalements des anomalies de référencement d’adresses:
+    Le processus doit prendre en compte deux catégories de signalements des anomalies de référencement d'adresses:
 
     * **Signalement unitaire**:
-      par exemple anomalie détectée à partir d’une réclamation client.
-      Il s’agit d’un signalement impactant une seule ligne de l’building.
+      par exemple anomalie détectée à partir d'une réclamation client.
+      Il s'agit d'un signalement impactant une seule ligne de l'building.
 
     * **Signalement en masse**:
-      par exemple liste d’anomalies détectées par contrôles informatisés ayant un critère commun (anomalie sur un même champ).
-      Il s’agit d’un signalement unitaire impactant deux lignes IPE ou plus.
+      par exemple liste d'anomalies détectées par contrôles informatisés ayant un critère commun (anomalie sur un même champ).
+      Il s'agit d'un signalement unitaire impactant deux lignes IPE ou plus.
       Certains critères devront concerner la même zone géographique.
 
-      La liste des critères communs n’est pas fermée et pourra être complétée
-      à la demande d’un opérateur suite à la validation par consensus du groupe de travail Infrastructure.
+      La liste des critères communs n'est pas fermée et pourra être complétée
+      à la demande d'un opérateur suite à la validation par consensus du groupe de travail Infrastructure.
 
     ## Types de signalement
 
@@ -104,7 +104,7 @@ info:
       Ce status est optionel. Certains OI peuvent ne pas offrir la possibilité de créer des tickets en mode *DRAFT*.
 
 
-    * `CREATING` → `CANCELLED`: Le délai de création du ticket est expiré.
+    * `CREATING` → `CANCELED`: Le délai de création du ticket est expiré.
 
       **Ce changement de status ne peut être effectué que par l'OI.**
 
@@ -241,7 +241,7 @@ info:
       le passage du status `RESOLVED` à `IN_PROGRESS` ne peut être effectué qu'une seule fois.
 
 
-    * `CREATING|ACKNOWLEDGED|IN_PROGRESS|PENDING` → `CANCELLED`: annulation du ticket par l'OC.
+    * `CREATING|ACKNOWLEDGED|IN_PROGRESS|PENDING` → `CANCELED`: annulation du ticket par l'OC.
 
       **Ce changement de status ne peut être effectué que par l'OC.**
 
@@ -878,7 +878,7 @@ components:
 
             * `REJECTED`: Le ticket est rejeté par l'OI.
 
-            * `CANCELLED`: Le ticket est annulé par l'OC.
+            * `CANCELED`: Le ticket est annulé par l'OC.
 
 
             **Notes:**
@@ -896,14 +896,14 @@ components:
             - RESOLVED
             - CLOSED
             - REJECTED
-            - CANCELLED
+            - CANCELED
         expectedResolutionDate:
           description: Date prévisionnelle de résolution du ticket.
             La valeur est renseignée par l'OI lors du passage à l'état `IN_PROGRESS`.
         acknowledgeDuration:
           type: integer
           readOnly: true
-          description: Temps culmulé du ticket dans le status `ACKNOWLEDGED`.
+          description: Temps passé du ticket dans le status `ACKNOWLEDGED`.
         totalInProgressDuration:
           type: integer
           readOnly: true
@@ -916,11 +916,11 @@ components:
           type: integer
           readOnly: true
           description: Temps cumulé du ticket dans les status `ACKNOWLEDGED` et `IN_PROGRESS`.
-        resolvedToInprogressDuration:
+        resolvedToInProgressDuration:
           type: integer
           readOnly: true
           description: Temps du ticket dans les status `RESOLVED` avant le passage à `IN_PROGRESS`.
-        resolvedToClosedsDuration:
+        resolvedToClosedDuration:
           type: integer
           readOnly: true
           description: Temps du ticket dans les status `RESOLVED` avant le passage à `CLOSED`.
@@ -955,9 +955,9 @@ components:
 
             Les valeurs possibles sont:
 
-            * `SIMPLE`: cas ne nécessitant pas d’intervention sur le terrain,
-              pas d’intervention sur le réseau ou de réalignement de référentiels.
-            * `COMPLEX`: cas qui n’est pas un cas simple
+            * `SIMPLE`: cas ne nécessitant pas d'intervention sur le terrain,
+              pas d'intervention sur le réseau ou de réalignement de référentiels.
+            * `COMPLEX`: cas qui n'est pas un cas simple
         code_oi:
           $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Arcep.openapi.yaml#/components/schemas/CodeOperateurArcep
           description: Code ARCEP de l'OI.
@@ -982,7 +982,7 @@ components:
 
             Les valeurs possibles sont:
 
-            * `CUSTUMER_REQUEST`: Ticket créé par l'OC suite à une demande client final
+            * `CUSTOMER_REQUEST`: Ticket créé par l'OC suite à une demande client final
               qui souhaite passer commande.
             * `OC_REQUEST`: Ticket créé par l'OC sans demande client final.
 
@@ -990,7 +990,7 @@ components:
           default: OC_REQUEST
           enum:
             - OC_REQUEST
-            - CUSTUMER_REQUEST
+            - CUSTOMER_REQUEST
         siren:
           type: string
           description: Numéro SIREN de l'entreprise cliente.
