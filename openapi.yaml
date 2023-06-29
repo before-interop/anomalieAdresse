@@ -380,12 +380,13 @@ paths:
             ETag:
               $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/update.openapi.yaml#/components/headers/ETag
         "400": *response400
-        "409": &response409
+        "403": &response403
           description: |
-            **Conflict**
+            **Forbidden**
 
-            Certains OI peuvent détecter les conflits de tickets dès la création.
-            Dans ce cas, le ticket n'est pas créé et n'a pas de cycle de vie.
+            Le serveur a compris la requête, mais refuse de l'exécuter car le client n'a pas respecté le processus de création ou de mise à jour.
+
+            Exemple: passage du status `ACKNOWLEDGED` à `RESOLVED` sans passer par le status `IN_PROGRESS`.
 
             * Le champ `reason` de la réponse d'erreur doit contenir la liste des tickets en conflit séparés par des virgules.
         default:
@@ -438,8 +439,8 @@ paths:
       responses:
         "200": *troubleTicket201
         "400": *response400
+        "403": *response403
         "404": *response404
-        "409": *response409
         "412":
           $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-412
         default:
@@ -463,8 +464,8 @@ paths:
       responses:
         "200": *troubleTicket201
         "400": *response400
+        "403": *response403
         "404": *response404
-        "409": *response409
         "412":
           $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-412
         default:
