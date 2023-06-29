@@ -1122,6 +1122,18 @@ components:
     Note:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Note.openapi.yaml#/components/schemas/Note
+      properties:
+        relatedEntity:
+          description: |
+            Relation entre la note et l'anomalie.
+            Ce champ est renseigné par l'OI lors de la création de la note.
+          type: array
+          minItems: 1
+          maxItems: 1
+          readOnly: true
+          items:
+            allOf:
+              - $ref: "#/components/schemas/RelatedAnomalie"
 
     Attachment:
       allOf:
@@ -1155,6 +1167,17 @@ components:
             - application/vnd.oasis.opendocument.text
             - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
             - application/vnd.openxmlformats-officedocument.wordprocessingml.document
+        relatedEntity:
+          description: |
+            Relation entre l'attachment et l'anomalie.
+            Ce champ est renseigné par l'OI lors de la création de l'attachment.
+          type: array
+          minItems: 1
+          maxItems: 1
+          readOnly: true
+          items:
+            allOf:
+              - $ref: "#/components/schemas/RelatedAnomalie"
 
     AttachmentFormData:
       allOf:
@@ -1180,3 +1203,14 @@ components:
           const: "Building"
         role:
           const: "building"
+
+    RelatedAnomalie:
+      allOf:
+        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/RelatedEntity.openapi.yaml#/components/schemas/RelatedEntity
+      properties:
+        "@referredType":
+          const: "AnomalieAdresse"
+        role:
+          const: "anomalie"
+        id:
+          description: Identifiant unique de l'anomalie.
