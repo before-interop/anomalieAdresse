@@ -97,21 +97,6 @@ info:
 
     **Possibilités de changement de status:**
 
-    * `CREATING` → `ACKNOWLEDGED`: L'OC a finalisé la création du tickets.
-
-      **Ce changement de status ne peut être effectué que par l'OC.**
-
-      Ce status est optionel. Certains OI peuvent ne pas offrir la possibilité de créer des tickets en mode *DRAFT*.
-
-
-    * `CREATING` → `CANCELED`: Le délai de création du ticket est expiré.
-
-      **Ce changement de status ne peut être effectué que par l'OI.**
-
-      Le délai de création est de **2 jours**.
-
-      Le champ `statusChangeReason` doit être renseigné avec la valeur `DELAY_CREATION_EXPIRED`.
-
 
     * `ACKNOWLEDGED` → `REJECTED`: Le ticket n'est pas recevable.
 
@@ -242,7 +227,7 @@ info:
       le passage du status `RESOLVED` à `IN_PROGRESS` ne peut être effectué qu'une seule fois.
 
 
-    * `CREATING|ACKNOWLEDGED|IN_PROGRESS|PENDING` → `CANCELED`: annulation du ticket par l'OC.
+    * `ACKNOWLEDGED|IN_PROGRESS|PENDING` → `CANCELED`: annulation du ticket par l'OC.
 
       **Ce changement de status ne peut être effectué que par l'OC.**
 
@@ -805,14 +790,6 @@ components:
 
             Les valeurs possibles sont:
 
-            * `CREATING`: Le ticket est en cours de création.
-
-              Ce statut est positionné lorsque la création du ticket est démarrée mais pas encore terminée.
-
-              Exemple:
-              Pour finir la création du ticket, une ou plusieurs pièces jointes doivent être téléversées.
-              Dans ce cas, un *PATCH* ou un *PUT* doit être effectué pour mettre à jour le ticket avec le status `ACKNOWLEDGED`.
-
             * `ACKNOWLEDGED`: Le ticket peut être traité par l'OI.
 
               Ce status est positionné lorsque la création du ticket est terminée.
@@ -840,7 +817,6 @@ components:
 
           default: ACKNOWLEDGED
           enum:
-            - CREATING
             - ACKNOWLEDGED
             - IN_PROGRESS
             - PENDING
