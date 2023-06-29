@@ -139,7 +139,7 @@ info:
 
         Le champ `statusChangeDetails` est obligatoire.
 
-      L'OI doit fournir la durée d'analyse dans le champ `acknowledgeDuration`.
+      L'OI doit fournir la durée d'analyse dans le champ `acknowledgedDuration`.
 
 
     * `ACKNOWLEDGED` → `IN_PROGRESS`: Le ticket est recevable.
@@ -154,7 +154,7 @@ info:
 
       * le qualification du ticket dans le champ `complexity`.
 
-      * la durée d'analyse dans le champ `acknowledgeDuration`.
+      * la durée d'analyse dans le champ `acknowledgedDuration`.
 
 
     * `IN_PROGRESS` → `PENDING`: demande d'information complémentaire
@@ -852,7 +852,7 @@ components:
         expectedResolutionDate:
           description: Date prévisionnelle de résolution du ticket.
             La valeur est renseignée par l'OI lors du passage à l'état `IN_PROGRESS`.
-        acknowledgeDuration:
+        acknowledgedDuration:
           type: integer
           readOnly: true
           description: Temps passé du ticket dans le status `ACKNOWLEDGED`.
