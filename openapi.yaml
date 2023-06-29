@@ -696,55 +696,6 @@ paths:
         default:
           $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
 
-  /{AnomalieAdresseId}/event:
-    parameters:
-      - $ref: "#/components/parameters/anomalieAdresseId"
-
-    get:
-      tags:
-        - Event
-        - OI
-      summary: Get all events of a trouble ticket
-      description: Get all events of a trouble ticket
-      parameters: *searchAndPaginateParameters
-      responses:
-        "200":
-          description: The list of events
-          headers:
-            X-Total-Count:
-              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
-            X-Result-Count:
-              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Result-Count
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Event"
-        "400": *response400
-        "404": *response404
-        default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
-
-    head:
-      tags:
-        - Event
-        - OI
-      summary: Count the number of events of a trouble ticket
-      description: Count the number of events of a trouble ticket matching the given criteria.
-      parameters:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/filters.openapi.yaml#/components/parameters/filters
-      responses:
-        "200":
-          description: The number of events
-          headers:
-            X-Total-Count:
-              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
-        "400": *response400
-        "404": *response404
-        default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
-
     post:
       tags:
         - Event
