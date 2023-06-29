@@ -959,7 +959,7 @@ components:
               pas d'intervention sur le réseau ou de réalignement de référentiels.
             * `COMPLEX`: cas qui n'est pas un cas simple
         code_oi:
-          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Arcep.openapi.yaml#/components/schemas/CodeOperateurArcep
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
           description: Code ARCEP de l'OI.
 
             La valeur est renseignée par l'OC à la création du ticket.
@@ -967,7 +967,7 @@ components:
             L'OI peut choisir de renseigner ou modifier ce code lors de la création du ticket,
             et donc rendre ce paramètre en lecture seule.
         code_oc:
-          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Arcep.openapi.yaml#/components/schemas/CodeOperateurArcep
+          $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
           description: Code ARCEP de l'OC.
 
             La valeur est renseignée par l'OC à la création du ticket.
@@ -1008,7 +1008,7 @@ components:
           const: AnomalieAdresse.creation
         building:
           allOf:
-            - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Arcep.openapi.yaml#/components/schemas/Building
+            - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/Building
           required:
             - address
             - geographicLocation
@@ -1049,7 +1049,7 @@ components:
               - $ref: "#/components/schemas/RefImb"
         building:
           allOf:
-            - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Arcep.openapi.yaml#/components/schemas/Building
+            - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/Building
           required:
             - name
             - geographicLocation
@@ -1120,7 +1120,7 @@ components:
                   type: array
                   minItems: 0
                   items:
-                    $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Arcep.openapi.yaml#/components/schemas/GeographicPoint
+                    $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/GeographicPoint
             "building.name":
               $ref: "#/components/schemas/Issue"
             "building.address.city":
