@@ -44,25 +44,6 @@ sequenceDiagram
   end
 ```
 
-### Gestion des pièces jointes
-
-```mermaid
-sequenceDiagram
-
-  participant OC
-  participant OI
-
-  OC->>OI: Création d'une anomalie en status CREATING
-
-  loop Pour chaque pièce jointe
-
-    OC->>OI: Ajout d'une pièce jointe
-
-  end
-
-  OC->>OI: Passage en status ACKNOWLEDGED
-```
-
 [Décision Arcep n° 2020-1432]: https://www.arcep.fr/uploads/tx_gsavis/20-1432.pdf
 
 
