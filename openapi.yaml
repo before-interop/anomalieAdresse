@@ -818,17 +818,15 @@ components:
 
             * `IN_PROGRESS`: Qualification du ticket par l'OI (cas simple ou complexe).
 
-              L'OC est autorisé à modifier la sévérité du ticket.
-
             * `PENDING`: Le ticket est en attente d'une action de l'OC.
 
               L'OI a besoin d'informations complémentaires pour traiter le ticket.
 
             * `RESOLVED`: Le ticket est résolu et en attente de validation par l'OC.
 
-            * `CLOSED`: Le ticket est clos et validé par l'OC.
+            * `CLOSED`: Cloture du ticket par l'OI ou l'OC.
 
-            * `REJECTED`: Le ticket est rejeté par l'OI.
+            * `REJECTED`: Le ticket est rejeté par l'OC.
 
             * `CANCELED`: Le ticket est annulé par l'OC.
 
