@@ -202,7 +202,7 @@ info:
       **Ce changement de status ne peut être effectué que par l'OI.**
 
       Le ticket est annulé car l'OC n'a pas répondu à la demande d'information complémentaire
-      dans les délais impartis (**2 semaines**).
+      dans les délais impartis. *Ce délai est à la disposition de l'OI*.
 
       Le champ `statusChangeReason` doit être renseigné avec la valeur `DELAY_ANSWER_EXPIRED`.
 
@@ -218,7 +218,8 @@ info:
         Le champ `statusChangeReason` doit être renseigné avec la valeur `RESOLUTION_ACCEPTED`.
 
       * Si le changement est effectué par l'OI, le ticket est clos
-        car l'OC n'a pas répondu à la résolution après un délai de **2 semaines**.
+        car l'OC n'a pas répondu à la résolution dans les délais impartis.
+        *Ce délai est à la disposition de l'OI*.
 
         Le champ `statusChangeReason` doit être renseigné avec la valeur `DELAY_VALIDATION_EXPIRED`.
 
