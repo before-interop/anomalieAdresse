@@ -237,3 +237,51 @@ curl "https://localhost/api/anomalie-adresse?status=IN_PROGRESS&statusChangeReas
 ```bash
 curl "https://localhost/api/anomalie-adresse?status[in]=ACKNOWLEDGED,IN_PROGRESS,PENDING&refs.codeImb=ID-75120000012C"
 ```
+
+### Nombre total de tickets ouverts sur le mois de janvier 2021
+
+```bash
+curl -XHEAD "https://localhost/api/anomalie-adresse?creationDate[gte]=2021-01-01&creationDate[lt]=2021-02-01"
+```
+
+### Nombre total de tickets clôturés sur le mois de janvier 2021 en moins d'une semaine
+
+```bash
+curl -XHEAD "https://localhost/api/anomalie-adresse?totalDuration[lt]=604800&resolutionDate[gte]=2021-01-01&resolutionDate[lt]=2021-02-01"
+```
+
+### Nombre total de tickets ouverts sur le mois de janvier 2021 et clôturés en moins d'une semaine
+
+```bash
+curl -XHEAD "https://localhost/api/anomalie-adresse?status=CLOSED&totalDuration[lt]=604800&creationDate[gte]=2021-01-01&creationDate[lt]=2021-02-01"
+```
+
+### Nombre total de tickets clôturés sur le mois de janvier 2021 en plus d'une semaine et moins de 4 semaines
+
+```bash
+curl -XHEAD "https://localhost/api/anomalie-adresse?totalDuration[gte]=604800&totalDuration[lt]=2419200&resolutionDate[gte]=2021-01-01&resolutionDate[lt]=2021-02-01"
+```
+
+### Nombre total de tickets clôturés sur le mois de janvier 2021 en plus de 4 semaines et moins de 8 semaines
+
+```bash
+curl -XHEAD "https://localhost/api/anomalie-adresse?totalDuration[gte]=2419200&totalDuration[lt]=4838400&resolutionDate[gte]=2021-01-01&resolutionDate[lt]=2021-02-01"
+```
+
+### Nombre total de tickets clôturés sur le mois de janvier 2021 en plus de 8 semaines
+
+```bash
+curl -XHEAD "https://localhost/api/anomalie-adresse?totalDuration[gte]=4838400&resolutionDate[gte]=2021-01-01&resolutionDate[lt]=2021-02-01"
+```
+
+### Nombre total de tickets ouverts sur le mois de janvier 2021 et toujours en cours
+
+```bash
+curl -XHEAD "https://localhost/api/anomalie-adresse?status[in]=ACKNOWLEDGED,IN_PROGRESS,PENDING,RESOLVED&creationDate[gte]=2021-01-01&creationDate[lt]=2021-02-01"
+```
+
+### Nombre total de tickets ouverts sur le mois de janvier 2021 et rejetés
+
+```bash
+curl -XHEAD "https://localhost/api/anomalie-adresse?status=REJECTED&creationDate[gte]=2021-01-01&creationDate[lt]=2021-02-01"
+```
