@@ -1012,7 +1012,6 @@ components:
           required:
             - address
             - geographicLocation
-            - housingsNumber
           properties:
             neighbor:
               allOf:
@@ -1035,7 +1034,6 @@ components:
       required:
         - refs
         - building
-        - housingsNumber
       properties:
         "@type":
           const: AnomalieAdresse.batiment
@@ -1053,7 +1051,6 @@ components:
           allOf:
             - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Arcep.openapi.yaml#/components/schemas/Building
           required:
-            - type
             - name
             - geographicLocation
           properties:
@@ -1124,6 +1121,8 @@ components:
                   minItems: 0
                   items:
                     $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Arcep.openapi.yaml#/components/schemas/GeographicPoint
+            "building.name":
+              $ref: "#/components/schemas/Issue"
             "building.address.city":
               $ref: "#/components/schemas/Issue"
             "building.address.postcode":
@@ -1150,45 +1149,6 @@ components:
               $ref: "#/components/schemas/Issue"
             "building.pm.id":
               $ref: "#/components/schemas/Issue"
-            "building.pm.capacity":
-              $ref: "#/components/schemas/Issue"
-              properties:
-                value:
-                  type: integer
-              type: integer
-            "building.pm.housingsNumber":
-              $ref: "#/components/schemas/Issue"
-              properties:
-                value:
-                  type: integer
-            "building.pm.address.city":
-              $ref: "#/components/schemas/Issue"
-            "building.pm.address.postcode":
-              $ref: "#/components/schemas/Issue"
-            "building.pm.address.streetName":
-              $ref: "#/components/schemas/Issue"
-            "building.pm.address.streetNr":
-              $ref: "#/components/schemas/Issue"
-            "building.pm.address.streetNrSuffix":
-              $ref: "#/components/schemas/Issue"
-            "building.pm.address.streetSuffix":
-              $ref: "#/components/schemas/Issue"
-            "building.pm.address.streetType":
-              $ref: "#/components/schemas/Issue"
-            "building.pm.address.code_insee":
-              $ref: "#/components/schemas/Issue"
-            "building.pm.address.code_hexacle":
-              $ref: "#/components/schemas/Issue"
-            "building.pm.address.code_hexavia":
-              $ref: "#/components/schemas/Issue"
-            "building.pm.address.code_rivoli":
-              $ref: "#/components/schemas/Issue"
-            "building.pm.address.code_ban":
-              $ref: "#/components/schemas/Issue"
-            "building.pbos":
-              $ref: "#/components/schemas/Issue"
-              required:
-                - description
 
     AnomalieAdresseUpdateNbLogements:
       description: |
