@@ -960,6 +960,8 @@ components:
             realEstateLessor:
               description: Bailleur.
               $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Company.openapi.yaml#/components/schemas/Company
+            newConstruction:
+              type: boolean
 
     AnomalieAdresseNewBuilding:
       allOf:
