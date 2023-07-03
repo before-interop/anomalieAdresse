@@ -1198,11 +1198,26 @@ components:
     Event:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/CloudEvent.openapi.yaml#/components/schemas/CloudEvent
+      required:
+        - time
+        - subject
       properties:
+        subject:
+          description: Identifiant unique de l'anomalie.
+          type: string
+          format: uuid
+        type:
+          enum:
+            - fr.interop.anomalieadresse.update
+            - fr.interop.anomalieadresse.note.create
+            - fr.interop.anomalieadresse.attachment.create
+        datacontenttype:
+          const: application/json
         data:
           oneOf:
-            - $ref: "#/components/schemas/AnomalieAdresseCreation"
-            - $ref: "#/components/schemas/AnomalieAdresseUpdate"
+            - $ref: "#/components/schemas/OneOfAnomalieAdresse"
+            - $ref: "#/components/schemas/Note"
+            - $ref: "#/components/schemas/Attachment"
 
     RelatedBuilding:
       allOf:
