@@ -6,6 +6,7 @@ info:
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
+    identifier: Apache-2.0
   description: |
     Cet outil a été créé afin de respecter l'obligation réglementaire
     indiquée dans la [Décision Arcep n° 2020-1432].
