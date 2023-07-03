@@ -136,11 +136,11 @@ info:
 
       L'OI doit renseigner:
 
-      * une date de résolution prévisionnelle dans le champ `expectedResolutionDate`.
+      * Une date de résolution prévisionnelle dans le champ `expectedResolutionDate`.
 
-      * le qualification du ticket dans le champ `complexity`.
+      * Le qualification du ticket dans le champ `complexity`.
 
-      * la durée d'analyse dans le champ `acknowledgedDuration`.
+      * La durée d'analyse dans le champ `acknowledgedDuration`.
 
 
     * `IN_PROGRESS` → `PENDING`: demande d'information complémentaire
@@ -149,9 +149,11 @@ info:
 
       Le temps de traitement est suspendu à partir de ce changement de status.
 
+      Le champ `statusChangeReason` doit être renseigné avec la valeur `WAITING_INFORMATION`.
+
       L'OC doit fournir en retour:
 
-      * la liste des informations complémentaires attendues dans le champ `statusChangeDetails`.
+      * La liste des informations complémentaires attendues dans le champ `statusChangeDetails`.
 
         Ces informations peuvent être fournies dans une note ou un attachement.
 
@@ -162,9 +164,9 @@ info:
 
       L'OI doit renseigner:
 
-      * la durée de résolution dans le champ `totalInProgressDuration`.
+      * La durée de résolution dans le champ `totalInProgressDuration`.
 
-      * la référence de la ressource créée ou modifiée dans le champ `statusChangeDetails`.
+      * Pour les création, la référence de la ressource créée ou modifiée dans le champ `building.id`.
 
       L'OC peut accepter la résolution du ticket en passant le status à `CLOSED`
       ou la refuser en passant le status à `IN_PROGRESS`.
@@ -220,7 +222,7 @@ info:
       La résolution du ticket est refusée par l'OC.
 
       * Le champ `statusChangeReason` doit être renseigné avec la valeur `RESOLUTION_REFUSED`.
-      * le champ `statusChangeDetails` doit être renseigné avec la raison du refus.
+      * Le champ `statusChangeDetails` doit être renseigné avec la raison du refus.
 
       Le temps de traitement est repris à partir de ce changement de status.
 
@@ -235,6 +237,8 @@ info:
       Le ticket est annulé par l'OC.
 
       Le temps de traitement est annulé à partir de ce changement de status.
+
+      * Le champ `statusChangeDetails` doit être renseigné avec la raison de l'annulation.
 
 
     ## Pagination
@@ -864,6 +868,8 @@ components:
             - RESOLUTION_ACCEPTED
             - UNKNOWN_RESOURCE
             - UNKNOWN_ZONE
+            - PASSED_TO_INPROGRESS
+            - WAITING_INFORMATION
         priority:
           readOnly: false
           enum:
