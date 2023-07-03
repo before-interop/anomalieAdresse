@@ -57,24 +57,22 @@ curl -XPOST -d '{
   "externalId": "123456789",
   "code_oi": "FTEL",
   "code_oc": "FTEL",
-  "refs": [
+  "relatedEntity": [
     {
-      "codeImb": "ID-75120000012C",
+      "id": "ID-75120000012C"
     },
     {
-      "codeImb": "ID-7512000000H9",
+      "id": "ID-7512000000H9"
     }
   ],
-  "issues": [
-    {
-      "key": "address.postcode",
-      "value": "75120"
-    },
-    {
-      "key": "address.city",
+  "issues": {
+    "building.address.city": {
       "description": "Ville inconnue"
+    },
+    "building.address.postcode": {
+      "value": "75120"
     }
-  ]
+  }
 }' https://localhost/api/anomalie-adresse
 
 HTTP/1.1 201 Created
@@ -86,24 +84,23 @@ Location: /api/anomalie-adresse/330e4b53-e426-4ac3-a4c2-1f9f9d875b6a
   "externalId": "123456789",
   "code_oi": "FTEL",
   "code_oc": "FTEL",
-  "refs": [
+  "relatedEntity": [
     {
-      "codeImb": "ID-75120000012C",
+      "id": "ID-75120000012C"
     },
     {
-      "codeImb": "ID-7512000000H9",
+      "id": "ID-7512000000H9"
     }
   ],
-  "issues": [
-    {
-      "key": "address.postcode",
-      "value": "75120"
-    },
-    {
-      "key": "address.city",
+  "issues": {
+    "building.address.city": {
       "description": "Ville inconnue"
+    },
+    "building.address.postcode": {
+      "value": "75120"
     }
-  ],
+  },
+  "sizeRefs": 2,
   "status": "ACKNOWLEDGED",
   "statusChangeReason": null,
   "statusChangeDetails": null,
@@ -143,24 +140,22 @@ ETag: 345678901abcdef
   "externalId": "123456789",
   "code_oi": "FTEL",
   "code_oc": "FTEL",
-  "refs": [
+  "relatedEntity": [
     {
-      "codeImb": "ID-75120000012C",
+      "id": "ID-75120000012C"
     },
     {
-      "codeImb": "ID-7512000000H9",
+      "id": "ID-7512000000H9"
     }
   ],
-  "issues": [
-    {
-      "key": "address.postcode",
-      "value": "75120"
-    },
-    {
-      "key": "address.city",
+  "issues": {
+    "building.address.city": {
       "description": "Ville inconnue"
+    },
+    "building.address.postcode": {
+      "value": "75120"
     }
-  ],
+  },
   "status": "IN_PROGRESS",
   "statusChangeReason": "NOT_ACCEPTED",
   "statusChangeDetails": "Ville toujours inconnue",
@@ -216,7 +211,7 @@ curl "https://localhost/api/anomalie-adresse?status=IN_PROGRESS&statusChangeReas
 ### Lister les tickets ouverts sur un code IMB
 
 ```bash
-curl "https://localhost/api/anomalie-adresse?status[in]=ACKNOWLEDGED,IN_PROGRESS,PENDING&refs.codeImb=ID-75120000012C"
+curl "https://localhost/api/anomalie-adresse?status[in]=ACKNOWLEDGED,IN_PROGRESS,PENDING&relatedEntity.id=ID-75120000012C"
 ```
 
 ### Nombre total de tickets ouverts sur le mois de janvier 2021
