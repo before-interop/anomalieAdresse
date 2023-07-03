@@ -954,6 +954,12 @@ components:
                 - city
                 - postcode
                 - code_insee
+            realEstateDeveloper:
+              description: Promoteur immobilier.
+              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Company.openapi.yaml#/components/schemas/Company
+            realEstateLessor:
+              description: Bailleur.
+              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Company.openapi.yaml#/components/schemas/Company
 
     AnomalieAdresseNewBuilding:
       allOf:
