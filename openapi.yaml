@@ -257,6 +257,18 @@ info:
     * signalement en masse: 8 semaines
 
 
+    ## Dépendances
+
+    Cette API utilise une architecture proxyfié pour la gestion des dépendances.
+
+    ![Proxyfied architecture schema](https://raw.githubusercontent.com/before-interop/common/main/schema/architecture.drawio.svg)
+
+    * [TroubleTicket](https://ggrebert.github.io/before-interop-common/?urls.primaryName=TroubleTicket)
+    * [Attachment](https://ggrebert.github.io/before-interop-common/?urls.primaryName=Attachment)
+    * [Note](https://ggrebert.github.io/before-interop-common/?urls.primaryName=Note)
+    * [Event](https://ggrebert.github.io/before-interop-common/?urls.primaryName=Event)
+
+
     [Décision Arcep n° 2020-1432]: https://www.arcep.fr/uploads/tx_gsavis/20-1432.pdf
     [L33-1]: https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000047293234
     [L33-6]: https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000037671945
@@ -393,6 +405,8 @@ paths:
         - OI
       summary: Get a trouble ticket
       description: Get a trouble ticket
+      parameters:
+        - $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/fields.openapi.yaml#/components/parameters/fields
       responses:
         "200":
           description: The trouble ticket
@@ -607,7 +621,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Attachment.openapi.yaml#/components/schemas/Attachment
+                $ref: "#/components/schemas/Attachment"
           headers:
             ETag:
               $ref: https://raw.githubusercontent.com/before-interop/common/main/common/utils/update.openapi.yaml#/components/headers/ETag
