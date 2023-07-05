@@ -911,17 +911,11 @@ components:
           description: Code ARCEP de l'OI.
 
             La valeur est renseignée par l'OC à la création du ticket.
-
-            L'OI peut choisir de renseigner ou modifier ce code lors de la création du ticket,
-            et donc rendre ce paramètre en lecture seule.
         code_oc:
           $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
           description: Code ARCEP de l'OC.
 
             La valeur est renseignée par l'OC à la création du ticket.
-
-            L'OI peut choisir de renseigner ou modifier ce code lors de la création du ticket,
-            et donc rendre ce paramètre en lecture seule.
         externalId:
           description: Référence interne du ticket de l'OC.
         ticketType:
@@ -947,6 +941,9 @@ components:
           description: Numéro SIRET de l'entreprise cliente.
 
     AnomalieAdresseCreation:
+      description: |
+        *AnomalieAdresseCreation* permet la création d'une adresse inexistante dans l'IPE
+        ou d'une immeuble neuf.
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseBase"
       required:
@@ -985,6 +982,8 @@ components:
               type: boolean
 
     AnomalieAdresseNewBuilding:
+      description: |
+        *AnomalieAdresseNewBuilding* permet de rajouter un nouveau bâtiment à une adresse existante dans l'IPE.
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseBase"
       required:
