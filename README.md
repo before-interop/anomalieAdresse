@@ -29,22 +29,151 @@ sequenceDiagram
   participant OI
 
   OC->>OI: Création d'une anomalie (ACKNOWLEDGED)
+  loop Pour chaque pièce jointe
+    OC->>OI: Ajout d'une pièce jointe
+  end
 
   OI->>OI: Contrôles métier
   alt Contrôles OK
     OI->>OI: Passage en IN_PROGRESS
     OI->>OC: Event ticket_updated
+
     OI->>OI: Traitement de l'anomalie
     OI->>OI: Passage en RESOLVED
     OI->>OC: Event ticket_updated
-    OC->>OI: Validation de la résolution
+
+    OC->>OI: Validation de la résolution (CLOSED)
   else Contrôles KO
     OI-->>OI: Passage en REJECTED
     OI->>OC: Event ticket_updated
   end
 ```
 
-[Décision Arcep n° 2020-1432]: https://www.arcep.fr/uploads/tx_gsavis/20-1432.pdf
+###  Cas incomplet (infos manquantes)
+
+```mermaid
+sequenceDiagram
+
+  participant OC
+  participant OI
+
+  OC->>OI: Création d'une anomalie (ACKNOWLEDGED)
+  loop Pour chaque pièce jointe
+    OC->>OI: Ajout d'une pièce jointe
+  end
+
+  OI->>OI: Contrôles métier : OK
+  OI->>OI: Passage en IN_PROGRESS
+  OI->>OC: Event ticket_updated
+
+  OI->>OI: Traitement de l'anomalie
+
+  OI->>OI: Passage en PENDING
+  OI->>OC: Event ticket_updated
+
+  loop Pour chaque info demandée
+    OC->>OI: Fourniture infos demandées (Note et/ou Attachment)
+  end
+  OC->>OI: Passage en IN_PROGRESS
+
+  OI->>OI: Traitement de l'anomalie
+  OI->>OI: Passage en RESOLVED
+  OI->>OC: Event ticket_updated
+
+  OC->>OI: Validation de la résolution (CLOSED)
+```
+
+###  Refus de la résolution par l'OC
+
+```mermaid
+sequenceDiagram
+
+  participant OC
+  participant OI
+
+  OC->>OI: Création d'une anomalie (ACKNOWLEDGED)
+  loop Pour chaque pièce jointe
+    OC->>OI: Ajout d'une pièce jointe
+  end
+
+  OI->>OI: Contrôles métier : OK
+  OI->>OI: Passage en IN_PROGRESS
+  OI->>OC: Event ticket_updated
+
+  OI->>OI: Traitement de l'anomalie
+  OI->>OI: Passage en RESOLVED
+  OI->>OC: Event ticket_updated
+
+  OC->>OI: Refus de la résolution (IN PROGRESS + explications)
+
+  OI->>OI: Traitement de l'anomalie
+  OI->>OI: Passage en RESOLVED
+  OI->>OC: Event ticket_updated
+
+  alt Résolution acceptée
+    OC->>OI: Validation de la résolution (CLOSED)
+  else Résolution refusée
+    OC->>OI: Validation de la résolution (CLOSED)
+    OC->>OI: Création d'une nouvelle anomalie (ACKNOWLEDGED)
+    Note over OC,OI: Création d'une nouvelle anomalie ???? HYPOTHESE A CONFIRMER
+ end
+```
+
+### Délai informations complémentaires dépassé
+
+```mermaid
+sequenceDiagram
+
+  participant OC
+  participant OI
+
+  OC->>OI: Création d'une anomalie (ACKNOWLEDGED)
+  loop Pour chaque pièce jointe
+    OC->>OI: Ajout d'une pièce jointe
+  end
+
+  OI->>OI: Contrôles métier : OK
+  OI->>OI: Passage en IN_PROGRESS
+  OI->>OC: Event ticket_updated
+
+  OI->>OI: Traitement de l'anomalie
+  OI->>OI: Passage en PENDING
+  OI->>OC: Event ticket_updated
+
+  OI->>OI: Fin délai infos complémentaires (Passage à RESOLVED)
+  OI->>OC: Event ticket_updated
+
+  alt Résolution acceptée
+    OC->>OI: Validation de la résolution (CLOSED)
+  else Résolution refusée
+    OC->>OI: Refus de la résolution (IN PROGRESS + explications)
+ end
+```
+
+### Délai validation résolution dépassé
+
+```mermaid
+sequenceDiagram
+
+  participant OC
+  participant OI
+
+  OC->>OI: Création d'une anomalie (ACKNOWLEDGED)
+  loop Pour chaque pièce jointe
+    OC->>OI: Ajout d'une pièce jointe
+  end
+
+  OI->>OI: Contrôles métier : OK
+  OI->>OI: Passage en IN_PROGRESS
+  OI->>OC: Event ticket_updated
+
+  OI->>OI: Traitement de l'anomalie
+  OI->>OI: Passage en RESOLVED
+  OI->>OC: Event ticket_updated
+
+  OI->>OI: Fin délai validation résolution (CLOSED)
+  OI->>OC: Event ticket_updated
+```
 
 
 ## Exemples d'utilisation de l'API
@@ -190,13 +319,13 @@ ETag: 345678901abcdef
 }
 ```
 
-### Récupération des annomalies `PENDING`
+### Récupération des anomalies `PENDING`
 
 ```bash
 curl "https://localhost/api/anomalie-adresse?status=PENDING"
 ```
 
-### Récupération des annomalies résolue en plus de 8 semaines
+### Récupération des anomalies résolue en plus de 8 semaines
 
 ```bash
 curl "https://localhost/api/anomalie-adresse?status=RESOLVED&resolutionDelay[gt]=4838400"
@@ -261,3 +390,6 @@ curl -XHEAD "https://localhost/api/anomalie-adresse?status[in]=ACKNOWLEDGED,IN_P
 ```bash
 curl -XHEAD "https://localhost/api/anomalie-adresse?status=REJECTED&creationDate[gte]=2021-01-01&creationDate[lt]=2021-02-01"
 ```
+
+
+[Décision Arcep n° 2020-1432]: https://www.arcep.fr/uploads/tx_gsavis/20-1432.pdf
