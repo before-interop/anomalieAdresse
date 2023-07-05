@@ -1092,7 +1092,7 @@ components:
               $ref: "#/components/schemas/Issue"
             "building.address.code_hexacle":
               $ref: "#/components/schemas/Issue"
-            "building.address.code_hexavia":
+            "building.address.code_hexacle_voie":
               $ref: "#/components/schemas/Issue"
             "building.address.code_rivoli":
               $ref: "#/components/schemas/Issue"
