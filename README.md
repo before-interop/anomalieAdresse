@@ -8,8 +8,6 @@ Il permet le traitement d’une demande de création ou de modification d’adre
 
 Le swagger est disponible à l'adresse suivante : https://before-interop.github.io/anomalieAdresse/
 
-TODO: adresse temporaire en attendant le Pull Request sur le repo officiel: https://ggrebert.github.io/anomalieAdresse
-
 ## Types d'anomalies
 
 ![Types de signalement](./type.drawio.svg)
