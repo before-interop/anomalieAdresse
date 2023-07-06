@@ -100,23 +100,17 @@ sequenceDiagram
   OI->>OI: Passage en IN_PROGRESS
   OI->>OC: Event ticket_updated
 
-  OI->>OI: Traitement de l'anomalie
-  OI->>OI: Passage en RESOLVED
-  OI->>OC: Event ticket_updated
+  loop Tant que la résolution n'est pas validé par l'OC
+    OI->>OI: Traitement de l'anomalie
+    OI->>OI: Passage en RESOLVED
+    OI->>OC: Event ticket_updated
 
-  OC->>OI: Refus de la résolution (IN PROGRESS + explications)
-
-  OI->>OI: Traitement de l'anomalie
-  OI->>OI: Passage en RESOLVED
-  OI->>OC: Event ticket_updated
-
-  alt Résolution acceptée
-    OC->>OI: Validation de la résolution (CLOSED)
-  else Résolution refusée
-    OC->>OI: Validation de la résolution (CLOSED)
-    OC->>OI: Création d'une nouvelle anomalie (ACKNOWLEDGED)
-    Note over OC,OI: Création d'une nouvelle anomalie ???? HYPOTHESE A CONFIRMER
- end
+    alt Résolution acceptée
+      OC->>OI: Validation de la résolution (CLOSED)
+    else Résolution refusée
+      OC->>OI: Refus de la résolution (IN PROGRESS + explications)
+    end
+  end
 ```
 
 ### Délai informations complémentaires dépassé

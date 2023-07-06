@@ -136,7 +136,8 @@ info:
 
       L'OI doit renseigner:
 
-      * Une date de résolution prévisionnelle dans le champ `expectedResolutionDate`.
+      * Une date de résolution prévisionnelle dans le champ `expectedResolutionDate`
+        (même si cette date est antérieure à la date courante).
 
       * Le qualification du ticket dans le champ `complexity`.
 
@@ -156,6 +157,21 @@ info:
       * La liste des informations complémentaires attendues dans le champ `statusChangeDetails`.
 
         Ces informations peuvent être fournies dans une note ou un attachement.
+
+
+    * `IN_PROGRESS` → `IN_PROGRESS`: requalification du ticket.
+
+      **Ce changement de status ne peut être effectué que par l'OI.**
+
+      L'OI doit renseigner:
+
+      * La nouvelle qualification du ticket dans le champ `complexity`.
+
+      * La date de résolution prévisionnelle dans le champ `expectedResolutionDate`.
+
+      * Le champ `statusChangeDetails` doit être renseigné avec la raison de la requalification.
+
+      * Le champ `statusChangeReason` doit être renseigné avec la valeur `REQUALIFIED`.
 
 
     * `IN_PROGRESS` → `RESOLVED`: résolution du ticket
@@ -225,10 +241,6 @@ info:
       * Le champ `statusChangeDetails` doit être renseigné avec la raison du refus.
 
       Le temps de traitement est repris à partir de ce changement de status.
-
-      **Attention:**
-      le passage du status `RESOLVED` à `IN_PROGRESS` ne peut être effectué qu'une seule fois.
-
 
     * `ACKNOWLEDGED|IN_PROGRESS|PENDING` → `CANCELED`: annulation du ticket par l'OC.
 
