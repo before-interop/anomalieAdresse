@@ -957,6 +957,7 @@ components:
           required:
             - address
             - geographicLocation
+            - relatedEntity
           properties:
             neighbor:
               allOf:
@@ -1013,6 +1014,14 @@ components:
 
                 La valeur est renseignée par l'OI à la résolution du ticket.
               readOnly: true
+            realEstateDeveloper:
+              description: Promoteur immobilier.
+              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Company.openapi.yaml#/components/schemas/Company
+            realEstateLessor:
+              description: Bailleur.
+              $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Company.openapi.yaml#/components/schemas/Company
+            newConstruction:
+              type: boolean
 
     AnomalieAdresseUpdate:
       allOf:
