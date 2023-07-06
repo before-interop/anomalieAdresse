@@ -1227,6 +1227,11 @@ components:
           items:
             allOf:
               - $ref: "#/components/schemas/RelatedAnomalie"
+        status:
+          enum:
+            - PENDING
+            - VALIDATED
+            - REJECTED
 
     AttachmentFormData:
       allOf:
