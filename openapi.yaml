@@ -1001,6 +1001,7 @@ components:
         - $ref: "#/components/schemas/AnomalieAdresseBase"
       required:
         - building
+        - relatedEntity
       properties:
         "@type":
           const: AnomalieAdresse.batiment
