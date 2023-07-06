@@ -1256,6 +1256,7 @@ components:
             - fr.interop.anomalieadresse.update
             - fr.interop.anomalieadresse.note.create
             - fr.interop.anomalieadresse.attachment.create
+            - fr.interop.anomalieadresse.attachment.update
         datacontenttype:
           const: application/json
         data:
