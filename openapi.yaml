@@ -969,7 +969,6 @@ components:
           required:
             - address
             - geographicLocation
-            - relatedEntity
           properties:
             neighbor:
               allOf:
