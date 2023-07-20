@@ -892,6 +892,7 @@ components:
             - INVALID
             - OTHER
             - RESOLUTION_ACCEPTED
+            - RESOLUTION_REFUSED
             - UNKNOWN_RESOURCE
             - UNKNOWN_ZONE
             - PASSED_TO_INPROGRESS
