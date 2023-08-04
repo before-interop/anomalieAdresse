@@ -113,7 +113,7 @@ info:
 
         Le champ `statusChangeDetails` est obligatoire avec la référence du ou des tickets en conflit.
 
-      * `ALREADY_RESOLVED`: la resource existe déjà chez l'OI
+      * `ALREADY_RESOLVED`: la ressource existe déjà chez l'OI
 
         Le champ `statusChangeDetails` est obligatoire avec la référence de la ressource existante.
 
