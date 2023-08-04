@@ -2,7 +2,7 @@
 
 Cet outil a été créé afin de respecter l’obligation réglementaire indiquée dans la [Décision Arcep n° 2020-1432].
 
-Il permet le traitement d’une demande de création ou de modification d’adresses dans les IPE grâce à des flux normalisés.
+Il permet le traitement d’une demande de création ou de modification d’adresses immeuble dans les IPE grâce à des flux normalisés.
 
 ## Swagger
 
