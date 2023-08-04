@@ -970,6 +970,7 @@ components:
           required:
             - address
             - geographicLocation
+            - type
           properties:
             neighbor:
               allOf:
@@ -1020,6 +1021,7 @@ components:
           required:
             - name
             - geographicLocation
+            - type
           properties:
             id:
               description: |
