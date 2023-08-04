@@ -1005,6 +1005,10 @@ components:
             realEstateLessor:
               description: Bailleur.
               $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Company.openapi.yaml#/components/schemas/Company
+            plot:
+              description: Parcelle cadastrale.
+              type: string
+              pattern: ^[0-9A-Z]+$
             newConstruction:
               type: boolean
 
@@ -1047,6 +1051,10 @@ components:
             realEstateLessor:
               description: Bailleur.
               $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Company.openapi.yaml#/components/schemas/Company
+            plot:
+              description: Parcelle cadastrale.
+              type: string
+              pattern: ^[0-9A-Z]+$
             newConstruction:
               type: boolean
 
