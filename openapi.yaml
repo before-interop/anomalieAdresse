@@ -109,7 +109,7 @@ info:
 
       * `UNKNOWN_ZONE`: la zone géographique n'est pas couverte par l'OI
 
-      * `DUPLICATE`: le ticket est en conflit avec un autre ticket (2 demandes actives sur la même adresse)
+      * `DUPLICATE`: le ticket est en conflit avec un autre ticket (2 demandes actives de même type sur la même adresse)
 
         Le champ `statusChangeDetails` est obligatoire avec la référence du ou des tickets en conflit.
 
