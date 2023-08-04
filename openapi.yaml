@@ -196,6 +196,8 @@ info:
 
       Le temps de traitement est repris à partir de ce changement de status.
 
+      Le champ `statusChangeReason` doit être renseigné avec la valeur `INFORMATION_PROVIDED`.
+
       L'OI doit renseigner:
 
       * La durée de gel dans le champ `totalPendingDuration`.
@@ -889,13 +891,14 @@ components:
             - DELAY_CREATION_EXPIRED
             - DELAY_VALIDATION_EXPIRED
             - DUPLICATE
+            - INFORMATION_PROVIDED
             - INVALID
             - OTHER
+            - PASSED_TO_INPROGRESS
             - RESOLUTION_ACCEPTED
             - RESOLUTION_REFUSED
             - UNKNOWN_RESOURCE
             - UNKNOWN_ZONE
-            - PASSED_TO_INPROGRESS
             - WAITING_INFORMATION
         priority:
           readOnly: false
