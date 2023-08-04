@@ -184,6 +184,15 @@ info:
 
       * Pour les création, la référence de la ressource créée ou modifiée dans le champ `building.id`.
 
+      * Le champ `statusChangeReason` doit être renseigné et peut avoir les valeurs suivantes:
+
+        * `DELAY_ANSWER_EXPIRED`: le délai de réponse de l'OC a expiré.
+
+        * `RESOLVED`: le ticket est résolu.
+
+        * `UNRESOLVABLE`: le ticket ne peut pas être résolu.
+          Le champ `statusChangeDetails` doit être renseigné avec la raison qui empêche la résolution du ticket.
+
       L'OC peut accepter la résolution du ticket en passant le status à `CLOSED`
       ou la refuser en passant le status à `IN_PROGRESS`.
 
@@ -897,8 +906,10 @@ components:
             - PASSED_TO_INPROGRESS
             - RESOLUTION_ACCEPTED
             - RESOLUTION_REFUSED
+            - RESOLVED
             - UNKNOWN_RESOURCE
             - UNKNOWN_ZONE
+            - UNRESOLVABLE
             - WAITING_INFORMATION
         priority:
           readOnly: false
