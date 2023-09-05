@@ -78,6 +78,24 @@ info:
 
       Anomalie qui permet de mettre à jour un ou plusieurs attributs sur un ou plusieurs immeubles.
 
+      | Attribut                             | Unicité de la valeur                   |
+      | ------------------------------------ | -------------------------------------- |
+      | `building.geographicLocations`       | Valeur spécifique à chaque immeuble    |
+      | `building.name`                      | Valeur commune pour tous les immeubles |
+      | `building.address.city`              | Valeur commune pour tous les immeubles |
+      | `building.address.postcode`          | Valeur commune pour tous les immeubles |
+      | `building.address.streetName`        | Valeur commune pour tous les immeubles |
+      | `building.address.streetNr`          | Valeur commune pour tous les immeubles |
+      | `building.address.streetNrSuffix`    | Valeur commune pour tous les immeubles |
+      | `building.address.streetSuffix`      | Valeur commune pour tous les immeubles |
+      | `building.address.streetType`        | Valeur commune pour tous les immeubles |
+      | `building.address.code_insee`        | Valeur commune pour tous les immeubles |
+      | `building.address.code_hexacle`      | Valeur commune pour tous les immeubles |
+      | `building.address.code_hexacle_voie` | Valeur commune pour tous les immeubles |
+      | `building.address.code_rivoli`       | Valeur commune pour tous les immeubles |
+      | `building.address.code_ban`          | Valeur commune pour tous les immeubles |
+      | `building.pm.id`                     | Valeur commune pour tous les immeubles |
+
     * **AnomalieAdresse.nbLogements**
 
       Anomalie qui permet de mettre à jour le nombre de logements cible d'un immeuble.
