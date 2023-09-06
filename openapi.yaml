@@ -78,6 +78,23 @@ info:
 
       Anomalie qui permet de mettre à jour un ou plusieurs attributs sur un ou plusieurs immeubles.
 
+      | Attribut                             | Unicité de la valeur                   |
+      | ------------------------------------ | -------------------------------------- |
+      | `building.geographicLocations`       | Valeur spécifique à chaque immeuble    |
+      | `building.name`                      | Valeur spécifique à chaque immeuble    |
+      | `building.address.city`              | Valeur commune pour tous les immeubles |
+      | `building.address.postcode`          | Valeur commune pour tous les immeubles |
+      | `building.address.streetName`        | Valeur commune pour tous les immeubles |
+      | `building.address.streetNr`          | Valeur spécifique à chaque immeuble    |
+      | `building.address.streetNrSuffix`    | Valeur commune pour tous les immeubles |
+      | `building.address.streetType`        | Valeur commune pour tous les immeubles |
+      | `building.address.code_insee`        | Valeur commune pour tous les immeubles |
+      | `building.address.code_hexacle`      | Valeur spécifique à chaque immeuble    |
+      | `building.address.code_hexacle_voie` | Valeur commune pour tous les immeubles |
+      | `building.address.code_rivoli`       | Valeur commune pour tous les immeubles |
+      | `building.address.code_ban`          | Valeur spécifique à chaque immeuble    |
+      | `building.pm.id`                     | Valeur commune pour tous les immeubles |
+
     * **AnomalieAdresse.nbLogements**
 
       Anomalie qui permet de mettre à jour le nombre de logements cible d'un immeuble.
@@ -1118,51 +1135,137 @@ components:
         issues:
           properties:
             "building.geographicLocations":
-              allOf:
-                - $ref: "#/components/schemas/Issue"
-              required:
-                - values
+              $ref: "#/components/schemas/IssueArray"
+              description: Liste des coordonnées géographiques de l'adresse corrigée.
               properties:
-                values:
-                  description: |
-                    Liste des coordonnées géographiques de l'adresse corrigée.
-
-                    Le nombre d'éléments de la liste doit être égal à la taille du tableau `relatedEntity`
-                    et les éléments doivent être dans le même ordre que les éléments du tableau `relatedEntity`.
-
-                    Si l'OC ne souhaite pas renseigner ces valeurs, il peut renseigner une liste vide.
-                  type: array
-                  minItems: 0
+                value:
                   items:
                     $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/GeographicPoint
             "building.name":
-              $ref: "#/components/schemas/Issue"
+              $ref: "#/components/schemas/IssueArray"
+              description: |
+                Nom du bâtiment.
+
+                Ce champ est nommé `BatimentImmeuble` dans le fichier IPE.
+              properties:
+                value:
+                  items:
+                    $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/Building/properties/name
             "building.address.city":
               $ref: "#/components/schemas/Issue"
+              description: |
+                Nom de la commune.
+
+                Ce champ est nommé `CommuneImmeuble` dans le fichier IPE.
+              properties:
+                value:
+                  items:
+                    $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/city
             "building.address.postcode":
               $ref: "#/components/schemas/Issue"
+              description: |
+                Code postal.
+
+                Ce champ est nommé `CodePostalImmeuble` dans le fichier IPE.
+              properties:
+                value:
+                  items:
+                    $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/postcode
             "building.address.streetName":
               $ref: "#/components/schemas/Issue"
+              description: |
+                Nom de la voie.
+
+                Ce champ est nommé `NomVoieImmeuble` dans le fichier IPE.
+              properties:
+                value:
+                  items:
+                    $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/streetName
             "building.address.streetNr":
-              $ref: "#/components/schemas/Issue"
+              $ref: "#/components/schemas/IssueArray"
+              description: |
+                Numéro de la voie.
+
+                Ce champ est nommé `NumeroVoieImmeuble` dans le fichier IPE.
+              properties:
+                value:
+                  items:
+                    $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/streetNr
             "building.address.streetNrSuffix":
               $ref: "#/components/schemas/Issue"
-            "building.address.streetSuffix":
-              $ref: "#/components/schemas/Issue"
+              description: |
+                Complément du numéro de la voie.
+
+                Ce champ est nommé `ComplementNumeroVoieImmeuble` dans le fichier IPE.
+              properties:
+                value:
+                  items:
+                    $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/streetNrSuffix
             "building.address.streetType":
               $ref: "#/components/schemas/Issue"
+              description: |
+                Type de la voie.
+
+                Ce champ est nommé `TypeVoieImmeuble` dans le fichier IPE.
+              properties:
+                value:
+                  items:
+                    $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/streetType
             "building.address.code_insee":
               $ref: "#/components/schemas/Issue"
+              description: |
+                Code INSEE de la commune.
+
+                Ce champ est nommé `CodeInseeImmeuble` dans le fichier IPE.
+              properties:
+                value:
+                  items:
+                    $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_insee
             "building.address.code_hexacle":
-              $ref: "#/components/schemas/Issue"
+              $ref: "#/components/schemas/IssueArray"
+              description: |
+                Code Hexacle de la commune.
+
+                Ce champ est nommé `CommuneImmeuble` dans le fichier IPE.
+              properties:
+                value:
+                  items:
+                    $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_hexacle
             "building.address.code_hexacle_voie":
               $ref: "#/components/schemas/Issue"
+              description: |
+                Code Hexacle de la voie.
+
+                Ce champ est nommé `CodeHexacleVoie` dans le fichier IPE.
+              properties:
+                value:
+                  items:
+                    $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_hexacle_voie
             "building.address.code_rivoli":
               $ref: "#/components/schemas/Issue"
+              description: |
+                Code Rivoli de la commune.
+
+                Ce champ est nommé `CodeVoieRivoliImmeuble` dans le fichier IPE.
             "building.address.code_ban":
-              $ref: "#/components/schemas/Issue"
+              $ref: "#/components/schemas/IssueArray"
+              description: |
+                Code BAN de l'immeuble.
+
+                Ce champ est nommé `CodeBAN` dans le fichier IPE.
+              properties:
+                value:
+                  items:
+                    $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_ban
             "building.pm.id":
               $ref: "#/components/schemas/Issue"
+              description: |
+                Identifiant du PM associé à l'immeuble.
+
+                Ce champ est nommé `ReferencePM` dans le fichier IPE.
+              properties:
+                value:
+                  $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/PM/properties/id
 
     AnomalieAdresseUpdateNbLogements:
       description: |
@@ -1209,6 +1312,22 @@ components:
 
             Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
             Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
+
+    IssueArray:
+      type: object
+      properties:
+        description:
+          type: string
+          description: Explication simple du problème lié à l'attribut en erreur.
+        value:
+          type: array
+          description: |
+            Le nombre d'éléments de la liste doit être égal à la taille du tableau `relatedEntity`
+            et les éléments doivent être dans le même ordre que les éléments du tableau `relatedEntity`.
+
+            Si l'OC ne souhaite pas renseigner ces valeurs, il peut mettre la valeur `null` dans la liste
+            et remplir de champs `description` pour expliquer pourquoi les valeurs ne sont pas renseignées.
+            (ex: "Les noms des bâtiments sont renseignés dans le fichier en PJ.")
 
     Note:
       allOf:
