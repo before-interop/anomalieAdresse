@@ -141,6 +141,8 @@ info:
 
       * Le qualification du ticket dans le champ `complexity`.
 
+      * Le type de zone (`ZTD` ou `ZMD`) dans le champ `zone`.
+
       * La durée d'analyse dans le champ `acknowledgedDuration`.
 
 
@@ -165,7 +167,9 @@ info:
 
       L'OI doit renseigner:
 
-      * La nouvelle qualification du ticket dans le champ `complexity`.
+      * La nouvelle qualification du ticket si changement dans le champ `complexity`.
+
+      * Le nouveau type de zone si changement dans le champs `zone`.
 
       * La date de résolution prévisionnelle dans le champ `expectedResolutionDate`.
 
@@ -964,6 +968,16 @@ components:
         siret:
           type: string
           description: Numéro SIRET de l'entreprise cliente.
+        zone:
+          enum:
+            - ZTD
+            - ZMD
+          readOnly: true
+          description: |
+            Zone de traitement du ticket.
+
+            La valeur est renseignée par l'OI lors de la qualification du ticket
+            et du passage au status `IN_PROGRESS`.
 
     AnomalieAdresseCreation:
       description: |
