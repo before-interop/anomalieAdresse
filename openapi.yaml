@@ -997,6 +997,7 @@ components:
           required:
             - address
             - geographicLocation
+            - newConstruction
             - type
           properties:
             neighbor:
@@ -1024,6 +1025,7 @@ components:
               type: string
               pattern: ^[0-9A-Z]+$
             newConstruction:
+              description: Indique si le bâtiment est neuf.
               type: boolean
 
     AnomalieAdresseNewBuilding:
@@ -1052,6 +1054,7 @@ components:
           required:
             - name
             - geographicLocation
+            - newConstruction
             - type
           properties:
             id:
@@ -1071,6 +1074,7 @@ components:
               type: string
               pattern: ^[0-9A-Z]+$
             newConstruction:
+              description: Indique si le bâtiment est neuf.
               type: boolean
 
     AnomalieAdresseUpdate:
