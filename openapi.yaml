@@ -54,6 +54,11 @@ info:
     * Dans le cas d'un signalement en masse, la correction de l'IPE par l'OI devra intervenir
       dans un délai de 2 mois maximum après le signalement de l'OC.
 
+    Les anomalies sont catégorisées en fonction de leur complexité:
+
+    * **Cas simple**: : cas ne nécessitant pas d'intervention sur le terrain, pas d'intervention sur le réseau ou de réalignement de référentiels.
+    * **Cas complexe**: cas qui n'est pas un cas simple.
+
     Le processus doit prendre en compte deux catégories de signalements des anomalies de référencement d'adresses:
 
     * **Signalement unitaire**:
@@ -1000,6 +1005,17 @@ components:
       description: |
         *AnomalieAdresseCreation* permet la création d'une adresse inexistante dans l'IPE
         ou d'une immeuble neuf.
+
+        Dans la mesure du possible, l'OC doit fournir les informations suivantes:
+
+        * Quadrulet (`code_rivoli`, `code_insee`, `streetNr`, `streetNrSuffix`)
+        * `code_hexacle`
+        * `code_ban`
+        * N-uplet (`postcode`, `city`, `streetName`)
+
+        Pour les immeubles neufs, l'OC peut fournir les informations suivantes
+        sur le bailleur et le promoteur immobilier grâce aux champs `realEstateLessor` et `realEstateDeveloper`.
+
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseBase"
       required:
@@ -1104,6 +1120,12 @@ components:
           enum:
             - AnomalieAdresseUpdate
         relatedEntity:
+          description: |
+            Liste des immeubles cibles de l'anomalie.
+
+            Si cette liste est supérieure à 1, alors l'OI traite les cas possibles de la demande en masse
+            et demande la résolution du ticket.
+            L'OC pourra rouvrir un ticket unitaire si besoin pour chaque cas non résolus.
           type: array
           minItems: 1
           items:
