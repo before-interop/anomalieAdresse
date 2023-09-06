@@ -120,6 +120,8 @@ info:
 
       **Ce changement de status ne peut être effectué que par l'OI.**
 
+      **Ce changement de status n'est pas possible si le ticket a déjà été qualifié.**
+
       Les raisons (`statusChangeReason`) possibles sont:
 
       * `UNKNOWN_RESOURCE`: la ressource n'existe pas chez l'OI
@@ -149,6 +151,8 @@ info:
     * `ACKNOWLEDGED` → `IN_PROGRESS`: Le ticket est recevable.
 
       **Ce changement de status ne peut être effectué que par l'OI.**
+
+      **Il n'est plus possible de passer le ticket à `REJECTED` une fois ce changement de status effectué.**
 
       Le temps de traitement est décompté à partir de ce changement de status (`totalInProgressDuration`).
 
@@ -219,11 +223,9 @@ info:
       Le temps de traitement est suspendu à partir de ce changement de status.
 
 
-    * `PENDING` → `IN_PROGRESS`: réponse à une demande d'information complémentaire
+    * `PENDING` → `ACKNOWLEDGED`: réponse à une demande d'information complémentaire
 
       **Ce changement de status ne peut être effectué que par l'OC.**
-
-      Le temps de traitement est repris à partir de ce changement de status.
 
       Le champ `statusChangeReason` doit être renseigné avec la valeur `INFORMATION_PROVIDED`.
 
@@ -262,7 +264,7 @@ info:
 
         * La durée de gel dans le champ `totalPendingDuration`.
 
-    * `RESOLVED` → `IN_PROGRESS`: refus de la résolution du ticket.
+    * `RESOLVED` → `ACKNOWLEDGED`: refus de la résolution du ticket.
 
       **Ce changement de status ne peut être effectué que par l'OC.**
 
@@ -270,8 +272,6 @@ info:
 
       * Le champ `statusChangeReason` doit être renseigné avec la valeur `RESOLUTION_REFUSED`.
       * Le champ `statusChangeDetails` doit être renseigné avec la raison du refus.
-
-      Le temps de traitement est repris à partir de ce changement de status.
 
     * `ACKNOWLEDGED|IN_PROGRESS|PENDING` → `CANCELED`: annulation du ticket par l'OC.
 
@@ -892,7 +892,7 @@ components:
         acknowledgedDuration:
           type: integer
           readOnly: true
-          description: Temps passé du ticket dans le status `ACKNOWLEDGED`.
+          description: Temps cumulé du ticket dans le status `ACKNOWLEDGED`.
         totalInProgressDuration:
           type: integer
           readOnly: true
@@ -908,22 +908,21 @@ components:
         resolvedToInProgressDuration:
           type: integer
           readOnly: true
-          description: Temps du ticket dans les status `RESOLVED` avant le passage à `IN_PROGRESS`.
+          description: Temps cumulé du ticket dans les status `RESOLVED` avant le passage à `IN_PROGRESS`.
         resolvedToClosedDuration:
           type: integer
           readOnly: true
-          description: Temps du ticket dans les status `RESOLVED` avant le passage à `CLOSED`.
+          description: Temps cumulé du ticket dans les status `RESOLVED` avant le passage à `CLOSED`.
         statusChangeReason:
           enum:
             - ALREADY_RESOLVED
             - DELAY_ANSWER_EXPIRED
-            - DELAY_CREATION_EXPIRED
             - DELAY_VALIDATION_EXPIRED
             - DUPLICATE
             - INFORMATION_PROVIDED
             - INVALID
             - OTHER
-            - PASSED_TO_INPROGRESS
+            - REQUALIFIED
             - RESOLUTION_ACCEPTED
             - RESOLUTION_REFUSED
             - RESOLVED
