@@ -109,11 +109,12 @@ info:
 
       * `UNKNOWN_ZONE`: la zone géographique n'est pas couverte par l'OI
 
-      * `DUPLICATE`: le ticket est en conflit avec un autre ticket (2 demandes actives sur la même adresse)
+      * `DUPLICATE`: le ticket est en conflit avec un autre ticket
+        (2 demandes actives de même type sur la même référence immeuble pour un `OC` donné)
 
-        Le champ `statusChangeDetails` est obligatoire avec la référence du ou des tickets en conflit.
+        Le champ `statusChangeDetails` est obligatoire avec la référence du ticket en conflit.
 
-      * `ALREADY_RESOLVED`: la resource existe déjà chez l'OI
+      * `ALREADY_RESOLVED`: la ressource existe déjà chez l'OI
 
         Le champ `statusChangeDetails` est obligatoire avec la référence de la ressource existante.
 
@@ -141,6 +142,8 @@ info:
 
       * Le qualification du ticket dans le champ `complexity`.
 
+      * Le type de zone (`ZTD` ou `ZMD`) dans le champ `zone`.
+
       * La durée d'analyse dans le champ `acknowledgedDuration`.
 
 
@@ -165,7 +168,9 @@ info:
 
       L'OI doit renseigner:
 
-      * La nouvelle qualification du ticket dans le champ `complexity`.
+      * La nouvelle qualification du ticket si changement dans le champ `complexity`.
+
+      * Le nouveau type de zone si changement dans le champs `zone`.
 
       * La date de résolution prévisionnelle dans le champ `expectedResolutionDate`.
 
@@ -184,6 +189,13 @@ info:
 
       * Pour les création, la référence de la ressource créée ou modifiée dans le champ `building.id`.
 
+      * Le champ `statusChangeReason` doit être renseigné et peut avoir les valeurs suivantes:
+
+        * `RESOLVED`: le ticket est résolu.
+
+        * `UNRESOLVABLE`: le ticket ne peut pas être résolu.
+          Le champ `statusChangeDetails` doit être renseigné avec la raison qui empêche la résolution du ticket.
+
       L'OC peut accepter la résolution du ticket en passant le status à `CLOSED`
       ou la refuser en passant le status à `IN_PROGRESS`.
 
@@ -195,6 +207,8 @@ info:
       **Ce changement de status ne peut être effectué que par l'OC.**
 
       Le temps de traitement est repris à partir de ce changement de status.
+
+      Le champ `statusChangeReason` doit être renseigné avec la valeur `INFORMATION_PROVIDED`.
 
       L'OI doit renseigner:
 
@@ -889,13 +903,16 @@ components:
             - DELAY_CREATION_EXPIRED
             - DELAY_VALIDATION_EXPIRED
             - DUPLICATE
+            - INFORMATION_PROVIDED
             - INVALID
             - OTHER
+            - PASSED_TO_INPROGRESS
             - RESOLUTION_ACCEPTED
             - RESOLUTION_REFUSED
+            - RESOLVED
             - UNKNOWN_RESOURCE
             - UNKNOWN_ZONE
-            - PASSED_TO_INPROGRESS
+            - UNRESOLVABLE
             - WAITING_INFORMATION
         priority:
           readOnly: false
@@ -952,6 +969,16 @@ components:
         siret:
           type: string
           description: Numéro SIRET de l'entreprise cliente.
+        zone:
+          enum:
+            - ZTD
+            - ZMD
+          readOnly: true
+          description: |
+            Zone de traitement du ticket.
+
+            La valeur est renseignée par l'OI lors de la qualification du ticket
+            et du passage au status `IN_PROGRESS`.
 
     AnomalieAdresseCreation:
       description: |
@@ -971,6 +998,7 @@ components:
             - address
             - geographicLocation
             - newConstruction
+            - type
           properties:
             neighbor:
               allOf:
@@ -992,6 +1020,10 @@ components:
             realEstateLessor:
               description: Bailleur.
               $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Company.openapi.yaml#/components/schemas/Company
+            plot:
+              description: Parcelle cadastrale.
+              type: string
+              pattern: ^[0-9A-Z]+$
             newConstruction:
               description: Indique si le bâtiment est neuf.
               type: boolean
@@ -1023,6 +1055,7 @@ components:
             - name
             - geographicLocation
             - newConstruction
+            - type
           properties:
             id:
               description: |
@@ -1036,6 +1069,10 @@ components:
             realEstateLessor:
               description: Bailleur.
               $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Company.openapi.yaml#/components/schemas/Company
+            plot:
+              description: Parcelle cadastrale.
+              type: string
+              pattern: ^[0-9A-Z]+$
             newConstruction:
               description: Indique si le bâtiment est neuf.
               type: boolean

@@ -317,10 +317,10 @@ ETag: 345678901abcdef
 curl "https://localhost/api/anomalie-adresse?status=PENDING"
 ```
 
-### Récupération des anomalies résolue en plus de 8 semaines
+### Récupération des anomalies ZMD résolue en plus de 8 semaines
 
 ```bash
-curl "https://localhost/api/anomalie-adresse?status=RESOLVED&resolutionDelay[gt]=4838400"
+curl "https://localhost/api/anomalie-adresse?zone=ZMD&status=RESOLVED&resolutionDelay[gt]=4838400"
 ```
 
 ### Lister les tickets en cours car la résolution n'a pas été acceptée
@@ -335,52 +335,52 @@ curl "https://localhost/api/anomalie-adresse?status=IN_PROGRESS&statusChangeReas
 curl "https://localhost/api/anomalie-adresse?status[in]=ACKNOWLEDGED,IN_PROGRESS,PENDING&relatedEntity.id=ID-75120000012C"
 ```
 
-### Nombre total de tickets ouverts sur le mois de janvier 2021
+### Nombre total de tickets ZMD ouverts sur le mois de janvier 2021
 
 ```bash
-curl -XHEAD "https://localhost/api/anomalie-adresse?creationDate[gte]=2021-01-01&creationDate[lt]=2021-02-01"
+curl -XHEAD "https://localhost/api/anomalie-adresse?zone=ZMD&creationDate[gte]=2021-01-01&creationDate[lt]=2021-02-01"
 ```
 
-### Nombre total de tickets clôturés sur le mois de janvier 2021 en moins d'une semaine
+### Nombre total de tickets ZMD clôturés sur le mois de janvier 2021 en moins d'une semaine
 
 ```bash
-curl -XHEAD "https://localhost/api/anomalie-adresse?totalDuration[lt]=604800&resolutionDate[gte]=2021-01-01&resolutionDate[lt]=2021-02-01"
+curl -XHEAD "https://localhost/api/anomalie-adresse?zone=ZMD&totalDuration[lt]=604800&resolutionDate[gte]=2021-01-01&resolutionDate[lt]=2021-02-01"
 ```
 
-### Nombre total de tickets ouverts sur le mois de janvier 2021 et clôturés en moins d'une semaine
+### Nombre total de tickets ZMD ouverts sur le mois de janvier 2021 et clôturés en moins d'une semaine
 
 ```bash
-curl -XHEAD "https://localhost/api/anomalie-adresse?status=CLOSED&totalDuration[lt]=604800&creationDate[gte]=2021-01-01&creationDate[lt]=2021-02-01"
+curl -XHEAD "https://localhost/api/anomalie-adresse?zone=ZMD&status=CLOSED&totalDuration[lt]=604800&creationDate[gte]=2021-01-01&creationDate[lt]=2021-02-01"
 ```
 
-### Nombre total de tickets clôturés sur le mois de janvier 2021 en plus d'une semaine et moins de 4 semaines
+### Nombre total de tickets ZMD clôturés sur le mois de janvier 2021 en plus d'une semaine et moins de 4 semaines
 
 ```bash
-curl -XHEAD "https://localhost/api/anomalie-adresse?totalDuration[gte]=604800&totalDuration[lt]=2419200&resolutionDate[gte]=2021-01-01&resolutionDate[lt]=2021-02-01"
+curl -XHEAD "https://localhost/api/anomalie-adresse?zone=ZMD&totalDuration[gte]=604800&totalDuration[lt]=2419200&resolutionDate[gte]=2021-01-01&resolutionDate[lt]=2021-02-01"
 ```
 
-### Nombre total de tickets clôturés sur le mois de janvier 2021 en plus de 4 semaines et moins de 8 semaines
+### Nombre total de tickets ZMD clôturés sur le mois de janvier 2021 en plus de 4 semaines et moins de 8 semaines
 
 ```bash
-curl -XHEAD "https://localhost/api/anomalie-adresse?totalDuration[gte]=2419200&totalDuration[lt]=4838400&resolutionDate[gte]=2021-01-01&resolutionDate[lt]=2021-02-01"
+curl -XHEAD "https://localhost/api/anomalie-adresse?zone=ZMD&totalDuration[gte]=2419200&totalDuration[lt]=4838400&resolutionDate[gte]=2021-01-01&resolutionDate[lt]=2021-02-01"
 ```
 
-### Nombre total de tickets clôturés sur le mois de janvier 2021 en plus de 8 semaines
+### Nombre total de tickets ZMD clôturés sur le mois de janvier 2021 en plus de 8 semaines
 
 ```bash
-curl -XHEAD "https://localhost/api/anomalie-adresse?totalDuration[gte]=4838400&resolutionDate[gte]=2021-01-01&resolutionDate[lt]=2021-02-01"
+curl -XHEAD "https://localhost/api/anomalie-adresse?zone=ZMD&totalDuration[gte]=4838400&resolutionDate[gte]=2021-01-01&resolutionDate[lt]=2021-02-01"
 ```
 
-### Nombre total de tickets ouverts sur le mois de janvier 2021 et toujours en cours
+### Nombre total de tickets ZMD ouverts sur le mois de janvier 2021 et toujours en cours
 
 ```bash
-curl -XHEAD "https://localhost/api/anomalie-adresse?status[in]=ACKNOWLEDGED,IN_PROGRESS,PENDING,RESOLVED&creationDate[gte]=2021-01-01&creationDate[lt]=2021-02-01"
+curl -XHEAD "https://localhost/api/anomalie-adresse?zone=ZMD&status[in]=ACKNOWLEDGED,IN_PROGRESS,PENDING,RESOLVED&creationDate[gte]=2021-01-01&creationDate[lt]=2021-02-01"
 ```
 
-### Nombre total de tickets ouverts sur le mois de janvier 2021 et rejetés
+### Nombre total de tickets ZMD ouverts sur le mois de janvier 2021 et rejetés
 
 ```bash
-curl -XHEAD "https://localhost/api/anomalie-adresse?status=REJECTED&creationDate[gte]=2021-01-01&creationDate[lt]=2021-02-01"
+curl -XHEAD "https://localhost/api/anomalie-adresse?zone=ZMD&status=REJECTED&creationDate[gte]=2021-01-01&creationDate[lt]=2021-02-01"
 ```
 
 
