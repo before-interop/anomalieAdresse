@@ -1247,7 +1247,7 @@ components:
               description: |
                 Code Hexacle de la commune.
 
-                Ce champ est nommé `CommuneImmeuble` dans le fichier IPE.
+                Ce champ est nommé `CodeAdresseImmeuble` dans le fichier IPE.
               properties:
                 value:
                   items:
