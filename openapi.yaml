@@ -223,7 +223,7 @@ info:
           Le champ `statusChangeDetails` doit être renseigné avec la raison qui empêche la résolution du ticket.
 
       L'OC peut accepter la résolution du ticket en passant le status à `CLOSED`
-      ou la refuser en passant le status à `IN_PROGRESS`.
+      ou la refuser en passant le status à `ACKNOWLEDGED`.
 
       Le temps de traitement est suspendu à partir de ce changement de status.
 
