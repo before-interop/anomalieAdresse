@@ -4,9 +4,13 @@ Cet outil a été créé afin de respecter l’obligation réglementaire indiqu�
 
 Il permet le traitement d’une demande de création ou de modification d’adresses immeuble dans les IPE grâce à des flux normalisés.
 
+## Documentation
+
+La documentation du protocole peut être téléchargée à l'adresse suivante: <https://github.com/before-interop/anomalieAdresse/raw/HEAD/protocole-anomalies-adresses.docx>
+
 ## Swagger
 
-Le swagger est disponible à l'adresse suivante : https://before-interop.github.io/anomalieAdresse/
+Le swagger est disponible à l'adresse suivante : <https://before-interop.github.io/anomalieAdresse/>
 
 ## Types d'anomalies
 
