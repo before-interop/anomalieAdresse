@@ -91,8 +91,8 @@ info:
       | `building.address.postcode`          | Valeur commune pour tous les immeubles |
       | `building.address.streetName`        | Valeur commune pour tous les immeubles |
       | `building.address.streetNr`          | Valeur spécifique à chaque immeuble    |
-      | `building.address.streetNrSuffix`    | Valeur commune pour tous les immeubles |
-      | `building.address.streetType`        | Valeur commune pour tous les immeubles |
+      | `building.address.streetNrSuffix`    | Valeur spécifique à chaque immeuble    |
+      | `building.address.streetType`        | Valeur spécifique à chaque immeuble    |
       | `building.address.code_insee`        | Valeur commune pour tous les immeubles |
       | `building.address.code_hexacle`      | Valeur spécifique à chaque immeuble    |
       | `building.address.code_hexacle_voie` | Valeur commune pour tous les immeubles |
