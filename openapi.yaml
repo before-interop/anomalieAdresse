@@ -1121,6 +1121,13 @@ components:
                 value:
                   items:
                     $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/Building/properties/name
+                toBlank:
+                  type: boolean
+                  description: |
+                    Indique si l'attribut en erreur doit être mis à blanc.
+
+                    Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
+                    Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
             "building.address.city":
               $ref: "#/components/schemas/Issue"
               description: |
@@ -1171,6 +1178,13 @@ components:
                 value:
                   items:
                     $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/streetNrSuffix
+                toBlank:
+                  type: boolean
+                  description: |
+                    Indique si l'attribut en erreur doit être mis à blanc.
+
+                    Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
+                    Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
             "building.address.streetType":
               $ref: "#/components/schemas/Issue"
               description: |
@@ -1181,6 +1195,13 @@ components:
                 value:
                   items:
                     $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/streetType
+                toBlank:
+                  type: boolean
+                  description: |
+                    Indique si l'attribut en erreur doit être mis à blanc.
+
+                    Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
+                    Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
             "building.address.code_insee":
               $ref: "#/components/schemas/Issue"
               description: |
@@ -1211,6 +1232,13 @@ components:
                 value:
                   items:
                     $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_hexacle_voie
+                toBlank:
+                  type: boolean
+                  description: |
+                    Indique si l'attribut en erreur doit être mis à blanc.
+
+                    Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
+                    Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
             "building.address.code_rivoli":
               $ref: "#/components/schemas/Issue"
               description: |
@@ -1227,6 +1255,13 @@ components:
                 value:
                   items:
                     $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_ban
+                toBlank:
+                  type: boolean
+                  description: |
+                    Indique si l'attribut en erreur doit être mis à blanc.
+
+                    Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
+                    Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
             "building.pm.id":
               $ref: "#/components/schemas/Issue"
               description: |
