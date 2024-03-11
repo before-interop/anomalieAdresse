@@ -1260,8 +1260,6 @@ components:
             "building.housingsNumber":
               allOf:
                 - $ref: "#/components/schemas/Issue"
-              required:
-                - value
               properties:
                 value:
                   type: integer
