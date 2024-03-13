@@ -1053,6 +1053,7 @@ components:
           allOf:
             - $ref: "#/components/schemas/Building"
           required:
+            - address
             - name
             - geographicLocation
             - newConstruction
