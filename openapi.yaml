@@ -1139,8 +1139,7 @@ components:
                 Ce champ est nommé `CommuneImmeuble` dans le fichier IPE.
               properties:
                 value:
-                  items:
-                    $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/city
+                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/city
             "building.address.postcode":
               $ref: "#/components/schemas/Issue"
               description: |
@@ -1149,8 +1148,7 @@ components:
                 Ce champ est nommé `CodePostalImmeuble` dans le fichier IPE.
               properties:
                 value:
-                  items:
-                    $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/postcode
+                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/postcode
             "building.address.streetName":
               $ref: "#/components/schemas/Issue"
               description: |
@@ -1159,8 +1157,7 @@ components:
                 Ce champ est nommé `NomVoieImmeuble` dans le fichier IPE.
               properties:
                 value:
-                  items:
-                    $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/streetName
+                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/streetName
             "building.address.streetNr":
               $ref: "#/components/schemas/IssueArray"
               description: |
@@ -1213,8 +1210,7 @@ components:
                 Ce champ est nommé `CodeInseeImmeuble` dans le fichier IPE.
               properties:
                 value:
-                  items:
-                    $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_insee
+                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_insee
             "building.address.code_hexacle":
               $ref: "#/components/schemas/IssueArray"
               description: |
@@ -1233,8 +1229,7 @@ components:
                 Ce champ est nommé `CodeHexacleVoie` dans le fichier IPE.
               properties:
                 value:
-                  items:
-                    $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_hexacle_voie
+                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_hexacle_voie
                 toBlank:
                   type: boolean
                   description: |
