@@ -948,6 +948,7 @@ components:
           enum:
             - SIMPLE
             - COMPLEX
+            - MULTIPLE
           description: |
             Complexité du ticket.
             La valeur est renseignée par l'OI lors du passage à l'état `IN_PROGRESS`.
@@ -956,7 +957,8 @@ components:
 
             * `SIMPLE`: cas ne nécessitant pas d'intervention sur le terrain,
               pas d'intervention sur le réseau ou de réalignement de référentiels.
-            * `COMPLEX`: cas qui n'est pas un cas simple
+            * `COMPLEX`: cas qui n'est pas un cas simple.
+            * `MULTIPLE`: cas qui concerne les anomalies en masse.
         code_oi:
           $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
           description: Code ARCEP de l'OI.
