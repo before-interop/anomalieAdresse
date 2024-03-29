@@ -1295,9 +1295,17 @@ components:
           type: string
           pattern: ^[0-9A-Z]+$
         newConstruction:
-          description: Indique si le bâtiment est neuf.
-          type: boolean
+          description: |
+            Indique si le bâtiment est neuf.
 
+            Les valeurs possibles sont:
+
+            * `0`: Le bâtiment n'est pas neuf.
+            * `1`: Le bâtiment est neuf avec cuivre.
+            * `2`: Le bâtiment est neuf sans cuivre (ZLIN).
+          type: integer
+          minimum: 0
+          maximum: 2
     Issue:
       type: object
       properties:
