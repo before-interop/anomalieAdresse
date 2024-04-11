@@ -937,6 +937,7 @@ components:
             - WAITING_INFORMATION
         priority:
           readOnly: false
+          type: string
           enum:
             - LOW
             - MEDIUM
@@ -991,6 +992,7 @@ components:
           type: string
           description: Numéro SIRET de l'entreprise cliente.
         zone:
+          type: string
           enum:
             - ZTD
             - ZMD
