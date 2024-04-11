@@ -110,7 +110,7 @@ info:
 
       Création d'une adresse inexistante dans l'IPE ou d'un immeuble neuf.
 
-    * **AnomalieAdresse.batiment**
+    * **AnomalieAdresse.newBuilding**
 
       Rajout d'un bâtiment à une adresse existante dans l'IPE.
 
@@ -819,8 +819,8 @@ components:
       discriminator:
         propertyName: "@type"
         mapping:
-          AnomalieAdresseCreation: "#/components/schemas/AnomalieAdresseCreation"
-          AnomalieAdresseNewBuilding: "#/components/schemas/AnomalieAdresseNewBuilding"
+          AnomalieAdresse.creation: "#/components/schemas/AnomalieAdresseCreation"
+          AnomalieAdresse.newBuilding: "#/components/schemas/AnomalieAdresseNewBuilding"
           AnomalieAdresse.modification: "#/components/schemas/AnomalieAdresseUpdateImb"
           AnomalieAdresse.nbLogements: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
 
@@ -833,8 +833,8 @@ components:
       discriminator:
         propertyName: "@type"
         mapping:
-          AnomalieAdresseCreation: "#/components/schemas/AnomalieAdresseCreation"
-          AnomalieAdresseNewBuilding: "#/components/schemas/AnomalieAdresseNewBuilding"
+          AnomalieAdresse.creation: "#/components/schemas/AnomalieAdresseCreation"
+          AnomalieAdresse.newBuilding: "#/components/schemas/AnomalieAdresseNewBuilding"
           AnomalieAdresse.modification: "#/components/schemas/AnomalieAdresseUpdateImb"
           AnomalieAdresse.nbLogements: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
 
@@ -1042,7 +1042,7 @@ components:
         - relatedEntity
       properties:
         "@type":
-          const: AnomalieAdresse.batiment
+          const: AnomalieAdresse.newBuilding
         relatedEntity:
           type: array
           minItems: 1
