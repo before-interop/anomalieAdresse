@@ -322,7 +322,7 @@ info:
     [L33-6]: https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000037671945
 
 servers:
-  - url: "{protocol}://{host}:{port}{basePath}/anomalie-adresse"
+  - url: "{protocol}://{host}:{port}{basePath}"
     variables:
       protocol:
         enum:
@@ -351,7 +351,7 @@ tags:
     description: OC endpoints
 
 paths:
-  /:
+  /anomalie-adresse:
     get:
       tags:
         - TroubleTicket
@@ -443,7 +443,7 @@ paths:
         default:
           $ref: https://raw.githubusercontent.com/before-interop/common/main/common/schemas/Error.openapi.yaml#/components/schemas/Error
 
-  /{AnomalieAdresseId}:
+  /anomalie-adresse/{AnomalieAdresseId}:
     parameters:
       - $ref: "#/components/parameters/anomalieAdresseId"
 
@@ -524,7 +524,7 @@ paths:
         default:
           $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
 
-  /{AnomalieAdresseId}/note:
+  /anomalie-adresse/{AnomalieAdresseId}/note:
     parameters:
       - $ref: "#/components/parameters/anomalieAdresseId"
 
@@ -601,7 +601,7 @@ paths:
         default:
           $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
 
-  /{AnomalieAdresseId}/attachment:
+  /anomalie-adresse/{AnomalieAdresseId}/attachment:
     parameters:
       - $ref: "#/components/parameters/anomalieAdresseId"
 
@@ -678,7 +678,7 @@ paths:
         default:
           $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/default
 
-  /{AnomalieAdresseId}/attachment/{AttachmentId}/content:
+  /anomalie-adresse/{AnomalieAdresseId}/attachment/{AttachmentId}/content:
     parameters:
       - $ref: "#/components/parameters/anomalieAdresseId"
       - $ref: "#/components/parameters/attachmentId"
@@ -706,7 +706,7 @@ paths:
         "412":
           $ref: https://raw.githubusercontent.com/before-interop/common/main/common/responses/errors.openapi.yaml#/components/responses/Error-412
 
-  /event:
+  /anomalie-adresse/event:
     get:
       tags:
         - Event
