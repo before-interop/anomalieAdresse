@@ -267,7 +267,7 @@ info:
 
         L'OI doit renseigner:
 
-        * La durée de gel dans le champ `totalPendingDuration`.
+        * La durée d’acceptation de résolution dans le champ `resolvedToClosedDuration`.
 
     * `RESOLVED` → `ACKNOWLEDGED`: refus de la résolution du ticket.
 
