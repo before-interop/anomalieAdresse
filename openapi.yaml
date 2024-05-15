@@ -278,6 +278,9 @@ info:
       * Le champ `statusChangeReason` doit être renseigné avec la valeur `RESOLUTION_REFUSED`.
       * Le champ `statusChangeDetails` doit être renseigné avec la raison du refus.
 
+      L'OI doit renseigner :
+        la durée de refus de résolution dans le champ `resolvedToAcknowledgedDuration`.
+
     * `ACKNOWLEDGED|IN_PROGRESS|PENDING` → `CANCELED`: annulation du ticket par l'OC.
 
       **Ce changement de status ne peut être effectué que par l'OC.**
