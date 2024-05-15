@@ -81,7 +81,9 @@ info:
 
     * **AnomalieAdresse.modification**
 
-      Anomalie qui permet de mettre à jour un ou plusieurs attributs sur un ou plusieurs immeubles.
+      Anomalie qui permet de mettre à jour :
+        - En unitaire : un ou plusieurs attributs sur un seul immeuble.
+        - En masse : un seul attribut sur plusieurs immeubles.
 
       | Attribut                             | Unicité de la valeur                   |
       | ------------------------------------ | -------------------------------------- |
