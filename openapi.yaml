@@ -247,6 +247,8 @@ info:
       dans les délais impartis. *Ce délai est à la disposition de l'OI*.
 
       Le champ `statusChangeReason` doit être renseigné avec la valeur `DELAY_ANSWER_EXPIRED`.
+      L'OI doit renseigner :
+        la durée de gel dans le champ `totalPendingDuration`.
 
 
     * `RESOLVED` → `CLOSED`: validation de la résolution du ticket.
