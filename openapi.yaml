@@ -1260,13 +1260,16 @@ components:
             - "building.housingsNumber"
           properties:
             "building.housingsNumber":
-              allOf:
-                - $ref: "#/components/schemas/Issue"
               required:
                 - value
               properties:
                 value:
                   type: integer
+                  minimum: 0
+                  description: |
+                    Nombre de logement de l'immeuble.
+
+                    Ce champ est nommé `NombreLogementsAdresseIPE` dans le fichier IPE.
 
     Building:
       allOf:
