@@ -51,7 +51,7 @@ sequenceDiagram
   end
 ```
 
-###  Cas incomplet (infos manquantes)
+### Cas incomplet (infos manquantes)
 
 ```mermaid
 sequenceDiagram
@@ -85,7 +85,7 @@ sequenceDiagram
   OC->>OI: Validation de la résolution (CLOSED)
 ```
 
-###  Refus de la résolution par l'OC
+### Refus de la résolution par l'OC
 
 ```mermaid
 sequenceDiagram
@@ -170,7 +170,6 @@ sequenceDiagram
   OI->>OI: Fin délai validation résolution (CLOSED)
   OI->>OC: Event ticket_updated
 ```
-
 
 ## Exemples d'utilisation de l'API
 
@@ -386,6 +385,5 @@ curl -XHEAD "https://localhost/api/anomalie-adresse?zone=ZMD&status[in]=ACKNOWLE
 ```bash
 curl -XHEAD "https://localhost/api/anomalie-adresse?zone=ZMD&status=REJECTED&creationDate[gte]=2021-01-01&creationDate[lt]=2021-02-01"
 ```
-
 
 [Décision Arcep n° 2020-1432]: https://www.arcep.fr/uploads/tx_gsavis/20-1432.pdf
