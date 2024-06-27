@@ -893,6 +893,7 @@ components:
         expectedResolutionDate:
           description: Date prévisionnelle de résolution du ticket.
             La valeur est renseignée par l'OI lors du passage à l'état `IN_PROGRESS`.
+          readOnly: true
         acknowledgedDuration:
           type: integer
           readOnly: true
@@ -912,11 +913,11 @@ components:
         resolvedToAcknowledgedDuration:
           type: integer
           readOnly: true
-          description: Temps cumulé du ticket dans les status `RESOLVED` avant le passage à `ACKNOWLEDGED`.
+          description: Temps cumulé du ticket dans le status `RESOLVED` avant le passage à `IN_PROGRESS`.
         resolvedToClosedDuration:
           type: integer
           readOnly: true
-          description: Temps cumulé du ticket dans les status `RESOLVED` avant le passage à `CLOSED`.
+          description: Temps cumulé du ticket dans le status `RESOLVED` avant le passage à `CLOSED`.
         statusChangeReason:
           enum:
             - ALREADY_RESOLVED
