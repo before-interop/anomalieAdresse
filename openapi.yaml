@@ -1,11 +1,11 @@
-openapi: 3.1.0
+openapi: 3.0.3
 
 info:
   title: AnomalieAdresse API
   version: 2.0.0
   license:
     name: Apache 2.0
-    identifier: Apache-2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
   description: |
     Cet outil a été créé afin de respecter l'obligation réglementaire
     indiquée dans la [Décision Arcep n° 2020-1432].
@@ -352,6 +352,7 @@ tags:
 paths:
   /anomalie-adresse:
     get:
+      operationId: getAllAnomalieAdresses
       tags:
         - TroubleTicket
         - OI
@@ -376,22 +377,26 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/AnyOfAnomalieAdresse"
+                  $ref: "#/components/schemas/AnomalieAdresseBase"
         "400": &response400
+          content:
+            application/json:
+              schema:
+                $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
           description: |
             **Bad Request**
 
             This error occurs when a query parameter or the body is invalid.
 
             * The `reason` field of the error response can contain information about the error.
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
         default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Error.openapi.yaml#/components/schemas/Error
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
 
     head:
       tags:
         - TroubleTicket
         - OI
+      operationId: countAnomalieAdresses
       summary: Count the number of trouble tickets
       description: Count the number of trouble tickets matching the given criteria.
       parameters:
@@ -404,12 +409,13 @@ paths:
               $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
         "400": *response400
         default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Error.openapi.yaml#/components/schemas/Error
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
 
     post:
       tags:
         - TroubleTicket
         - OI
+      operationId: createAnomalieAdresse
       summary: Create a trouble ticket
       description: Create a trouble ticket
       requestBody:
@@ -418,14 +424,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/OneOfAnomalieAdresse"
+              $ref: "#/components/schemas/AnomalieAdresseBase"
       responses:
         "201": &troubleTicket201
           description: The trouble ticket
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/OneOfAnomalieAdresse"
+                $ref: "#/components/schemas/AnomalieAdresseBase"
           headers:
             ETag:
               $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/update.openapi.yaml#/components/headers/ETag
@@ -440,7 +446,7 @@ paths:
 
             * Le champ `reason` de la réponse d'erreur doit contenir la liste des tickets en conflit séparés par des virgules.
         default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Error.openapi.yaml#/components/schemas/Error
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
 
   /anomalie-adresse/{AnomalieAdresseId}:
     parameters:
@@ -450,6 +456,7 @@ paths:
       tags:
         - TroubleTicket
         - OI
+      operationId: getAnomalieAdresse
       summary: Get a trouble ticket
       description: Get a trouble ticket
       parameters:
@@ -460,23 +467,28 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/OneOfAnomalieAdresse"
+                $ref: "#/components/schemas/AnomalieAdresseBase"
           headers:
             ETag:
               $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/update.openapi.yaml#/components/headers/ETag
         "404": &response404
+          content:
+            application/json:
+              schema:
+                $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
           description: |
             **Not Found**
 
             This error occurs when the resource does not exist or is not visible by the user.
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
+
         default:
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Error.openapi.yaml#/components/schemas/Error
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
 
     put:
       tags:
         - TroubleTicket
         - OI
+      operationId: updateAnomalieAdresse
       summary: Update a trouble ticket
       description: Update a trouble ticket
       requestBody:
@@ -485,7 +497,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/OneOfAnomalieAdresse"
+              $ref: "#/components/schemas/AnomalieAdresseBase"
       parameters:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/update.openapi.yaml#/components/parameters/If-Match
       responses:
@@ -502,6 +514,7 @@ paths:
       tags:
         - TroubleTicket
         - OI
+      operationId: partialUpdateAnomalieAdresse
       summary: Partially update a trouble ticket
       description: Partially update a trouble ticket
       requestBody:
@@ -510,7 +523,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/OneOfAnomalieAdresse"
+              $ref: "#/components/schemas/AnomalieAdresseBase"
       parameters:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/update.openapi.yaml#/components/parameters/If-Match
       responses:
@@ -531,6 +544,7 @@ paths:
       tags:
         - Note
         - OI
+      operationId: getAnomalieAdresseNotes
       summary: Get all notes of a trouble ticket
       description: Get all notes of a trouble ticket
       parameters: *searchAndPaginateParameters
@@ -557,6 +571,7 @@ paths:
       tags:
         - Note
         - OI
+      operationId: countAnomalieAdresseNotes
       summary: Count the number of notes of a trouble ticket
       description: Count the number of notes of a trouble ticket matching the given criteria.
       parameters:
@@ -576,6 +591,7 @@ paths:
       tags:
         - Note
         - OI
+      operationId: createAnomalieAdresseNote
       summary: Create a note for a trouble ticket
       description: Create a note for a trouble ticket
       requestBody:
@@ -608,6 +624,7 @@ paths:
       tags:
         - Attachment
         - OI
+      operationId: getAnomalieAdresseAttachments
       summary: Get all attachments of a trouble ticket
       description: Get all attachments of a trouble ticket
       parameters: *searchAndPaginateParameters
@@ -634,6 +651,7 @@ paths:
       tags:
         - Attachment
         - OI
+      operationId: countAnomalieAdresseAttachments
       summary: Count the number of attachments of a trouble ticket
       description: Count the number of attachments of a trouble ticket matching the given criteria.
       parameters:
@@ -653,6 +671,7 @@ paths:
       tags:
         - Attachment
         - OI
+      operationId: createAnomalieAdresseAttachment
       summary: Create an attachment for a trouble ticket
       description: Create an attachment for a trouble ticket
       requestBody:
@@ -688,6 +707,7 @@ paths:
       tags:
         - Attachment
         - OI
+      operationId: downloadAnomalieAdresseAttachment
       summary: Download an attachment of a trouble ticket
       description: Download an attachment of a trouble ticket
       parameters:
@@ -700,7 +720,10 @@ paths:
         "200":
           description: The content of the attachment
           content:
-            application/octet-stream: {}
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
         "404": *response404
         default:
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
@@ -712,6 +735,7 @@ paths:
       tags:
         - Event
         - OI
+      operationId: getAnomalieAdresseEvents
       summary: Get all events of all trouble tickets
       description: Get all events of all trouble tickets
       parameters: *searchAndPaginateParameters
@@ -737,6 +761,7 @@ paths:
       tags:
         - Event
         - OI
+      operationId: countAnomalieAdresseEvents
       summary: Count the number of events of all trouble tickets
       description: Count the number of events of all trouble tickets matching the given criteria.
       parameters:
@@ -755,6 +780,7 @@ paths:
       tags:
         - Event
         - OC
+      operationId: receiveAnomalieAdresseEvent
       summary: Receive an event for a trouble ticket
       description: Receive an event for a trouble ticket
       requestBody:
@@ -765,28 +791,44 @@ paths:
             schema:
               $ref: "#/components/schemas/Event"
       responses:
+        "200":
+          description: The event has been received
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        "204":
+          description: The event has been received
+
         default:
           description: |
             L'événement a été reçu avec succès.
 
             La réponse n'a pas l'obligation de contenir un body.
             Si l'OC retourne un body, celui-ci pourra être enregistré dans le journal de l'OI.
-        4xx:
+        "400": *response400
+        "403": *response403
+        "404": *response404
+        "500":
           description: |
-            Erreur lors de la réception de l'événement.
+            **Internal Server Error**
 
-            L'OI ne doit pas retransmettre l'événement à l'OC.
+            This error occurs when the server encountered an unexpected condition that prevented it from fulfilling the request.
 
-            La réponse n'a pas l'obligation de contenir un body.
-            Si l'OC retourne un body, celui-ci pourra être enregistré dans le journal de l'OI.
-        5xx:
-          description: |
-            Erreur lors de la réception de l'événement.
+            * The `reason` field of the error response can contain information about the error.
+          content:
+            application/json:
+              schema:
+                $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-500
+        "501":
+            description: |
+                **Not Implemented**
+    
+                This error occurs when the server does not support the functionality required to fulfill the request.
+    
+                * The `reason` field of the error response can contain information about the error.
 
-            L'OI peut retransmettre l'événement à l'OC.
-
-            La réponse n'a pas l'obligation de contenir un body.
-            Si l'OC retourne un body, celui-ci pourra être enregistré dans le journal de l'OI.
 
 components:
   parameters:
@@ -811,44 +853,24 @@ components:
         example: 123e4567-e89b-12d3-a456-426614174000
 
   schemas:
-    OneOfAnomalieAdresse:
-      oneOf:
-        - $ref: "#/components/schemas/AnomalieAdresseCreation"
-        - $ref: "#/components/schemas/AnomalieAdresseNewBuilding"
-        - $ref: "#/components/schemas/AnomalieAdresseUpdateImb"
-        - $ref: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
-      discriminator:
-        propertyName: "@type"
-        mapping:
-          AnomalieAdresse.creation: "#/components/schemas/AnomalieAdresseCreation"
-          AnomalieAdresse.newBuilding: "#/components/schemas/AnomalieAdresseNewBuilding"
-          AnomalieAdresse.modification: "#/components/schemas/AnomalieAdresseUpdateImb"
-          AnomalieAdresse.nbLogements: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
-
-    AnyOfAnomalieAdresse:
-      anyOf:
-        - $ref: "#/components/schemas/AnomalieAdresseCreation"
-        - $ref: "#/components/schemas/AnomalieAdresseNewBuilding"
-        - $ref: "#/components/schemas/AnomalieAdresseUpdateImb"
-        - $ref: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
-      discriminator:
-        propertyName: "@type"
-        mapping:
-          AnomalieAdresse.creation: "#/components/schemas/AnomalieAdresseCreation"
-          AnomalieAdresse.newBuilding: "#/components/schemas/AnomalieAdresseNewBuilding"
-          AnomalieAdresse.modification: "#/components/schemas/AnomalieAdresseUpdateImb"
-          AnomalieAdresse.nbLogements: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
-
     AnomalieAdresseBase:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/TroubleTicket.openapi.yaml#/components/schemas/TroubleTicket
+      discriminator:
+        propertyName: "@type"
+        mapping:
+          AnomalieAdresse.creation: "#/components/schemas/AnomalieAdresseCreation"
+          AnomalieAdresse.newBuilding: "#/components/schemas/AnomalieAdresseNewBuilding"
+          AnomalieAdresse.modification: "#/components/schemas/AnomalieAdresseUpdateImb"
+          AnomalieAdresse.nbLogements: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
       required:
         - code_oi
         - code_oc
         - "@type"
       properties:
         "@baseType":
-          const: AnomalieAdresse
+          type: string
+          default: "AnomalieAdresse"
         "@type":
           type: string
           readOnly: false
@@ -892,10 +914,10 @@ components:
             - CLOSED
             - REJECTED
             - CANCELED
-        expectedResolutionDate:
-          description: Date prévisionnelle de résolution du ticket.
-            La valeur est renseignée par l'OI lors du passage à l'état `IN_PROGRESS`.
-          readOnly: true
+        relatedEntity:
+          type: array
+          items:
+            $ref: "#/components/schemas/RelatedBuilding"
         acknowledgedDuration:
           type: integer
           readOnly: true
@@ -915,11 +937,18 @@ components:
         resolvedToAcknowledgedDuration:
           type: integer
           readOnly: true
-          description: Temps cumulé du ticket dans le status `RESOLVED` avant le passage à `IN_PROGRESS`.
+          description: Temps cumulé du ticket dans les status `RESOLVED` avant le passage à `ACKNOWLEDGED`.
         resolvedToClosedDuration:
           type: integer
           readOnly: true
-          description: Temps cumulé du ticket dans le status `RESOLVED` avant le passage à `CLOSED`.
+          description: Temps cumulé du ticket dans les status `RESOLVED` avant le passage à `CLOSED`.
+        expectedResolutionDate:
+          description: The expected resolution date
+            determined by the trouble ticket system.
+          type: string
+          format: date-time
+          nullable: true
+          readOnly: true
         statusChangeReason:
           enum:
             - ALREADY_RESOLVED
@@ -962,18 +991,14 @@ components:
               pas d'intervention sur le réseau ou de réalignement de référentiels.
             * `COMPLEX`: cas qui n'est pas un cas simple.
             * `MASSE`: cas qui concerne les anomalies en masse.
-        code_oi:
+        code_oi: # Code ARCEP de l'OI.
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
-          description: Code ARCEP de l'OI.
 
-            La valeur est renseignée par l'OC à la création du ticket.
-        code_oc:
+        code_oc: # Code ARCEP de l'OC.
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
-          description: Code ARCEP de l'OC.
-
-            La valeur est renseignée par l'OC à la création du ticket.
         externalId:
           description: Référence interne du ticket de l'OC.
+          type: string
         ticketType:
           description: |
             Types de ticket.
@@ -1027,8 +1052,6 @@ components:
       required:
         - building
       properties:
-        "@type":
-          const: AnomalieAdresse.creation
         building:
           allOf:
             - $ref: "#/components/schemas/Building"
@@ -1047,8 +1070,6 @@ components:
         - building
         - relatedEntity
       properties:
-        "@type":
-          const: AnomalieAdresse.newBuilding
         relatedEntity:
           type: array
           minItems: 1
@@ -1068,12 +1089,11 @@ components:
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseBase"
       required:
-        - issues
         - relatedEntity
       properties:
         "@baseType":
-          enum:
-            - AnomalieAdresseUpdate
+          type: string
+          default: "AnomalieAdresseUpdate"
         relatedEntity:
           description: |
             Liste des immeubles cibles de l'anomalie.
@@ -1096,8 +1116,6 @@ components:
             Elle permet de rechercher plus efficacement les anomalies
             et de facilement différencier les traitement unitaires et en masse.
           readOnly: true
-        issues:
-          type: object
 
     AnomalieAdresseUpdateImb:
       description: |
@@ -1105,172 +1123,170 @@ components:
         qui permet de mettre à jour un des attributs en masse d'un ou plusieurs immeubles.
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseUpdate"
+      required:
+        - issues
       properties:
-        "@type":
-          const: AnomalieAdresse.modification
         issues:
+          $ref: "#/components/schemas/AnomalieAdresseUpdateImbIssues"
+
+    AnomalieAdresseUpdateImbIssues:
+      description: "Les anomalies spécifiques en masse"
+      type: object
+      properties:
+        "building.geographicLocations":
+          allOf:
+            - $ref: "#/components/schemas/IssueArray"
+          description: Liste des coordonnées géographiques de l'adresse corrigée.
           properties:
-            "building.geographicLocations":
-              $ref: "#/components/schemas/IssueArray"
-              description: Liste des coordonnées géographiques de l'adresse corrigée.
-              properties:
-                value:
-                  items:
-                    $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/GeographicPoint
-            "building.name":
-              $ref: "#/components/schemas/IssueArray"
+            value:
+              type: array
+              items:
+                $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/GeographicPoint
+        "building.name":
+          allOf:
+            - $ref: "#/components/schemas/IssueArray"
+          properties:
+            value:
+              type: array
+              items:
+                $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/Building/properties/name
+            toBlank:
+              type: boolean
               description: |
-                Nom du bâtiment.
+                Indique si l'attribut en erreur doit être mis à blanc.
+                Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
+                Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
+        "building.address.city":
+          allOf:
+          - $ref: "#/components/schemas/Issue"
+          description: |
+            Nom de la commune.
 
-                Ce champ est nommé `BatimentImmeuble` dans le fichier IPE.
-              properties:
-                value:
-                  items:
-                    $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/Building/properties/name
-                toBlank:
-                  type: boolean
-                  description: |
-                    Indique si l'attribut en erreur doit être mis à blanc.
+            Ce champ est nommé `CommuneImmeuble` dans le fichier IPE.
+          properties:
+            value:
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/city
+        "building.address.postcode":
+          allOf:
+            - $ref: "#/components/schemas/Issue"
+          description: |
+            Code postal.
 
-                    Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
-                    Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
-            "building.address.city":
-              $ref: "#/components/schemas/Issue"
+            Ce champ est nommé `CodePostalImmeuble` dans le fichier IPE.
+          properties:
+            value:
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/postcode
+        "building.address.streetName":
+          allOf:
+            - $ref: "#/components/schemas/Issue"
+          description: |
+            Nom de la voie.
+
+            Ce champ est nommé `NomVoieImmeuble` dans le fichier IPE.
+          properties:
+            value:
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/streetName
+        "building.address.streetNr":
+          properties:
+            description:
+              type: string
+              description: Explication simple du problème lié à l'attribut en erreur.
+            value:
+              type: array
+              items:
+                $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/streetNr
+        "building.address.streetNrSuffix":
+          allOf:
+            - $ref: "#/components/schemas/Issue"
+          description: |
+            Complément du numéro de la voie.
+
+            Ce champ est nommé `ComplementNumeroVoieImmeuble` dans le fichier IPE.
+          properties:
+            value:
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/streetNrSuffix
+            toBlank:
+              type: boolean
               description: |
-                Nom de la commune.
+                Indique si l'attribut en erreur doit être mis à blanc.
 
-                Ce champ est nommé `CommuneImmeuble` dans le fichier IPE.
-              properties:
-                value:
-                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/city
-            "building.address.postcode":
-              $ref: "#/components/schemas/Issue"
+                Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
+                Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
+        "building.address.streetType":
+          allOf:
+            - $ref: "#/components/schemas/Issue"
+          description: |
+            Type de la voie.
+
+            Ce champ est nommé `TypeVoieImmeuble` dans le fichier IPE.
+          properties:
+            value:
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/streetType
+        "building.address.code_insee":
+          allOf:
+            - $ref: "#/components/schemas/Issue"
+          description: |
+            Code INSEE de la commune.
+
+            Ce champ est nommé `CodeInseeImmeuble` dans le fichier IPE.
+          properties:
+            value:
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_insee
+        "building.address.code_hexacle":
+          properties:
+            description:
+              type: string
+              description: Explication simple du problème lié à l'attribut en erreur.
+            value:
+              type: array
+              items:
+                $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_hexacle
+        "building.address.code_hexacle_voie":
+          allOf:
+            - $ref: "#/components/schemas/Issue"
+          description: |
+            Code Hexacle de la voie.
+
+            Ce champ est nommé `CodeHexacleVoie` dans le fichier IPE.
+          properties:
+            value:
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_hexacle_voie
+        "building.address.code_rivoli":
+          allOf:
+            - $ref: "#/components/schemas/Issue"
+          description: |
+            Code Rivoli de la commune.
+
+            Ce champ est nommé `CodeVoieRivoliImmeuble` dans le fichier IPE.
+        "building.address.code_ban":
+          allOf:
+            - $ref: "#/components/schemas/IssueArray"
+          description: |
+            Code BAN de l'immeuble.
+
+            Ce champ est nommé `CodeBAN` dans le fichier IPE.
+          properties:
+            value:
+              type: array
+              items:
+                $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_ban
+            toBlank:
+              type: boolean
               description: |
-                Code postal.
+                Indique si l'attribut en erreur doit être mis à blanc.
 
-                Ce champ est nommé `CodePostalImmeuble` dans le fichier IPE.
-              properties:
-                value:
-                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/postcode
-            "building.address.streetName":
-              $ref: "#/components/schemas/Issue"
-              description: |
-                Nom de la voie.
+                Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
+                Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
+        "building.pm.id":
+          allOf:
+            - $ref: "#/components/schemas/Issue"
+          description: |
+            Identifiant du PM associé à l'immeuble.
 
-                Ce champ est nommé `NomVoieImmeuble` dans le fichier IPE.
-              properties:
-                value:
-                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/streetName
-            "building.address.streetNr":
-              $ref: "#/components/schemas/IssueArray"
-              description: |
-                Numéro de la voie.
-
-                Ce champ est nommé `NumeroVoieImmeuble` dans le fichier IPE.
-              properties:
-                value:
-                  items:
-                    $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/streetNr
-            "building.address.streetNrSuffix":
-              $ref: "#/components/schemas/Issue"
-              description: |
-                Complément du numéro de la voie.
-
-                Ce champ est nommé `ComplementNumeroVoieImmeuble` dans le fichier IPE.
-              properties:
-                value:
-                  items:
-                    $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/streetNrSuffix
-                toBlank:
-                  type: boolean
-                  description: |
-                    Indique si l'attribut en erreur doit être mis à blanc.
-
-                    Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
-                    Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
-            "building.address.streetType":
-              $ref: "#/components/schemas/Issue"
-              description: |
-                Type de la voie.
-
-                Ce champ est nommé `TypeVoieImmeuble` dans le fichier IPE.
-              properties:
-                value:
-                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/streetType
-                toBlank:
-                  type: boolean
-                  description: |
-                    Indique si l'attribut en erreur doit être mis à blanc.
-
-                    Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
-                    Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
-            "building.address.code_insee":
-              $ref: "#/components/schemas/Issue"
-              description: |
-                Code INSEE de la commune.
-
-                Ce champ est nommé `CodeInseeImmeuble` dans le fichier IPE.
-              properties:
-                value:
-                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_insee
-            "building.address.code_hexacle":
-              $ref: "#/components/schemas/IssueArray"
-              description: |
-                Code Hexacle de la commune.
-
-                Ce champ est nommé `CodeAdresseImmeuble` dans le fichier IPE.
-              properties:
-                value:
-                  items:
-                    $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_hexacle
-            "building.address.code_hexacle_voie":
-              $ref: "#/components/schemas/Issue"
-              description: |
-                Code Hexacle de la voie.
-
-                Ce champ est nommé `CodeHexacleVoie` dans le fichier IPE.
-              properties:
-                value:
-                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_hexacle_voie
-                toBlank:
-                  type: boolean
-                  description: |
-                    Indique si l'attribut en erreur doit être mis à blanc.
-
-                    Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
-                    Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
-            "building.address.code_rivoli":
-              $ref: "#/components/schemas/Issue"
-              description: |
-                Code Rivoli de la commune.
-
-                Ce champ est nommé `CodeVoieRivoliImmeuble` dans le fichier IPE.
-            "building.address.code_ban":
-              $ref: "#/components/schemas/IssueArray"
-              description: |
-                Code BAN de l'immeuble.
-
-                Ce champ est nommé `CodeBAN` dans le fichier IPE.
-              properties:
-                value:
-                  items:
-                    $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_ban
-                toBlank:
-                  type: boolean
-                  description: |
-                    Indique si l'attribut en erreur doit être mis à blanc.
-
-                    Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
-                    Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
-            "building.pm.id":
-              $ref: "#/components/schemas/Issue"
-              description: |
-                Identifiant du PM associé à l'immeuble.
-
-                Ce champ est nommé `ReferencePM` dans le fichier IPE.
-              properties:
-                value:
-                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/PM/properties/id
+            Ce champ est nommé `ReferencePM` dans le fichier IPE.
+          properties:
+            value:
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/PM/properties/id
 
     AnomalieAdresseUpdateNbLogements:
       description: |
@@ -1283,26 +1299,42 @@ components:
         dont la clef est `building.housingsNumber`.
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseUpdate"
+      required:
+        - issues
       properties:
-        "@type":
-          const: AnomalieAdresse.nbLogements
         relatedEntity:
-          maxItems: 1
-        issues:
-          required:
-            - "building.housingsNumber"
-          properties:
-            "building.housingsNumber":
-              required:
-                - value
-              properties:
-                value:
-                  type: integer
-                  minimum: 0
-                  description: |
-                    Nombre de logement de l'immeuble.
+          description: |
+            Liste des immeubles cibles de l'anomalie.
 
-                    Ce champ est nommé `NombreLogementsAdresseIPE` dans le fichier IPE.
+            Si cette liste est supérieure à 1, alors l'OI traite les cas possibles de la demande en masse
+            et demande la résolution du ticket.
+            L'OC pourra rouvrir un ticket unitaire si besoin pour chaque cas non résolus.
+          type: array
+          minItems: 1
+          maxItems: 1
+          items:
+            allOf:
+              - $ref: "#/components/schemas/RelatedBuilding"
+        issues:
+          $ref: "#/components/schemas/AnomalieAdresseUpdateNbLogementsIssues"
+
+    AnomalieAdresseUpdateNbLogementsIssues:
+      type: object
+      description: "Les issues relatives à la mise à jour du nombre de logements d'un immeuble."
+      required:
+        - "building.housingsNumber"
+      properties:
+        "building.housingsNumber":
+          required:
+            - value
+          properties:
+            value:
+              type: integer
+              minimum: 0
+              description: |
+                Nombre de logement de l'immeuble.
+
+                Ce champ est nommé `NombreLogementsAdresseIPE` dans le fichier IPE.
 
     Building:
       allOf:
@@ -1313,20 +1345,13 @@ components:
             Identifiant unique de l'immeuble.
 
             La valeur est renseignée par l'OI à la résolution du ticket.
+          type: string
           readOnly: true
         neighbor:
-          allOf:
-            - $ref: "#/components/schemas/RelatedBuilding"
-        address:
-          required:
-            - city
-            - postcode
-            - code_insee
-        realEstateDeveloper:
-          description: Promoteur immobilier.
+          $ref: "#/components/schemas/RelatedBuilding"
+        realEstateDeveloper: # Promoteur immobilier
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Company.openapi.yaml#/components/schemas/Company
-        realEstateLessor:
-          description: Bailleur.
+        realEstateLessor: # Bailleur
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Company.openapi.yaml#/components/schemas/Company
         plot:
           description: Parcelle cadastrale.
@@ -1342,9 +1367,6 @@ components:
         description:
           type: string
           description: Explication simple du problème lié à l'attribut en erreur.
-        value:
-          type: string
-          description: Proposition de valeur de remplacement pour l'attribut en erreur.
         toBlank:
           type: boolean
           description: |
@@ -1355,19 +1377,18 @@ components:
 
     IssueArray:
       type: object
+      description: |
+        Le nombre d'éléments de la liste comprise dans value doit être égal à la taille du tableau `relatedEntity`
+        et les éléments doivent être dans le même ordre que les éléments du tableau `relatedEntity`.
+        
+        Si l'OC ne souhaite pas renseigner ces valeurs, il peut mettre la valeur `null` dans la liste
+        et remplir de champs `description` pour expliquer pourquoi les valeurs ne sont pas renseignées.
+        (ex: "Les noms des bâtiments sont renseignés dans le fichier en PJ.")
       properties:
         description:
           type: string
           description: Explication simple du problème lié à l'attribut en erreur.
-        value:
-          type: array
-          description: |
-            Le nombre d'éléments de la liste doit être égal à la taille du tableau `relatedEntity`
-            et les éléments doivent être dans le même ordre que les éléments du tableau `relatedEntity`.
 
-            Si l'OC ne souhaite pas renseigner ces valeurs, il peut mettre la valeur `null` dans la liste
-            et remplir de champs `description` pour expliquer pourquoi les valeurs ne sont pas renseignées.
-            (ex: "Les noms des bâtiments sont renseignés dans le fichier en PJ.")
 
     Note:
       allOf:
@@ -1388,55 +1409,57 @@ components:
     Attachment:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/Attachment
-      description: |
-        An attachment is a file that is attached to an entity.
-
-        Les extensions de fichier autorisées sont:
-
-        * `csv`
-        * `jpeg`
-        * `jpg`
-        * `png`
-        * `svg`
-        * `pdf`
-        * `ods`
-        * `odt`
-        * `xlsx`
-        * `docx`
-
-        Les fichiers contenant du code exécutable comme des scripts ou des macros sont interdits.
-      properties:
-        mimeType:
-          enum:
-            - text/csv
-            - image/jpeg
-            - image/png
-            - image/svg+xml
-            - application/pdf
-            - application/vnd.oasis.opendocument.spreadsheet
-            - application/vnd.oasis.opendocument.text
-            - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
-            - application/vnd.openxmlformats-officedocument.wordprocessingml.document
-        relatedEntity:
-          description: |
-            Relation entre l'attachment et l'anomalie.
-            Ce champ est renseigné par l'OI lors de la création de l'attachment.
-          type: array
-          minItems: 1
-          maxItems: 1
-          readOnly: true
-          items:
-            allOf:
-              - $ref: "#/components/schemas/RelatedAnomalie"
-        status:
-          enum:
-            - PENDING
-            - VALIDATED
-            - REJECTED
+        - description: |
+            An attachment is a file that is attached to an entity.
+    
+            Les extensions de fichier autorisées sont:
+    
+            * `csv`
+            * `jpeg`
+            * `jpg`
+            * `png`
+            * `svg`
+            * `pdf`
+            * `ods`
+            * `odt`
+            * `xlsx`
+            * `docx`
+    
+            Les fichiers contenant du code exécutable comme des scripts ou des macros sont interdits.
+          properties:
+            mimeType:
+              enum:
+                - text/csv
+                - image/jpeg
+                - image/png
+                - image/svg+xml
+                - application/pdf
+                - application/vnd.oasis.opendocument.spreadsheet
+                - application/vnd.oasis.opendocument.text
+                - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+                - application/vnd.openxmlformats-officedocument.wordprocessingml.document
+            relatedEntity:
+              description: |
+                Relation entre l'attachment et l'anomalie.
+                Ce champ est renseigné par l'OI lors de la création de l'attachment.
+              type: array
+              minItems: 1
+              maxItems: 1
+              readOnly: true
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/RelatedAnomalie"
+            status:
+              enum:
+                - PENDING
+                - VALIDATED
+                - REJECTED
 
     AttachmentFormData:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/tools/attachment/attachment.openapi.yaml#/components/schemas/AttachmentFormData
+      required:
+        - attachment
       properties:
         attachment:
           $ref: "#/components/schemas/Attachment"
@@ -1444,44 +1467,71 @@ components:
     Event:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/CloudEvent.openapi.yaml#/components/schemas/CloudEvent
-      required:
-        - time
-        - subject
-      properties:
-        subject:
-          description: Identifiant unique de l'anomalie.
-          type: string
-          format: uuid
-        type:
-          enum:
-            - fr.interop.anomalieadresse.update
-            - fr.interop.anomalieadresse.note.create
-            - fr.interop.anomalieadresse.attachment.create
-            - fr.interop.anomalieadresse.attachment.update
-        datacontenttype:
-          const: application/json
-        data:
-          oneOf:
-            - $ref: "#/components/schemas/OneOfAnomalieAdresse"
-            - $ref: "#/components/schemas/Note"
-            - $ref: "#/components/schemas/Attachment"
+        - discriminator:
+            propertyName: type
+            mapping:
+              fr.interop.anomalieadresse.update: "#/components/schemas/EventAnomalieAdresse"
+              fr.interop.anomalieadresse.note.create: "#/components/schemas/EventAnomalieAdresseNote"
+              fr.interop.anomalieadresse.attachment.create: "#/components/schemas/EventAnomalieAdresseAttachment"
+              fr.interop.anomalieadresse.attachment.update: "#/components/schemas/EventAnomalieAdresseAttachment"
+          required:
+            - time
+            - subject
+            - type
+          properties:
+            subject:
+              description: Identifiant unique de l'anomalie.
+              type: string
+              format: uuid
+            type:
+              type: string
+            datacontenttype:
+              type: string
+              default: "application/json"
+              example: "application/json"
+
+    EventAnomalieAdresse:
+      allOf:
+        - $ref: "#/components/schemas/Event"
+        - properties:
+            data:
+              $ref: "#/components/schemas/AnomalieAdresseBase"
+
+    EventAnomalieAdresseNote:
+      allOf:
+        - $ref: "#/components/schemas/Event"
+        - properties:
+            data:
+              $ref: "#/components/schemas/Note"
+
+    EventAnomalieAdresseAttachment:
+      allOf:
+        - $ref: "#/components/schemas/Event"
+        - properties:
+            data:
+              $ref: "#/components/schemas/Attachment"
 
     RelatedBuilding:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/RelatedEntity.openapi.yaml#/components/schemas/RelatedEntity
       properties:
         "@referredType":
-          const: "Building"
+          type: string
+          default: "Building"
         role:
-          const: "building"
+          type: string
+          default: "building"
 
     RelatedAnomalie:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/RelatedEntity.openapi.yaml#/components/schemas/RelatedEntity
       properties:
         "@referredType":
-          const: "AnomalieAdresse"
+          type: string
+          default: "AnomalieAdresse"
         role:
-          const: "anomalie"
+          type: string
+          default: "anomalie"
         id:
           description: Identifiant unique de l'anomalie.
+          type: string
