@@ -76,13 +76,11 @@ sequenceDiagram
   loop Pour chaque info demandée
     OC->>OI: Fourniture infos demandées (Note et/ou Attachment)
   end
-  OC->>OI: Passage en IN_PROGRESS
+  OC->>OI: Passage en ACKNOWLEDGED
 
-  OI->>OI: Traitement de l'anomalie
-  OI->>OI: Passage en RESOLVED
-  OI->>OC: Event ticket_updated
+  OI->>OI: Contrôles métier
 
-  OC->>OI: Validation de la résolution (CLOSED)
+  Note over OC, OI: Retour cas nominal
 ```
 
 ### Refus de la résolution par l'OC
@@ -110,7 +108,7 @@ sequenceDiagram
     alt Résolution acceptée
       OC->>OI: Validation de la résolution (CLOSED)
     else Résolution refusée
-      OC->>OI: Refus de la résolution (IN PROGRESS + explications)
+      OC->>OI: Refus de la résolution (ACKNOWLEDGED + explications)
     end
   end
 ```
@@ -142,7 +140,7 @@ sequenceDiagram
   alt Résolution acceptée
     OC->>OI: Validation de la résolution (CLOSED)
   else Résolution refusée
-    OC->>OI: Refus de la résolution (IN PROGRESS + explications)
+    OC->>OI: Refus de la résolution (ACKNOWLEDGED + explications)
  end
 ```
 
