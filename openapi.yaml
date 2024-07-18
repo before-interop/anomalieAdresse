@@ -1258,6 +1258,9 @@ components:
             Code Rivoli de la commune.
 
             Ce champ est nommé `CodeVoieRivoliImmeuble` dans le fichier IPE.
+          properties:
+            value:
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_rivoli
         "building.address.code_ban":
           allOf:
             - $ref: "#/components/schemas/IssueArray"
