@@ -1329,10 +1329,6 @@ components:
             - $ref: "#/components/schemas/Issue"
             - required:
                 - value
-              description: |
-                Identifiant du PM associé à l'immeuble.
-
-                Ce champ est nommé `ReferencePM` dans le fichier IPE.
               properties:
                 value:
                   type: integer
