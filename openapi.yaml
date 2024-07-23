@@ -1050,7 +1050,7 @@ components:
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseBase"
         - required:
-          - building
+            - building
           properties:
             building:
               allOf:
@@ -1067,8 +1067,8 @@ components:
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseBase"
         - required:
-          - building
-          - relatedEntity
+            - building
+            - relatedEntity
           properties:
             relatedEntity:
               type: array
@@ -1089,7 +1089,7 @@ components:
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseBase"
         - required:
-          - relatedEntity
+            - relatedEntity
           properties:
             "@baseType":
               type: string
@@ -1243,13 +1243,13 @@ components:
         "building.address.code_hexacle_voie":
           allOf:
             - $ref: "#/components/schemas/Issue"
-          description: |
-            Code Hexacle de la voie.
+            - description: |
+                Code Hexacle de la voie.
 
-            Ce champ est nommé `CodeHexacleVoie` dans le fichier IPE.
-          properties:
-            value:
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_hexacle_voie
+                Ce champ est nommé `CodeHexacleVoie` dans le fichier IPE.
+              properties:
+                value:
+                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_hexacle_voie
         "building.address.code_rivoli":
           allOf:
             - $ref: "#/components/schemas/Issue"
@@ -1300,8 +1300,8 @@ components:
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseUpdate"
         - required:
-          - issues
-          - relatedEntity
+            - issues
+            - relatedEntity
           properties:
             relatedEntity:
               description: |
@@ -1325,16 +1325,22 @@ components:
         - "building.housingsNumber"
       properties:
         "building.housingsNumber":
-          required:
-            - value
-          properties:
-            value:
-              type: integer
-              minimum: 0
+          allOf:
+            - $ref: "#/components/schemas/Issue"
+            - required:
+                - value
               description: |
-                Nombre de logement de l'immeuble.
+                Identifiant du PM associé à l'immeuble.
 
-                Ce champ est nommé `NombreLogementsAdresseIPE` dans le fichier IPE.
+                Ce champ est nommé `ReferencePM` dans le fichier IPE.
+              properties:
+                value:
+                  type: integer
+                  minimum: 0
+                  description: |
+                    Nombre de logement de l'immeuble.
+
+                    Ce champ est nommé `NombreLogementsAdresseIPE` dans le fichier IPE.
 
     Building:
       allOf:
@@ -1457,7 +1463,7 @@ components:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/tools/attachment/attachment.openapi.yaml#/components/schemas/AttachmentFormData
         - required:
-          - attachment
+            - attachment
           properties:
             attachment:
               $ref: "#/components/schemas/Attachment"
