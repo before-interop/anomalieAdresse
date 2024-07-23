@@ -824,11 +824,10 @@ paths:
         "501":
           description: |
             **Not Implemented**
-            
-            This error occurs when the server does not support the functionality required to fulfill the request.
-            
-            * The `reason` field of the error response can contain information about the error.
 
+            This error occurs when the server does not support the functionality required to fulfill the request.
+
+            * The `reason` field of the error response can contain information about the error.
 
 components:
   parameters:
@@ -877,32 +876,32 @@ components:
             status:
               description: |
                 Le status du ticket.
-                
+
                 Les valeurs possibles sont:
-                
+
                 * `ACKNOWLEDGED`: Le ticket peut être traité par l'OI.
-                
+
                   Ce status est positionné lorsque la création du ticket est terminée.
-                
+
                 * `IN_PROGRESS`: Qualification du ticket par l'OI (cas simple ou complexe).
-                
+
                 * `PENDING`: Le ticket est en attente d'une action de l'OC.
-                
+
                   L'OI a besoin d'informations complémentaires pour traiter le ticket.
-                
+
                 * `RESOLVED`: Le ticket est résolu et en attente de validation par l'OC.
-                
+
                 * `CLOSED`: Cloture du ticket par l'OI ou l'OC.
-                
+
                 * `REJECTED`: Le ticket est rejeté par l'OC.
-                
+
                 * `CANCELED`: Le ticket est annulé par l'OC.
-                
-                
+
+
                 **Notes:**
-                
+
                 * Le changement de status peut être accompagné d'une raison dans `statusChangeReason`.
-                
+
                 * Le changement de status peut être accompagné d'une description dans `statusChangeDetails`.
 
               default: ACKNOWLEDGED
@@ -984,9 +983,9 @@ components:
               description: |
                 Complexité du ticket.
                 La valeur est renseignée par l'OI lors du passage à l'état `IN_PROGRESS`.
-                
+
                 Les valeurs possibles sont:
-                
+
                 * `SIMPLE`: cas ne nécessitant pas d'intervention sur le terrain,
                   pas d'intervention sur le réseau ou de réalignement de référentiels.
                 * `COMPLEX`: cas qui n'est pas un cas simple.
@@ -1002,13 +1001,13 @@ components:
             ticketType:
               description: |
                 Types de ticket.
-                
+
                 Les valeurs possibles sont:
-                
+
                 * `CUSTOMER_REQUEST`: Ticket créé par l'OC suite à une demande client final
                   qui souhaite passer commande.
                 * `OC_REQUEST`: Ticket créé par l'OC sans demande client final.
-                
+
                 La valeur est renseignée par l'OC à la création du ticket.
               default: OC_REQUEST
               enum:
@@ -1028,7 +1027,7 @@ components:
               readOnly: true
               description: |
                 Zone de traitement du ticket.
-                
+
                 La valeur est renseignée par l'OI lors de la qualification du ticket
                 et du passage au status `IN_PROGRESS`.
 
@@ -1160,7 +1159,7 @@ components:
             - $ref: "#/components/schemas/Issue"
             - description: |
                 Nom de la commune.
-                
+
                 Ce champ est nommé `CommuneImmeuble` dans le fichier IPE.
               properties:
                 value:
@@ -1170,7 +1169,7 @@ components:
             - $ref: "#/components/schemas/Issue"
             - description: |
                 Code postal.
-                
+
                 Ce champ est nommé `CodePostalImmeuble` dans le fichier IPE.
               properties:
                 value:
@@ -1306,7 +1305,7 @@ components:
             relatedEntity:
               description: |
                 Liste des immeubles cibles de l'anomalie.
-                
+
                 Si cette liste est supérieure à 1, alors l'OI traite les cas possibles de la demande en masse
                 et demande la résolution du ticket.
                 L'OC pourra rouvrir un ticket unitaire si besoin pour chaque cas non résolus.
@@ -1382,7 +1381,7 @@ components:
       description: |
         Le nombre d'éléments de la liste comprise dans value doit être égal à la taille du tableau `relatedEntity`
         et les éléments doivent être dans le même ordre que les éléments du tableau `relatedEntity`.
-        
+
         Si l'OC ne souhaite pas renseigner ces valeurs, il peut mettre la valeur `null` dans la liste
         et remplir de champs `description` pour expliquer pourquoi les valeurs ne sont pas renseignées.
         (ex: "Les noms des bâtiments sont renseignés dans le fichier en PJ.")
@@ -1390,7 +1389,6 @@ components:
         description:
           type: string
           description: Explication simple du problème lié à l'attribut en erreur.
-
 
     Note:
       allOf:
@@ -1412,9 +1410,9 @@ components:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/Attachment
         - description: |
             An attachment is a file that is attached to an entity.
-            
+
             Les extensions de fichier autorisées sont:
-            
+
             * `csv`
             * `jpeg`
             * `jpg`
@@ -1425,7 +1423,7 @@ components:
             * `odt`
             * `xlsx`
             * `docx`
-            
+
             Les fichiers contenant du code exécutable comme des scripts ou des macros sont interdits.
           properties:
             mimeType:
