@@ -1256,14 +1256,8 @@ components:
             - description: |
                 Code Rivoli de la commune.
 
-<<<<<<< Updated upstream
-            Ce champ est nommé `CodeVoieRivoliImmeuble` dans le fichier IPE.
-=======
                 Ce champ est nommé `CodeVoieRivoliImmeuble` dans le fichier IPE.
-              properties:
-                value:
-                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_rivoli
->>>>>>> Stashed changes
+
         "building.address.code_ban":
           allOf:
             - $ref: "#/components/schemas/IssueArray"
@@ -1305,24 +1299,24 @@ components:
         dont la clef est `building.housingsNumber`.
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseUpdate"
-      required:
-        - issues
-        - relatedEntity
-      properties:
-        relatedEntity:
-          description: |
-            Liste des immeubles cibles de l'anomalie.
-
-            Si cette liste est supérieure à 1, alors l'OI traite les cas possibles de la demande en masse
-            et demande la résolution du ticket.
-            L'OC pourra rouvrir un ticket unitaire si besoin pour chaque cas non résolus.
-          type: array
-          minItems: 1
-          maxItems: 1
-          items:
-            $ref: "#/components/schemas/RelatedBuilding"
-        issues:
-          $ref: "#/components/schemas/AnomalieAdresseUpdateNbLogementsIssues"
+        - required:
+          - issues
+          - relatedEntity
+          properties:
+            relatedEntity:
+              description: |
+                Liste des immeubles cibles de l'anomalie.
+    
+                Si cette liste est supérieure à 1, alors l'OI traite les cas possibles de la demande en masse
+                et demande la résolution du ticket.
+                L'OC pourra rouvrir un ticket unitaire si besoin pour chaque cas non résolus.
+              type: array
+              minItems: 1
+              maxItems: 1
+              items:
+                $ref: "#/components/schemas/RelatedBuilding"
+            issues:
+              $ref: "#/components/schemas/AnomalieAdresseUpdateNbLogementsIssues"
 
     AnomalieAdresseUpdateNbLogementsIssues:
       type: object
