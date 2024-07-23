@@ -1049,73 +1049,72 @@ components:
 
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseBase"
-      required:
-        - building
-      properties:
-        building:
-          allOf:
-            - $ref: "#/components/schemas/Building"
-          required:
-            - address
-            - geographicLocation
-            - newConstruction
-            - type
+        - required:
+          - building
+          properties:
+            building:
+              allOf:
+                - $ref: "#/components/schemas/Building"
+              required:
+                - address
+                - geographicLocation
+                - newConstruction
+                - type
 
     AnomalieAdresseNewBuilding:
       description: |
         *AnomalieAdresseNewBuilding* permet de rajouter un nouveau bâtiment à une adresse existante dans l'IPE.
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseBase"
-      required:
-        - building
-        - relatedEntity
-      properties:
-        relatedEntity:
-          type: array
-          minItems: 1
-          maxItems: 1
-          items:
-            $ref: "#/components/schemas/RelatedBuilding"
-        building:
-          allOf:
-            - $ref: "#/components/schemas/Building"
-          required:
-            - name
-            - geographicLocation
-            - newConstruction
-            - type
+        - required:
+          - building
+          - relatedEntity
+          properties:
+            relatedEntity:
+              type: array
+              minItems: 1
+              maxItems: 1
+              items:
+                $ref: "#/components/schemas/RelatedBuilding"
+            building:
+              allOf:
+                - $ref: "#/components/schemas/Building"
+                - required:
+                  - name
+                  - geographicLocation
+                  - newConstruction
+                  - type
 
     AnomalieAdresseUpdate:
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseBase"
-      required:
-        - relatedEntity
-      properties:
-        "@baseType":
-          type: string
-          default: "AnomalieAdresseUpdate"
-        relatedEntity:
-          description: |
-            Liste des immeubles cibles de l'anomalie.
+        - required:
+          - relatedEntity
+          properties:
+            "@baseType":
+              type: string
+              default: "AnomalieAdresseUpdate"
+            relatedEntity:
+              description: |
+                Liste des immeubles cibles de l'anomalie.
 
-            Si cette liste est supérieure à 1, alors l'OI traite les cas possibles de la demande en masse
-            et demande la résolution du ticket.
-            L'OC pourra rouvrir un ticket unitaire si besoin pour chaque cas non résolus.
-          type: array
-          minItems: 1
-          items:
-            allOf:
-              - $ref: "#/components/schemas/RelatedBuilding"
-        sizeRefs:
-          type: integer
-          description: |
-            Nombre d'immeubles cibles de l'anomalie.
+                Si cette liste est supérieure à 1, alors l'OI traite les cas possibles de la demande en masse
+                et demande la résolution du ticket.
+                L'OC pourra rouvrir un ticket unitaire si besoin pour chaque cas non résolus.
+              type: array
+              minItems: 1
+              items:
+                $ref: "#/components/schemas/RelatedBuilding"
+            sizeRefs:
+              type: integer
+              description: |
+                Nombre d'immeubles cibles de l'anomalie.
 
-            La valeur est renseignée par l'OI à la création du ticket.
-            Elle est égale à la taille du tableau `relatedEntity`.
-            Elle permet de rechercher plus efficacement les anomalies
-            et de facilement différencier les traitement unitaires et en masse.
-          readOnly: true
+                La valeur est renseignée par l'OI à la création du ticket.
+                Elle est égale à la taille du tableau `relatedEntity`.
+                Elle permet de rechercher plus efficacement les anomalies
+                et de facilement différencier les traitement unitaires et en masse.
+              readOnly: true
 
     AnomalieAdresseUpdateImb:
       description: |
@@ -1159,33 +1158,33 @@ components:
         "building.address.city":
           allOf:
           - $ref: "#/components/schemas/Issue"
-          description: |
-            Nom de la commune.
+          - description: |
+              Nom de la commune.
 
-            Ce champ est nommé `CommuneImmeuble` dans le fichier IPE.
-          properties:
-            value:
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/city
+              Ce champ est nommé `CommuneImmeuble` dans le fichier IPE.
+            properties:
+              value:
+                $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/city
         "building.address.postcode":
           allOf:
-            - $ref: "#/components/schemas/Issue"
-          description: |
-            Code postal.
+          - $ref: "#/components/schemas/Issue"
+          - description: |
+              Code postal.
 
-            Ce champ est nommé `CodePostalImmeuble` dans le fichier IPE.
-          properties:
-            value:
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/postcode
+              Ce champ est nommé `CodePostalImmeuble` dans le fichier IPE.
+            properties:
+              value:
+                $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/postcode
         "building.address.streetName":
           allOf:
             - $ref: "#/components/schemas/Issue"
-          description: |
-            Nom de la voie.
+            - description: |
+                Nom de la voie.
 
-            Ce champ est nommé `NomVoieImmeuble` dans le fichier IPE.
-          properties:
-            value:
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/streetName
+                Ce champ est nommé `NomVoieImmeuble` dans le fichier IPE.
+              properties:
+                value:
+                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/streetName
         "building.address.streetNr":
           properties:
             description:
@@ -1198,40 +1197,40 @@ components:
         "building.address.streetNrSuffix":
           allOf:
             - $ref: "#/components/schemas/Issue"
-          description: |
-            Complément du numéro de la voie.
+            - description: |
+                Complément du numéro de la voie.
 
-            Ce champ est nommé `ComplementNumeroVoieImmeuble` dans le fichier IPE.
-          properties:
-            value:
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/streetNrSuffix
-            toBlank:
-              type: boolean
-              description: |
-                Indique si l'attribut en erreur doit être mis à blanc.
+                Ce champ est nommé `ComplementNumeroVoieImmeuble` dans le fichier IPE.
+              properties:
+                value:
+                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/streetNrSuffix
+                toBlank:
+                  type: boolean
+                  description: |
+                    Indique si l'attribut en erreur doit être mis à blanc.
 
-                Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
-                Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
+                    Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
+                    Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
         "building.address.streetType":
           allOf:
             - $ref: "#/components/schemas/Issue"
-          description: |
-            Type de la voie.
+            - description: |
+                Type de la voie.
 
-            Ce champ est nommé `TypeVoieImmeuble` dans le fichier IPE.
-          properties:
-            value:
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/streetType
+                Ce champ est nommé `TypeVoieImmeuble` dans le fichier IPE.
+              properties:
+                value:
+                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/streetType
         "building.address.code_insee":
           allOf:
             - $ref: "#/components/schemas/Issue"
-          description: |
-            Code INSEE de la commune.
+            - description: |
+                Code INSEE de la commune.
 
-            Ce champ est nommé `CodeInseeImmeuble` dans le fichier IPE.
-          properties:
-            value:
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_insee
+                Ce champ est nommé `CodeInseeImmeuble` dans le fichier IPE.
+              properties:
+                value:
+                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_insee
         "building.address.code_hexacle":
           properties:
             description:
@@ -1254,39 +1253,46 @@ components:
         "building.address.code_rivoli":
           allOf:
             - $ref: "#/components/schemas/Issue"
-          description: |
-            Code Rivoli de la commune.
+            - description: |
+                Code Rivoli de la commune.
 
+<<<<<<< Updated upstream
             Ce champ est nommé `CodeVoieRivoliImmeuble` dans le fichier IPE.
+=======
+                Ce champ est nommé `CodeVoieRivoliImmeuble` dans le fichier IPE.
+              properties:
+                value:
+                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_rivoli
+>>>>>>> Stashed changes
         "building.address.code_ban":
           allOf:
             - $ref: "#/components/schemas/IssueArray"
-          description: |
-            Code BAN de l'immeuble.
+            - description: |
+                Code BAN de l'immeuble.
 
-            Ce champ est nommé `CodeBAN` dans le fichier IPE.
-          properties:
-            value:
-              type: array
-              items:
-                $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_ban
-            toBlank:
-              type: boolean
-              description: |
-                Indique si l'attribut en erreur doit être mis à blanc.
+                Ce champ est nommé `CodeBAN` dans le fichier IPE.
+              properties:
+                value:
+                  type: array
+                  items:
+                    $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_ban
+                toBlank:
+                  type: boolean
+                  description: |
+                    Indique si l'attribut en erreur doit être mis à blanc.
 
-                Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
-                Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
+                    Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
+                    Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
         "building.pm.id":
           allOf:
             - $ref: "#/components/schemas/Issue"
-          description: |
-            Identifiant du PM associé à l'immeuble.
+            - description: |
+                Identifiant du PM associé à l'immeuble.
 
-            Ce champ est nommé `ReferencePM` dans le fichier IPE.
-          properties:
-            value:
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/PM/properties/id
+                Ce champ est nommé `ReferencePM` dans le fichier IPE.
+              properties:
+                value:
+                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/PM/properties/id
 
     AnomalieAdresseUpdateNbLogements:
       description: |
@@ -1301,6 +1307,7 @@ components:
         - $ref: "#/components/schemas/AnomalieAdresseUpdate"
       required:
         - issues
+        - relatedEntity
       properties:
         relatedEntity:
           description: |
@@ -1313,8 +1320,7 @@ components:
           minItems: 1
           maxItems: 1
           items:
-            allOf:
-              - $ref: "#/components/schemas/RelatedBuilding"
+            $ref: "#/components/schemas/RelatedBuilding"
         issues:
           $ref: "#/components/schemas/AnomalieAdresseUpdateNbLogementsIssues"
 
@@ -1339,27 +1345,27 @@ components:
     Building:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/Building
-      properties:
-        id:
-          description: |
-            Identifiant unique de l'immeuble.
+        - properties:
+            id:
+              description: |
+                Identifiant unique de l'immeuble.
 
-            La valeur est renseignée par l'OI à la résolution du ticket.
-          type: string
-          readOnly: true
-        neighbor:
-          $ref: "#/components/schemas/RelatedBuilding"
-        realEstateDeveloper: # Promoteur immobilier
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Company.openapi.yaml#/components/schemas/Company
-        realEstateLessor: # Bailleur
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Company.openapi.yaml#/components/schemas/Company
-        plot:
-          description: Parcelle cadastrale.
-          type: string
-          pattern: ^[0-9A-Z]+$
-        newConstruction:
-          description: Indique si le bâtiment est neuf.
-          type: boolean
+                La valeur est renseignée par l'OI à la résolution du ticket.
+              type: string
+              readOnly: true
+            neighbor:
+              $ref: "#/components/schemas/RelatedBuilding"
+            realEstateDeveloper: # Promoteur immobilier
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Company.openapi.yaml#/components/schemas/Company
+            realEstateLessor: # Bailleur
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Company.openapi.yaml#/components/schemas/Company
+            plot:
+              description: Parcelle cadastrale.
+              type: string
+              pattern: ^[0-9A-Z]+$
+            newConstruction:
+              description: Indique si le bâtiment est neuf.
+              type: boolean
 
     Issue:
       type: object
@@ -1393,18 +1399,17 @@ components:
     Note:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Note.openapi.yaml#/components/schemas/Note
-      properties:
-        relatedEntity:
-          description: |
-            Relation entre la note et l'anomalie.
-            Ce champ est renseigné par l'OI lors de la création de la note.
-          type: array
-          minItems: 1
-          maxItems: 1
-          readOnly: true
-          items:
-            allOf:
-              - $ref: "#/components/schemas/RelatedAnomalie"
+        - properties:
+            relatedEntity:
+              description: |
+                Relation entre la note et l'anomalie.
+                Ce champ est renseigné par l'OI lors de la création de la note.
+              type: array
+              minItems: 1
+              maxItems: 1
+              readOnly: true
+              items:
+                $ref: "#/components/schemas/RelatedAnomalie"
 
     Attachment:
       allOf:
@@ -1447,8 +1452,7 @@ components:
               maxItems: 1
               readOnly: true
               items:
-                allOf:
-                  - $ref: "#/components/schemas/RelatedAnomalie"
+                $ref: "#/components/schemas/RelatedAnomalie"
             status:
               enum:
                 - PENDING
@@ -1458,11 +1462,11 @@ components:
     AttachmentFormData:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/tools/attachment/attachment.openapi.yaml#/components/schemas/AttachmentFormData
-      required:
-        - attachment
-      properties:
-        attachment:
-          $ref: "#/components/schemas/Attachment"
+        - required:
+          - attachment
+          properties:
+            attachment:
+              $ref: "#/components/schemas/Attachment"
 
     Event:
       allOf:
@@ -1514,24 +1518,24 @@ components:
     RelatedBuilding:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/RelatedEntity.openapi.yaml#/components/schemas/RelatedEntity
-      properties:
-        "@referredType":
-          type: string
-          default: "Building"
-        role:
-          type: string
-          default: "building"
+        - properties:
+            "@referredType":
+              type: string
+              default: "Building"
+            role:
+              type: string
+              default: "building"
 
     RelatedAnomalie:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/RelatedEntity.openapi.yaml#/components/schemas/RelatedEntity
-      properties:
-        "@referredType":
-          type: string
-          default: "AnomalieAdresse"
-        role:
-          type: string
-          default: "anomalie"
-        id:
-          description: Identifiant unique de l'anomalie.
-          type: string
+        - properties:
+            "@referredType":
+              type: string
+              default: "AnomalieAdresse"
+            role:
+              type: string
+              default: "anomalie"
+            id:
+              description: Identifiant unique de l'anomalie.
+              type: string
