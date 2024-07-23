@@ -822,12 +822,12 @@ paths:
               schema:
                 $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-500
         "501":
-            description: |
-                **Not Implemented**
-    
-                This error occurs when the server does not support the functionality required to fulfill the request.
-    
-                * The `reason` field of the error response can contain information about the error.
+          description: |
+            **Not Implemented**
+            
+            This error occurs when the server does not support the functionality required to fulfill the request.
+            
+            * The `reason` field of the error response can contain information about the error.
 
 
 components:
@@ -856,181 +856,181 @@ components:
     AnomalieAdresseBase:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/TroubleTicket.openapi.yaml#/components/schemas/TroubleTicket
-      discriminator:
-        propertyName: "@type"
-        mapping:
-          AnomalieAdresse.creation: "#/components/schemas/AnomalieAdresseCreation"
-          AnomalieAdresse.newBuilding: "#/components/schemas/AnomalieAdresseNewBuilding"
-          AnomalieAdresse.modification: "#/components/schemas/AnomalieAdresseUpdateImb"
-          AnomalieAdresse.nbLogements: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
-      required:
-        - code_oi
-        - code_oc
-        - "@type"
-      properties:
-        "@baseType":
-          type: string
-          default: "AnomalieAdresse"
-        "@type":
-          type: string
-          readOnly: false
-        status:
-          description: |
-            Le status du ticket.
+        - discriminator:
+            propertyName: "@type"
+            mapping:
+              AnomalieAdresse.creation: "#/components/schemas/AnomalieAdresseCreation"
+              AnomalieAdresse.newBuilding: "#/components/schemas/AnomalieAdresseNewBuilding"
+              AnomalieAdresse.modification: "#/components/schemas/AnomalieAdresseUpdateImb"
+              AnomalieAdresse.nbLogements: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
+          required:
+            - code_oi
+            - code_oc
+            - "@type"
+          properties:
+            "@baseType":
+              type: string
+              default: "AnomalieAdresse"
+            "@type":
+              type: string
+              readOnly: false
+            status:
+              description: |
+                Le status du ticket.
+                
+                Les valeurs possibles sont:
+                
+                * `ACKNOWLEDGED`: Le ticket peut être traité par l'OI.
+                
+                  Ce status est positionné lorsque la création du ticket est terminée.
+                
+                * `IN_PROGRESS`: Qualification du ticket par l'OI (cas simple ou complexe).
+                
+                * `PENDING`: Le ticket est en attente d'une action de l'OC.
+                
+                  L'OI a besoin d'informations complémentaires pour traiter le ticket.
+                
+                * `RESOLVED`: Le ticket est résolu et en attente de validation par l'OC.
+                
+                * `CLOSED`: Cloture du ticket par l'OI ou l'OC.
+                
+                * `REJECTED`: Le ticket est rejeté par l'OC.
+                
+                * `CANCELED`: Le ticket est annulé par l'OC.
+                
+                
+                **Notes:**
+                
+                * Le changement de status peut être accompagné d'une raison dans `statusChangeReason`.
+                
+                * Le changement de status peut être accompagné d'une description dans `statusChangeDetails`.
 
-            Les valeurs possibles sont:
+              default: ACKNOWLEDGED
+              enum:
+                - ACKNOWLEDGED
+                - IN_PROGRESS
+                - PENDING
+                - RESOLVED
+                - CLOSED
+                - REJECTED
+                - CANCELED
+            relatedEntity:
+              type: array
+              items:
+                $ref: "#/components/schemas/RelatedBuilding"
+            acknowledgedDuration:
+              type: integer
+              readOnly: true
+              description: Temps cumulé du ticket dans le status `ACKNOWLEDGED`.
+            totalInProgressDuration:
+              type: integer
+              readOnly: true
+              description: Temps cumulé du ticket dans le status `IN_PROGRESS`.
+            totalPendingDuration:
+              type: integer
+              readOnly: true
+              description: Temps cumulé du ticket dans le status `PENDING`.
+            totalDuration:
+              type: integer
+              readOnly: true
+              description: Temps cumulé du ticket dans les status `ACKNOWLEDGED` et `IN_PROGRESS`.
+            resolvedToAcknowledgedDuration:
+              type: integer
+              readOnly: true
+              description: Temps cumulé du ticket dans les status `RESOLVED` avant le passage à `ACKNOWLEDGED`.
+            resolvedToClosedDuration:
+              type: integer
+              readOnly: true
+              description: Temps cumulé du ticket dans les status `RESOLVED` avant le passage à `CLOSED`.
+            expectedResolutionDate:
+              description: The expected resolution date
+                determined by the trouble ticket system.
+              type: string
+              format: date-time
+              nullable: true
+              readOnly: true
+            statusChangeReason:
+              enum:
+                - ALREADY_RESOLVED
+                - DELAY_ANSWER_EXPIRED
+                - DELAY_VALIDATION_EXPIRED
+                - DUPLICATE
+                - INFORMATION_PROVIDED
+                - INVALID
+                - OTHER
+                - REQUALIFIED
+                - RESOLUTION_ACCEPTED
+                - RESOLUTION_REFUSED
+                - RESOLVED
+                - UNKNOWN_RESOURCE
+                - UNKNOWN_ZONE
+                - UNRESOLVABLE
+                - WAITING_INFORMATION
+            priority:
+              readOnly: false
+              type: string
+              enum:
+                - LOW
+                - MEDIUM
+                - HIGH
+              default: LOW
+            complexity:
+              type: string
+              readOnly: true
+              enum:
+                - SIMPLE
+                - COMPLEX
+                - MASSE
+              description: |
+                Complexité du ticket.
+                La valeur est renseignée par l'OI lors du passage à l'état `IN_PROGRESS`.
+                
+                Les valeurs possibles sont:
+                
+                * `SIMPLE`: cas ne nécessitant pas d'intervention sur le terrain,
+                  pas d'intervention sur le réseau ou de réalignement de référentiels.
+                * `COMPLEX`: cas qui n'est pas un cas simple.
+                * `MASSE`: cas qui concerne les anomalies en masse.
+            code_oi: # Code ARCEP de l'OI.
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
 
-            * `ACKNOWLEDGED`: Le ticket peut être traité par l'OI.
-
-              Ce status est positionné lorsque la création du ticket est terminée.
-
-            * `IN_PROGRESS`: Qualification du ticket par l'OI (cas simple ou complexe).
-
-            * `PENDING`: Le ticket est en attente d'une action de l'OC.
-
-              L'OI a besoin d'informations complémentaires pour traiter le ticket.
-
-            * `RESOLVED`: Le ticket est résolu et en attente de validation par l'OC.
-
-            * `CLOSED`: Cloture du ticket par l'OI ou l'OC.
-
-            * `REJECTED`: Le ticket est rejeté par l'OC.
-
-            * `CANCELED`: Le ticket est annulé par l'OC.
-
-
-            **Notes:**
-
-            * Le changement de status peut être accompagné d'une raison dans `statusChangeReason`.
-
-            * Le changement de status peut être accompagné d'une description dans `statusChangeDetails`.
-
-          default: ACKNOWLEDGED
-          enum:
-            - ACKNOWLEDGED
-            - IN_PROGRESS
-            - PENDING
-            - RESOLVED
-            - CLOSED
-            - REJECTED
-            - CANCELED
-        relatedEntity:
-          type: array
-          items:
-            $ref: "#/components/schemas/RelatedBuilding"
-        acknowledgedDuration:
-          type: integer
-          readOnly: true
-          description: Temps cumulé du ticket dans le status `ACKNOWLEDGED`.
-        totalInProgressDuration:
-          type: integer
-          readOnly: true
-          description: Temps cumulé du ticket dans le status `IN_PROGRESS`.
-        totalPendingDuration:
-          type: integer
-          readOnly: true
-          description: Temps cumulé du ticket dans le status `PENDING`.
-        totalDuration:
-          type: integer
-          readOnly: true
-          description: Temps cumulé du ticket dans les status `ACKNOWLEDGED` et `IN_PROGRESS`.
-        resolvedToAcknowledgedDuration:
-          type: integer
-          readOnly: true
-          description: Temps cumulé du ticket dans les status `RESOLVED` avant le passage à `ACKNOWLEDGED`.
-        resolvedToClosedDuration:
-          type: integer
-          readOnly: true
-          description: Temps cumulé du ticket dans les status `RESOLVED` avant le passage à `CLOSED`.
-        expectedResolutionDate:
-          description: The expected resolution date
-            determined by the trouble ticket system.
-          type: string
-          format: date-time
-          nullable: true
-          readOnly: true
-        statusChangeReason:
-          enum:
-            - ALREADY_RESOLVED
-            - DELAY_ANSWER_EXPIRED
-            - DELAY_VALIDATION_EXPIRED
-            - DUPLICATE
-            - INFORMATION_PROVIDED
-            - INVALID
-            - OTHER
-            - REQUALIFIED
-            - RESOLUTION_ACCEPTED
-            - RESOLUTION_REFUSED
-            - RESOLVED
-            - UNKNOWN_RESOURCE
-            - UNKNOWN_ZONE
-            - UNRESOLVABLE
-            - WAITING_INFORMATION
-        priority:
-          readOnly: false
-          type: string
-          enum:
-            - LOW
-            - MEDIUM
-            - HIGH
-          default: LOW
-        complexity:
-          type: string
-          readOnly: true
-          enum:
-            - SIMPLE
-            - COMPLEX
-            - MASSE
-          description: |
-            Complexité du ticket.
-            La valeur est renseignée par l'OI lors du passage à l'état `IN_PROGRESS`.
-
-            Les valeurs possibles sont:
-
-            * `SIMPLE`: cas ne nécessitant pas d'intervention sur le terrain,
-              pas d'intervention sur le réseau ou de réalignement de référentiels.
-            * `COMPLEX`: cas qui n'est pas un cas simple.
-            * `MASSE`: cas qui concerne les anomalies en masse.
-        code_oi: # Code ARCEP de l'OI.
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
-
-        code_oc: # Code ARCEP de l'OC.
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
-        externalId:
-          description: Référence interne du ticket de l'OC.
-          type: string
-        ticketType:
-          description: |
-            Types de ticket.
-
-            Les valeurs possibles sont:
-
-            * `CUSTOMER_REQUEST`: Ticket créé par l'OC suite à une demande client final
-              qui souhaite passer commande.
-            * `OC_REQUEST`: Ticket créé par l'OC sans demande client final.
-
-            La valeur est renseignée par l'OC à la création du ticket.
-          default: OC_REQUEST
-          enum:
-            - OC_REQUEST
-            - CUSTOMER_REQUEST
-        siren:
-          type: string
-          description: Numéro SIREN de l'entreprise cliente.
-        siret:
-          type: string
-          description: Numéro SIRET de l'entreprise cliente.
-        zone:
-          type: string
-          enum:
-            - ZTD
-            - ZMD
-          readOnly: true
-          description: |
-            Zone de traitement du ticket.
-
-            La valeur est renseignée par l'OI lors de la qualification du ticket
-            et du passage au status `IN_PROGRESS`.
+            code_oc: # Code ARCEP de l'OC.
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
+            externalId:
+              description: Référence interne du ticket de l'OC.
+              type: string
+            ticketType:
+              description: |
+                Types de ticket.
+                
+                Les valeurs possibles sont:
+                
+                * `CUSTOMER_REQUEST`: Ticket créé par l'OC suite à une demande client final
+                  qui souhaite passer commande.
+                * `OC_REQUEST`: Ticket créé par l'OC sans demande client final.
+                
+                La valeur est renseignée par l'OC à la création du ticket.
+              default: OC_REQUEST
+              enum:
+                - OC_REQUEST
+                - CUSTOMER_REQUEST
+            siren:
+              type: string
+              description: Numéro SIREN de l'entreprise cliente.
+            siret:
+              type: string
+              description: Numéro SIRET de l'entreprise cliente.
+            zone:
+              type: string
+              enum:
+                - ZTD
+                - ZMD
+              readOnly: true
+              description: |
+                Zone de traitement du ticket.
+                
+                La valeur est renseignée par l'OI lors de la qualification du ticket
+                et du passage au status `IN_PROGRESS`.
 
     AnomalieAdresseCreation:
       description: |
@@ -1080,10 +1080,10 @@ components:
               allOf:
                 - $ref: "#/components/schemas/Building"
                 - required:
-                  - name
-                  - geographicLocation
-                  - newConstruction
-                  - type
+                    - name
+                    - geographicLocation
+                    - newConstruction
+                    - type
 
     AnomalieAdresseUpdate:
       allOf:
@@ -1122,11 +1122,11 @@ components:
         qui permet de mettre à jour un des attributs en masse d'un ou plusieurs immeubles.
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseUpdate"
-      required:
-        - issues
-      properties:
-        issues:
-          $ref: "#/components/schemas/AnomalieAdresseUpdateImbIssues"
+        - required:
+            - issues
+          properties:
+            issues:
+              $ref: "#/components/schemas/AnomalieAdresseUpdateImbIssues"
 
     AnomalieAdresseUpdateImbIssues:
       description: "Les anomalies spécifiques en masse"
@@ -1135,46 +1135,46 @@ components:
         "building.geographicLocations":
           allOf:
             - $ref: "#/components/schemas/IssueArray"
-          description: Liste des coordonnées géographiques de l'adresse corrigée.
-          properties:
-            value:
-              type: array
-              items:
-                $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/GeographicPoint
+            - description: Liste des coordonnées géographiques de l'adresse corrigée.
+              properties:
+                value:
+                  type: array
+                  items:
+                    $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/GeographicPoint
         "building.name":
           allOf:
             - $ref: "#/components/schemas/IssueArray"
-          properties:
-            value:
-              type: array
-              items:
-                $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/Building/properties/name
-            toBlank:
-              type: boolean
-              description: |
-                Indique si l'attribut en erreur doit être mis à blanc.
-                Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
-                Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
+            - properties:
+                value:
+                  type: array
+                  items:
+                    $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/Building/properties/name
+                toBlank:
+                  type: boolean
+                  description: |
+                    Indique si l'attribut en erreur doit être mis à blanc.
+                    Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
+                    Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
         "building.address.city":
           allOf:
-          - $ref: "#/components/schemas/Issue"
-          - description: |
-              Nom de la commune.
-
-              Ce champ est nommé `CommuneImmeuble` dans le fichier IPE.
-            properties:
-              value:
-                $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/city
+            - $ref: "#/components/schemas/Issue"
+            - description: |
+                Nom de la commune.
+                
+                Ce champ est nommé `CommuneImmeuble` dans le fichier IPE.
+              properties:
+                value:
+                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/city
         "building.address.postcode":
           allOf:
-          - $ref: "#/components/schemas/Issue"
-          - description: |
-              Code postal.
-
-              Ce champ est nommé `CodePostalImmeuble` dans le fichier IPE.
-            properties:
-              value:
-                $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/postcode
+            - $ref: "#/components/schemas/Issue"
+            - description: |
+                Code postal.
+                
+                Ce champ est nommé `CodePostalImmeuble` dans le fichier IPE.
+              properties:
+                value:
+                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/postcode
         "building.address.streetName":
           allOf:
             - $ref: "#/components/schemas/Issue"
@@ -1306,7 +1306,7 @@ components:
             relatedEntity:
               description: |
                 Liste des immeubles cibles de l'anomalie.
-    
+                
                 Si cette liste est supérieure à 1, alors l'OI traite les cas possibles de la demande en masse
                 et demande la résolution du ticket.
                 L'OC pourra rouvrir un ticket unitaire si besoin pour chaque cas non résolus.
@@ -1412,9 +1412,9 @@ components:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/Attachment
         - description: |
             An attachment is a file that is attached to an entity.
-    
+            
             Les extensions de fichier autorisées sont:
-    
+            
             * `csv`
             * `jpeg`
             * `jpg`
@@ -1425,7 +1425,7 @@ components:
             * `odt`
             * `xlsx`
             * `docx`
-    
+            
             Les fichiers contenant du code exécutable comme des scripts ou des macros sont interdits.
           properties:
             mimeType:
