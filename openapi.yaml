@@ -867,6 +867,10 @@ components:
             - code_oc
             - "@type"
           properties:
+            id:
+              type: string
+              format: uuid
+              readOnly: true
             "@baseType":
               type: string
               default: "AnomalieAdresse"
@@ -1426,6 +1430,10 @@ components:
 
             Les fichiers contenant du code exécutable comme des scripts ou des macros sont interdits.
           properties:
+            id:
+              type: string
+              format: uuid
+              readOnly: true
             mimeType:
               enum:
                 - text/csv
