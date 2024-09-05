@@ -877,6 +877,16 @@ components:
             "@type":
               type: string
               readOnly: false
+              example: AnomalieAdresse.creation
+              description: |
+                Type de ticket.
+
+                Les valeurs possibles sont:
+
+                * `AnomalieAdresse.creation`: "#/components/schemas/AnomalieAdresseCreation"
+                * `AnomalieAdresse.newBuilding`: "#/components/schemas/AnomalieAdresseNewBuilding"
+                * `AnomalieAdresse.modification`: "#/components/schemas/AnomalieAdresseUpdateImb"
+                * `AnomalieAdresse.nbLogements`: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
             status:
               description: |
                 Le status du ticket.
