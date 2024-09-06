@@ -1056,13 +1056,16 @@ components:
             - building
           properties:
             building:
-              allOf:
-                - $ref: "#/components/schemas/Building"
-              required:
-                - address
-                - geographicLocation
-                - newConstruction
-                - type
+              $ref: "#/components/schemas/AnomalieAdresseCreationBuilding"
+
+    AnomalieAdresseCreationBuilding:
+      allOf:
+        - $ref: "#/components/schemas/Building"
+        - required:
+            - address
+            - geographicLocation
+            - newConstruction
+            - type
 
     AnomalieAdresseNewBuilding:
       description: |
@@ -1080,13 +1083,16 @@ components:
               items:
                 $ref: "#/components/schemas/RelatedBuilding"
             building:
-              allOf:
-                - $ref: "#/components/schemas/Building"
-                - required:
-                    - name
-                    - geographicLocation
-                    - newConstruction
-                    - type
+              $ref: "#/components/schemas/AnomalieAdresseNewBuildingBuilding"
+
+    AnomalieAdresseNewBuildingBuilding:
+      allOf:
+        - $ref: "#/components/schemas/Building"
+        - required:
+            - name
+            - geographicLocation
+            - newConstruction
+            - type
 
     AnomalieAdresseUpdate:
       allOf:
