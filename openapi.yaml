@@ -1250,6 +1250,13 @@ components:
           description: Explication simple du problème lié à l'attribut en erreur.
         value:
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/allOf/1/properties/streetName
+        toBlank:
+          type: boolean
+          description: |
+            Indique si l'attribut en erreur doit être mis à blanc.
+
+            Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
+            Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
 
     UpdateImbIssuesBuildingStreetNr:
       type: object
@@ -1462,6 +1469,9 @@ components:
           required:
             - value
           properties:
+            description:
+              type: string
+              description: Explication simple du problème lié à l'attribut en erreur.
             value:
               type: integer
               minimum: 0
