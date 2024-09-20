@@ -855,10 +855,10 @@ components:
     AnomalieAdresseAttachmentFormData:
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseAttachment"
-        - $ref: "https://github.com/before-interop/common/tree/v1/tools/attachment/attachment.openapi.yaml#/components/schemas/AttachmentFormData"
+        - $ref: "https://raw.githubusercontent.com/before-interop/common/refs/heads/v1/tools/attachment/attachment.openapi.yaml#/components/schemas/AttachmentFormData"
     AnomalieAdresseAttachment:
       allOf:
-        - $ref: "https://github.com/christophelach/defecto-interop-common/blob/8f050a062e4723ed5891c5a9142df74aa69215c4/common/schemas/Attachment.openapi.yaml#/components/schemas/TroubleTicketAttachment"
+        - $ref: "https://raw.githubusercontent.com/christophelach/defecto-interop-common/generic-troubleTicket-model-for_codeGen/common/schemas/Attachment.openapi.yaml#/components/schemas/TroubleTicketAttachment"
         - properties:
             "@baseType":
               type: string
@@ -888,7 +888,7 @@ components:
 
     AnomalieAdresseNote:
       allOf:
-        - $ref: https://github.com/before-interop/common/blob/a409ef0d0c57e89b050005f2294097263818a5de/common/schemas/Note.openapi.yaml#/components/schema/TroubleTicketNote
+        - $ref: https://raw.githubusercontent.com/christophelach/defecto-interop-common/generic-troubleTicket-model-for_codeGen/common/schemas/Note.openapi.yaml#/components/schema/TroubleTicketNote
         - properties:
             "@baseType":
               type: string
@@ -906,7 +906,7 @@ components:
     TroubleTicketAnomalieAdresse:
       allOf:
         # - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/TroubleTicket.openapi.yaml#/components/schemas/TroubleTicket
-        - $ref: https://github.com/christophelach/defecto-interop-common/blob/d6ab5166edac32898884d21b18307835bff4758c/common/schemas/TroubleTicket.openapi.yaml#/components/schemas/TroubleTicket
+        - $ref: https://raw.githubusercontent.com/christophelach/defecto-interop-common/generic-troubleTicket-model-for_codeGen/common/schemas/TroubleTicket.openapi.yaml#/components/schemas/TroubleTicket
         - properties:
             "@baseType":
               type: string
@@ -1493,24 +1493,9 @@ components:
           type: string
           description: Explication simple du problème lié à l'attribut en erreur.
 
-    Note:
-      allOf:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Note.openapi.yaml#/components/schemas/Note
-        - properties:
-            relatedEntity:
-              description: |
-                Relation entre la note et l'anomalie.
-                Ce champ est renseigné par l'OI lors de la création de la note.
-              type: array
-              minItems: 1
-              maxItems: 1
-              readOnly: true
-              items:
-                $ref: "#/components/schemas/RelatedAnomalie"
-
     EventAnomalieAdresse:
       allOf:
-        - $ref: https://github.com/christophelach/defecto-interop-common/blob/13bce5caa72e07998d131e9d36fe646946aec7d7/common/schemas/CloudEvent.openapi.yaml#/components/schemas/TroubleTicketEvent
+        - $ref: https://raw.githubusercontent.com/christophelach/defecto-interop-common/generic-troubleTicket-model-for_codeGen/common/schemas/CloudEvent.openapi.yaml#/components/schemas/TroubleTicketEvent
         - properties:
             "@baseType":
               type: string
@@ -1528,7 +1513,7 @@ components:
       discriminator:
         propertyName: type
         mapping:
-          fr.interop.anomalieadresse.update: "#/components/schemas/EventAnomalieAdresse"
+          fr.interop.anomalieadresse.update: "#/components/schemas/EventAnomalieAdresseUpdate"
           fr.interop.anomalieadresse.note.create: "#/components/schemas/EventAnomalieAdresseNote"
           fr.interop.anomalieadresse.attachment.create: "#/components/schemas/EventAnomalieAdresseAttachment"
           fr.interop.anomalieadresse.attachment.update: "#/components/schemas/EventAnomalieAdresseAttachment"
