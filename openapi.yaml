@@ -855,10 +855,10 @@ components:
     AnomalieAdresseAttachmentFormData:
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseAttachment"
-        - $ref: "https://github.com/before-interop/common/tree/v1/tools/attachment/attachment.openapi.yaml#/components/schema/AttachmentFormData"
+        - $ref: "https://github.com/before-interop/common/tree/v1/tools/attachment/attachment.openapi.yaml#/components/schemas/AttachmentFormData"
     AnomalieAdresseAttachment:
       allOf:
-        - $ref: "https://github.com/christophelach/defecto-interop-common/blob/8f050a062e4723ed5891c5a9142df74aa69215c4/common/schemas/Attachment.openapi.yaml#/components/schema/TroubleTicketAttachment"
+        - $ref: "https://github.com/christophelach/defecto-interop-common/blob/8f050a062e4723ed5891c5a9142df74aa69215c4/common/schemas/Attachment.openapi.yaml#/components/schemas/TroubleTicketAttachment"
         - properties:
             "@baseType":
               type: string
