@@ -912,10 +912,8 @@ components:
         - properties:
             "@baseType":
               type: string
-              default: AnomalieAdresse
             "@type":
               type: string
-              default: AnomalieAdresse
             priority:
               type: string
               enum:
