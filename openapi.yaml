@@ -888,7 +888,7 @@ components:
 
     AnomalieAdresseNote:
       allOf:
-        - $ref: https://raw.githubusercontent.com/christophelach/defecto-interop-common/generic-troubleTicket-model-for_codeGen/common/schemas/Note.openapi.yaml#/components/schema/TroubleTicketNote
+        - $ref: https://raw.githubusercontent.com/christophelach/defecto-interop-common/generic-troubleTicket-model-for_codeGen/common/schemas/Note.openapi.yaml#/components/schemas/TroubleTicketNote
         - properties:
             "@baseType":
               type: string
