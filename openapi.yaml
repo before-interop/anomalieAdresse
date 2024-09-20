@@ -856,6 +856,7 @@ components:
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseAttachment"
         - $ref: "https://raw.githubusercontent.com/before-interop/common/refs/heads/v1/tools/attachment/attachment.openapi.yaml#/components/schemas/AttachmentFormData"
+
     AnomalieAdresseAttachment:
       allOf:
         - $ref: "https://raw.githubusercontent.com/christophelach/defecto-interop-common/generic-troubleTicket-model-for_codeGen/common/schemas/Attachment.openapi.yaml#/components/schemas/TroubleTicketAttachment"
@@ -903,6 +904,7 @@ components:
               minItems: 1
               readOnly: true
               type: array
+
     TroubleTicketAnomalieAdresse:
       allOf:
         # - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/TroubleTicket.openapi.yaml#/components/schemas/TroubleTicket
@@ -1149,21 +1151,18 @@ components:
     AnomalieAdresseCreationBuilding:
       allOf:
         - $ref: "#/components/schemas/Building"
-        - required:
-            - address
-            - geographicLocation
-            - newConstruction
-            - type
+      required:
+        - address
+        - geographicLocation
+        - newConstruction
+        - type
 
     AnomalieAdresseNewBuilding:
       description: |
         *AnomalieAdresseNewBuilding* permet de rajouter un nouveau bâtiment à une adresse existante dans l'IPE.
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseBase"
-        - required:
-            - building
-            - relatedEntity
-          properties:
+        - properties:
             "@type":
               type: string
               default: "AnomalieAdresse.newBuilding"
@@ -1175,22 +1174,23 @@ components:
                 $ref: "#/components/schemas/RelatedBuilding"
             building:
               $ref: "#/components/schemas/AnomalieAdresseNewBuildingBuilding"
+      required:
+        - building
+        - relatedEntity
 
     AnomalieAdresseNewBuildingBuilding:
       allOf:
         - $ref: "#/components/schemas/Building"
-        - required:
-            - name
-            - geographicLocation
-            - newConstruction
-            - type
+      required:
+        - name
+        - geographicLocation
+        - newConstruction
+        - type
 
     AnomalieAdresseUpdate:
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseBase"
-        - required:
-            - relatedEntity
-          properties:
+        - properties:
             "@type":
               type: string
               default: "AnomalieAdresse.update"
@@ -1204,6 +1204,8 @@ components:
                 Elle permet de rechercher plus efficacement les anomalies
                 et de facilement différencier les traitement unitaires et en masse.
               readOnly: true
+      required:
+        - relatedEntity
 
     AnomalieAdresseUpdateImb:
       description: |
@@ -1211,9 +1213,7 @@ components:
         qui permet de mettre à jour un des attributs en masse d'un ou plusieurs immeubles.
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseUpdate"
-        - required:
-            - issues
-          properties:
+        - properties:
             "@type":
               type: string
               default: "AnomalieAdresse.modification"
@@ -1230,6 +1230,8 @@ components:
                 $ref: "#/components/schemas/RelatedBuilding"
             issues:
               $ref: "#/components/schemas/AnomalieAdresseUpdateImbIssues"
+      required:
+        - issues
 
     AnomalieAdresseUpdateImbIssues:
       description: "Les anomalies spécifiques en masse"
@@ -1400,10 +1402,7 @@ components:
         dont la clef est `building.housingsNumber`.
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseUpdate"
-        - required:
-            - issues
-            - relatedEntity
-          properties:
+        - properties:
             "@type":
               type: string
               default: "AnomalieAdresse.nbLogements"
@@ -1421,6 +1420,9 @@ components:
                 $ref: "#/components/schemas/RelatedBuilding"
             issues:
               $ref: "#/components/schemas/AnomalieAdresseUpdateNbLogementsIssues"
+      required:
+        - issues
+        - relatedEntity
 
     AnomalieAdresseUpdateNbLogementsIssues:
       type: object
@@ -1515,8 +1517,8 @@ components:
         mapping:
           fr.interop.anomalieadresse.update: "#/components/schemas/EventAnomalieAdresseUpdate"
           fr.interop.anomalieadresse.note.create: "#/components/schemas/EventAnomalieAdresseNote"
-          fr.interop.anomalieadresse.attachment.create: "#/components/schemas/EventAnomalieAdresseAttachment"
-          fr.interop.anomalieadresse.attachment.update: "#/components/schemas/EventAnomalieAdresseAttachment"
+          fr.interop.anomalieadresse.attachment.create: "#/components/schemas/EventAnomalieAdresseCreateAttachment"
+          fr.interop.anomalieadresse.attachment.update: "#/components/schemas/EventAnomalieAdresseUpdateAttachment"
       required:
         - type
 
