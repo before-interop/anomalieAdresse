@@ -1052,16 +1052,16 @@ components:
               description: NumÃ©ro SIRET de l'entreprise cliente.
               type: string
             zone:
-            description: |
-              Zone de traitement du ticket.
+              description: |
+                Zone de traitement du ticket.
 
-              La valeur est renseignÃ©e par l'OI lors de la qualification du ticket
-              et du passage au status `IN_PROGRESS`.
-            enum:
-              - ZTD
-              - ZMD
-            readOnly: true
-            type: string
+                La valeur est renseignÃ©e par l'OI lors de la qualification du ticket
+                et du passage au status `IN_PROGRESS`.
+              enum:
+                - ZTD
+                - ZMD
+              readOnly: true
+              type: string
       required:
         - "@type"
         - code_oc
