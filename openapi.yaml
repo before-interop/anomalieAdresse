@@ -1500,16 +1500,8 @@ components:
             "@baseType":
               type: string
               default: "AnomalieAdresse"
-            subject:
-              description: Identifiant unique de l'anomalie.
-              type: string
-              format: uuid
             type:
               type: string
-            datacontenttype:
-              type: string
-              default: "application/json"
-              example: "application/json"
       discriminator:
         propertyName: type
         mapping:
