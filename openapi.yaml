@@ -859,7 +859,7 @@ components:
 
     AnomalieAdresseAttachment:
       allOf:
-        - $ref: "https://raw.githubusercontent.com/christophelach/defecto-interop-common/generic-troubleTicket-model-for_codeGen/common/schemas/Attachment.openapi.yaml#/components/schemas/TroubleTicketAttachment"
+        - $ref: "https://raw.githubusercontent.com/christophelach/defecto-interop-common/refs/heads/generic-troubleTicket-model-for_codeGen/common/schemas/Attachment.openapi.yaml#/components/schemas/TroubleTicketAttachment"
         - properties:
             "@baseType":
               type: string
@@ -889,7 +889,7 @@ components:
 
     AnomalieAdresseNote:
       allOf:
-        - $ref: https://raw.githubusercontent.com/christophelach/defecto-interop-common/generic-troubleTicket-model-for_codeGen/common/schemas/Note.openapi.yaml#/components/schemas/TroubleTicketNote
+        - $ref: https://raw.githubusercontent.com/christophelach/defecto-interop-common/refs/heads/generic-troubleTicket-model-for_codeGen/common/schemas/Note.openapi.yaml#/components/schemas/TroubleTicketNote
         - properties:
             "@baseType":
               type: string
@@ -908,7 +908,7 @@ components:
     TroubleTicketAnomalieAdresse:
       allOf:
         # - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/TroubleTicket.openapi.yaml#/components/schemas/TroubleTicket
-        - $ref: https://raw.githubusercontent.com/christophelach/defecto-interop-common/generic-troubleTicket-model-for_codeGen/common/schemas/TroubleTicket.openapi.yaml#/components/schemas/TroubleTicket
+        - $ref: https://raw.githubusercontent.com/christophelach/defecto-interop-common/refs/heads/generic-troubleTicket-model-for_codeGen/common/schemas/TroubleTicket.openapi.yaml#/components/schemas/TroubleTicket
         - properties:
             "@baseType":
               type: string
@@ -1495,7 +1495,7 @@ components:
 
     EventAnomalieAdresse:
       allOf:
-        - $ref: https://raw.githubusercontent.com/christophelach/defecto-interop-common/generic-troubleTicket-model-for_codeGen/common/schemas/CloudEvent.openapi.yaml#/components/schemas/TroubleTicketEvent
+        - $ref: https://raw.githubusercontent.com/christophelach/defecto-interop-common/refs/heads/generic-troubleTicket-model-for_codeGen/common/schemas/CloudEvent.openapi.yaml#/components/schemas/TroubleTicketEvent
         - properties:
             "@baseType":
               type: string
