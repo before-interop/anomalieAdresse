@@ -1212,6 +1212,8 @@ components:
                 Elle permet de rechercher plus efficacement les anomalies
                 et de facilement différencier les traitement unitaires et en masse.
               readOnly: true
+      required:
+        - "@type"
 
     AnomalieAdresseUpdateImb:
       description: |
