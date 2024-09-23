@@ -946,6 +946,10 @@ components:
                     default: OC_REQUEST
             relatedEntity:
               type: object
+            relatedParty:
+              items:
+                $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/RelatedEntity.openapi.yaml#/components/schemas/RelatedEntity
+              type: array
             status:
               type: string
               enum:
