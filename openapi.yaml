@@ -854,8 +854,12 @@ components:
   schemas:
     AnomalieAdresseAttachmentFormData:
       allOf:
-        - $ref: "#/components/schemas/AnomalieAdresseAttachment"
         - $ref: "https://raw.githubusercontent.com/before-interop/common/refs/heads/v1/tools/attachment/attachment.openapi.yaml#/components/schemas/AttachmentFormData"
+        - properties:
+            attachment:
+              $ref: "#/components/schemas/AnomalieAdresseAttachment"
+      required:
+        - attachment
 
     AnomalieAdresseAttachment:
       allOf:
