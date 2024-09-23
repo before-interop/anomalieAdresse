@@ -1239,6 +1239,7 @@ components:
       required:
         - issues
         - "@type"
+        - relatedEntity
 
     AnomalieAdresseUpdateImbIssues:
       description: "Les anomalies spécifiques en masse"
