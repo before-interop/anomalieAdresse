@@ -973,8 +973,6 @@ components:
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresse"
         - properties:
-            "@type":
-              type: string
             acknowledgedDuration:
               description: Temps cumulé du ticket dans le status `ACKNOWLEDGED`.
               readOnly: true
@@ -1151,6 +1149,8 @@ components:
               default: "AnomalieAdresse.creation"
             building:
               $ref: "#/components/schemas/AnomalieAdresseCreationBuilding"
+      required:
+        - "@type"
 
     AnomalieAdresseCreationBuilding:
       allOf:
@@ -1181,6 +1181,7 @@ components:
       required:
         - building
         - relatedEntity
+        - "@type"
 
     AnomalieAdresseNewBuildingBuilding:
       allOf:
@@ -1210,6 +1211,7 @@ components:
               readOnly: true
       required:
         - relatedEntity
+        - "@type"
 
     AnomalieAdresseUpdateImb:
       description: |
@@ -1236,6 +1238,7 @@ components:
               $ref: "#/components/schemas/AnomalieAdresseUpdateImbIssues"
       required:
         - issues
+        - "@type"
 
     AnomalieAdresseUpdateImbIssues:
       description: "Les anomalies spécifiques en masse"
@@ -1427,6 +1430,7 @@ components:
       required:
         - issues
         - relatedEntity
+        - "@type"
 
     AnomalieAdresseUpdateNbLogementsIssues:
       type: object
