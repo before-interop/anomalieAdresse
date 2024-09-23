@@ -905,7 +905,7 @@ components:
               readOnly: true
               type: array
 
-    TroubleTicketAnomalieAdresse:
+    AnomalieAdresse:
       allOf:
         # - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/TroubleTicket.openapi.yaml#/components/schemas/TroubleTicket
         - $ref: https://raw.githubusercontent.com/christophelach/defecto-interop-common/refs/heads/generic-troubleTicket-model-for_codeGen/common/schemas/TroubleTicket.openapi.yaml#/components/schemas/TroubleTicket
@@ -965,7 +965,7 @@ components:
 
     AnomalieAdresseBase:
       allOf:
-        - $ref: "#/components/schemas/TroubleTicketAnomalieAdresse"
+        - $ref: "#/components/schemas/AnomalieAdresse"
         - properties:
             "@type":
               type: string
