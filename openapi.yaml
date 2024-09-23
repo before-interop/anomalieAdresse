@@ -881,6 +881,15 @@ components:
                 - application/vnd.openxmlformats-officedocument.wordprocessingml.document
               type: string
             relatedEntity:
+              description: |
+                Relation entre la pièce jointe et l'anomalie.
+                Ce champ est renseigné par l'OI lors de la création de la pièce jointe.
+              items:
+                $ref: "#/components/schemas/RelatedAnomalie"
+              maxItems: 1
+              minItems: 1
+              readOnly: true
+              type: array
       required:
         - "@baseType"
 
