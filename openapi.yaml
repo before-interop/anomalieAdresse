@@ -1161,7 +1161,7 @@ components:
 
     AnomalieAdresseCreationBuilding:
       allOf:
-        - $ref: "#/components/schemas/Building"
+        - $ref: "#/components/schemas/TroubleTicketBuilding"
       required:
         - address
         - geographicLocation
@@ -1192,7 +1192,7 @@ components:
 
     AnomalieAdresseNewBuildingBuilding:
       allOf:
-        - $ref: "#/components/schemas/Building"
+        - $ref: "#/components/schemas/TroubleTicketBuilding"
       required:
         - name
         - geographicLocation
@@ -1457,7 +1457,7 @@ components:
 
             Ce champ est nommé `NombreLogementsAdresseIPE` dans le fichier IPE.
 
-    Building:
+    TroubleTicketBuilding:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/Building
         - properties:
