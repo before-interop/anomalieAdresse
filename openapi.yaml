@@ -973,6 +973,9 @@ components:
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresse"
         - properties:
+            "@type":
+              type: string
+              default: "AnomalieAdresse"
             acknowledgedDuration:
               description: Temps cumulé du ticket dans le status `ACKNOWLEDGED`.
               readOnly: true
