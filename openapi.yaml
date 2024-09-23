@@ -881,15 +881,8 @@ components:
                 - application/vnd.openxmlformats-officedocument.wordprocessingml.document
               type: string
             relatedEntity:
-              description: |
-                Relation entre l'attachment et l'anomalie.
-                Ce champ est renseignÃ© par l'OI lors de la crÃ©ation de l'attachment.
-              items:
-                $ref: "#/components/schemas/RelatedAnomalie"
-              maxItems: 1
-              minItems: 1
-              readOnly: true
-              type: array
+      required:
+        - "@baseType"
 
     AnomalieAdresseNote:
       allOf:
