@@ -938,11 +938,11 @@ components:
 
                 Les valeurs possibles sont:
 
-                * `CUSTOMER_REQUEST`: Ticket créé par l'OC suite Ã  une demande client final
+                * `CUSTOMER_REQUEST`: Ticket créé par l'OC suite à  une demande client final
                   qui souhaite passer commande.
                 * `OC_REQUEST`: Ticket créé par l'OC sans demande client final.
 
-                La valeur est renseignée par l'OC Ã  la création du ticket.
+                La valeur est renseignée par l'OC à  la création du ticket.
                     default: OC_REQUEST
             relatedEntity:
               type: object
@@ -1001,13 +1001,13 @@ components:
             resolvedToAcknowledgedDuration:
               description:
                 Temps cumulé du ticket dans les status `RESOLVED` avant
-                le passage Ã  `ACKNOWLEDGED`.
+                le passage à  `ACKNOWLEDGED`.
               readOnly: true
               type: integer
             resolvedToClosedDuration:
               description:
                 Temps cumulé du ticket dans les status `RESOLVED` avant
-                le passage Ã  `CLOSED`.
+                le passage à  `CLOSED`.
               readOnly: true
               type: integer
             expectedResolutionDate:
@@ -1039,7 +1039,7 @@ components:
             complexity:
               description: |
                 Complexité du ticket.
-                La valeur est renseignée par l'OI lors du passage Ã  l'état `IN_PROGRESS`.
+                La valeur est renseignée par l'OI lors du passage à  l'état `IN_PROGRESS`.
 
                 Les valeurs possibles sont:
 
