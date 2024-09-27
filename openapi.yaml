@@ -903,7 +903,7 @@ components:
             relatedEntity:
               description: |
                 Relation entre la note et l'anomalie.
-                Ce champ est renseignÃ© par l'OI lors de la crÃ©ation de la note.
+                Ce champ est renseigné par l'OI lors de la création de la note.
               items:
                 $ref: "#/components/schemas/RelatedAnomalie"
               maxItems: 1
@@ -938,11 +938,11 @@ components:
 
                 Les valeurs possibles sont:
 
-                * `CUSTOMER_REQUEST`: Ticket crÃ©Ã© par l'OC suite Ã  une demande client final
+                * `CUSTOMER_REQUEST`: Ticket créé par l'OC suite Ã  une demande client final
                   qui souhaite passer commande.
-                * `OC_REQUEST`: Ticket crÃ©Ã© par l'OC sans demande client final.
+                * `OC_REQUEST`: Ticket créé par l'OC sans demande client final.
 
-                La valeur est renseignÃ©e par l'OC Ã  la crÃ©ation du ticket.
+                La valeur est renseignée par l'OC Ã  la création du ticket.
                     default: OC_REQUEST
             relatedEntity:
               type: object
@@ -1038,13 +1038,13 @@ components:
               type: string
             complexity:
               description: |
-                ComplexitÃ© du ticket.
-                La valeur est renseignÃ©e par l'OI lors du passage Ã  l'Ã©tat `IN_PROGRESS`.
+                Complexité du ticket.
+                La valeur est renseignée par l'OI lors du passage Ã  l'état `IN_PROGRESS`.
 
                 Les valeurs possibles sont:
 
-                * `SIMPLE`: cas ne nÃ©cessitant pas d'intervention sur le terrain,
-                  pas d'intervention sur le rÃ©seau ou de rÃ©alignement de rÃ©fÃ©rentiels.
+                * `SIMPLE`: cas ne nécessitant pas d'intervention sur le terrain,
+                  pas d'intervention sur le réseau ou de réalignement de référentiels.
                 * `COMPLEX`: cas qui n'est pas un cas simple.
                 * `MASSE`: cas qui concerne les anomalies en masse.
               enum:
@@ -1054,19 +1054,19 @@ components:
               readOnly: true
               type: string
             externalId:
-              description: RÃ©fÃ©rence interne du ticket de l'OC.
+              description: Référence interne du ticket de l'OC.
               type: string
             siren:
-              description: NumÃ©ro SIREN de l'entreprise cliente.
+              description: Numéro SIREN de l'entreprise cliente.
               type: string
             siret:
-              description: NumÃ©ro SIRET de l'entreprise cliente.
+              description: Numéro SIRET de l'entreprise cliente.
               type: string
             zone:
               description: |
                 Zone de traitement du ticket.
 
-                La valeur est renseignÃ©e par l'OI lors de la qualification du ticket
+                La valeur est renseignée par l'OI lors de la qualification du ticket
                 et du passage au status `IN_PROGRESS`.
               enum:
                 - ZTD
