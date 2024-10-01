@@ -1152,158 +1152,283 @@ components:
       type: object
       properties:
         "building.geographicLocations":
-          allOf:
-            - $ref: "#/components/schemas/IssueArray"
-            - description: Liste des coordonnées géographiques de l'adresse corrigée.
-              properties:
-                value:
-                  type: array
-                  items:
-                    $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/GeographicPoint
+          $ref: "#/components/schemas/UpdateImbIssuesBuildingGeographicLocations"
         "building.name":
-          allOf:
-            - $ref: "#/components/schemas/IssueArray"
-            - properties:
-                value:
-                  type: array
-                  items:
-                    $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/Building/properties/name
-                toBlank:
-                  type: boolean
-                  description: |
-                    Indique si l'attribut en erreur doit être mis à blanc.
-                    Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
-                    Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
+          $ref: "#/components/schemas/UpdateImbIssuesBuildingName"
         "building.address.city":
-          description: |
-            Nom de la commune.
-
-            Ce champ est nommé `CommuneImmeuble` dans le fichier IPE.
-          properties:
-            value:
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/city
+          $ref: "#/components/schemas/UpdateImbIssuesBuildingCity"
         "building.address.postcode":
-          description: |
-            Code postal.
-
-            Ce champ est nommé `CodePostalImmeuble` dans le fichier IPE.
-          properties:
-            value:
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/postcode
+          $ref: "#/components/schemas/UpdateImbIssuesBuildingPostcode"
         "building.address.streetName":
-          allOf:
-            - $ref: "#/components/schemas/Issue"
-            - description: |
-                Nom de la voie.
-
-                Ce champ est nommé `NomVoieImmeuble` dans le fichier IPE.
-              properties:
-                value:
-                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/streetName
+          $ref: "#/components/schemas/UpdateImbIssuesBuildingStreetName"
         "building.address.streetNr":
-          allOf:
-            - $ref: "#/components/schemas/Issue"
-            - properties:
-                description:
-                  type: string
-                  description: Explication simple du problème lié à l'attribut en erreur.
-                value:
-                  type: array
-                  items:
-                    $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/streetNr
+          $ref: "#/components/schemas/UpdateImbIssuesBuildingStreetNr"
         "building.address.streetNrSuffix":
-          allOf:
-            - $ref: "#/components/schemas/Issue"
-            - description: |
-                Complément du numéro de la voie.
-
-                Ce champ est nommé `ComplementNumeroVoieImmeuble` dans le fichier IPE.
-              properties:
-                value:
-                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/streetNrSuffix
-                toBlank:
-                  type: boolean
-                  description: |
-                    Indique si l'attribut en erreur doit être mis à blanc.
-
-                    Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
-                    Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
+          $ref: "#/components/schemas/UpdateImbIssuesBuildingStreetNrSuffix"
         "building.address.streetType":
-          allOf:
-            - $ref: "#/components/schemas/Issue"
-            - description: |
-                Type de la voie.
-
-                Ce champ est nommé `TypeVoieImmeuble` dans le fichier IPE.
-              properties:
-                value:
-                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/streetType
+          $ref: "#/components/schemas/UpdateImbIssuesBuildingStreetType"
         "building.address.code_insee":
-          description: |
-            Code INSEE de la commune.
-
-            Ce champ est nommé `CodeInseeImmeuble` dans le fichier IPE.
-          properties:
-            value:
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_insee
+          $ref: "#/components/schemas/UpdateImbIssuesBuildingCodeInsee"
         "building.address.code_hexacle":
-          allOf:
-            - $ref: "#/components/schemas/Issue"
-            - properties:
-                description:
-                  type: string
-                  description: Explication simple du problème lié à l'attribut en erreur.
-                value:
-                  type: array
-                  items:
-                    $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_hexacle
+          $ref: "#/components/schemas/UpdateImbIssuesBuildingCodeHexacle"
         "building.address.code_hexacle_voie":
-          allOf:
-            - $ref: "#/components/schemas/Issue"
-            - description: |
-                Code Hexacle de la voie.
-
-                Ce champ est nommé `CodeHexacleVoie` dans le fichier IPE.
-              properties:
-                value:
-                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_hexacle_voie
+          $ref: "#/components/schemas/UpdateImbIssuesBuildingCodeHexacleVoie"
         "building.address.code_rivoli":
-          allOf:
-            - $ref: "#/components/schemas/Issue"
-            - description: |
-                Code Rivoli de la commune.
-
-                Ce champ est nommé `CodeVoieRivoliImmeuble` dans le fichier IPE.
-              properties:
-                value:
-                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_rivoli
+          $ref: "#/components/schemas/UpdateImbIssuesBuildingCodeRivoli"
         "building.address.code_ban":
-          allOf:
-            - $ref: "#/components/schemas/IssueArray"
-            - description: |
-                Code BAN de l'immeuble.
-
-                Ce champ est nommé `CodeBAN` dans le fichier IPE.
-              properties:
-                value:
-                  type: array
-                  items:
-                    $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/properties/code_ban
-                toBlank:
-                  type: boolean
-                  description: |
-                    Indique si l'attribut en erreur doit être mis à blanc.
-
-                    Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
-                    Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
+          $ref: "#/components/schemas/UpdateImbIssuesBuildingCodeBan"
         "building.pm.id":
-          description: |
-            Identifiant du PM associé à l'immeuble.
+          $ref: "#/components/schemas/UpdateImbIssuesBuildingPmId"
 
-            Ce champ est nommé `ReferencePM` dans le fichier IPE.
-          properties:
-            value:
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/PM/properties/id
+    UpdateImbIssuesBuildingGeographicLocations:
+      type: object
+      description: Liste des coordonnées géographiques de l'adresse corrigée.
+      properties:
+        description:
+          type: string
+          description: Explication simple du problème lié à l'attribut en erreur.
+        value:
+          type: array
+          items:
+            $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/GeographicPoint
+
+    UpdateImbIssuesBuildingName:
+      type: object
+      description: |
+        Nom du bâtiment.
+
+        Ce champ est nommé `BatimentImmeuble` dans le fichier IPE.
+      properties:
+        description:
+          type: string
+          description: Explication simple du problème lié à l'attribut en erreur.
+        value:
+          type: array
+          items:
+            $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/Building/allOf/1/properties/name
+        toBlank:
+          type: boolean
+          description: |
+            Indique si l'attribut en erreur doit être mis à blanc.
+            Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
+            Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
+    UpdateImbIssuesBuildingCity:
+      type: object
+      description: |
+        Nom de la commune.
+
+        Ce champ est nommé `CommuneImmeuble` dans le fichier IPE.
+      properties:
+        description:
+          type: string
+          description: Explication simple du problème lié à l'attribut en erreur.
+        value:
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/allOf/1/properties/city
+
+    UpdateImbIssuesBuildingPostcode:
+      type: object
+      description: |
+        Code postal.
+
+        Ce champ est nommé `CodePostalImmeuble` dans le fichier IPE.
+      properties:
+        description:
+          type: string
+          description: Explication simple du problème lié à l'attribut en erreur.
+        value:
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/allOf/1/properties/postcode
+
+    UpdateImbIssuesBuildingStreetName:
+      type: object
+      description: |
+        Nom de la voie.
+
+        Ce champ est nommé `NomVoieImmeuble` dans le fichier IPE.
+      properties:
+        description:
+          type: string
+          description: Explication simple du problème lié à l'attribut en erreur.
+        value:
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/allOf/1/properties/streetName
+        toBlank:
+          type: boolean
+          description: |
+            Indique si l'attribut en erreur doit être mis à blanc.
+
+            Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
+            Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
+
+    UpdateImbIssuesBuildingStreetNr:
+      type: object
+      description: |
+        Numéro de la voie.
+
+        Ce champ est nommé `NumeroVoieImmeuble` dans le fichier IPE.
+      properties:
+        description:
+          type: string
+          description: Explication simple du problème lié à l'attribut en erreur.
+        value:
+          type: array
+          items:
+            $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/allOf/1/properties/streetNr
+        toBlank:
+          type: boolean
+          description: |
+            Indique si l'attribut en erreur doit être mis à blanc.
+
+            Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
+            Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
+
+    UpdateImbIssuesBuildingStreetNrSuffix:
+      type: object
+      description: |
+        Complément du numéro de la voie.
+
+        Ce champ est nommé `ComplementNumeroVoieImmeuble` dans le fichier IPE.
+      properties:
+        description:
+          type: string
+          description: Explication simple du problème lié à l'attribut en erreur.
+        value:
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/allOf/1/properties/streetNrSuffix
+        toBlank:
+          type: boolean
+          description: |
+            Indique si l'attribut en erreur doit être mis à blanc.
+
+            Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
+            Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
+
+    UpdateImbIssuesBuildingStreetType:
+      type: object
+      description: |
+        Type de la voie.
+
+        Ce champ est nommé `TypeVoieImmeuble` dans le fichier IPE.
+      properties:
+        description:
+          type: string
+          description: Explication simple du problème lié à l'attribut en erreur.
+        value:
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/allOf/1/properties/streetType
+        toBlank:
+          type: boolean
+          description: |
+            Indique si l'attribut en erreur doit être mis à blanc.
+
+            Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
+            Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
+
+    UpdateImbIssuesBuildingCodeInsee:
+      type: object
+      description: |
+        Code INSEE de la commune.
+
+        Ce champ est nommé `CodeInseeImmeuble` dans le fichier IPE.
+      properties:
+        description:
+          type: string
+          description: Explication simple du problème lié à l'attribut en erreur.
+        value:
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/allOf/1/properties/code_insee
+
+    UpdateImbIssuesBuildingCodeHexacle:
+      type: object
+      description: |
+        Code Hexacle de la commune.
+
+        Ce champ est nommé `CodeAdresseImmeuble` dans le fichier IPE.
+      properties:
+        description:
+          type: string
+          description: Explication simple du problème lié à l'attribut en erreur.
+        value:
+          type: array
+          items:
+            $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/allOf/1/properties/code_hexacle
+        toBlank:
+          type: boolean
+          description: |
+            Indique si l'attribut en erreur doit être mis à blanc.
+
+            Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
+            Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
+
+    UpdateImbIssuesBuildingCodeHexacleVoie:
+      type: object
+      description: |
+        Code Hexacle de la voie.
+
+        Ce champ est nommé `CodeHexacleVoie` dans le fichier IPE.
+      properties:
+        description:
+          type: string
+          description: Explication simple du problème lié à l'attribut en erreur.
+        value:
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/allOf/1/properties/code_hexacle_voie
+        toBlank:
+          type: boolean
+          description: |
+            Indique si l'attribut en erreur doit être mis à blanc.
+
+            Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
+            Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
+
+    UpdateImbIssuesBuildingCodeRivoli:
+      type: object
+      description: |
+        Code Rivoli de la commune.
+
+        Ce champ est nommé `CodeVoieRivoliImmeuble` dans le fichier IPE.
+      properties:
+        description:
+          type: string
+          description: Explication simple du problème lié à l'attribut en erreur.
+        value:
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/allOf/1/properties/code_rivoli
+        toBlank:
+          type: boolean
+          description: |
+            Indique si l'attribut en erreur doit être mis à blanc.
+
+            Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
+            Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
+
+    UpdateImbIssuesBuildingCodeBan:
+      type: object
+      description: |
+        Code BAN de l'immeuble.
+
+        Ce champ est nommé `CodeBAN` dans le fichier IPE.
+      properties:
+        description:
+          type: string
+          description: Explication simple du problème lié à l'attribut en erreur.
+        value:
+          type: array
+          items:
+            $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/allOf/1/properties/code_ban
+        toBlank:
+          type: boolean
+          description: |
+            Indique si l'attribut en erreur doit être mis à blanc.
+
+            Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
+            Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
+
+    UpdateImbIssuesBuildingPmId:
+      type: object
+      description: |
+        Identifiant du PM associé à l'immeuble.
+
+        Ce champ est nommé `ReferencePM` dans le fichier IPE.
+      properties:
+        description:
+          type: string
+          description: Explication simple du problème lié à l'attribut en erreur.
+        value:
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/PM/properties/id
 
     AnomalieAdresseUpdateNbLogements:
       description: |
@@ -1312,8 +1437,7 @@ components:
 
         Cette anomalie est unitaire et ne peut contenir qu'un seul immeuble.
 
-        Cette anomalie ne peut contenir qu'une seule [Issue](#/components/schemas/Issue)
-        dont la clef est `building.housingsNumber`.
+        Cette anomalie ne peut contenir qu'une seule correction dont la clé vaut `building.housingsNumber`.
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseUpdate"
         - required:
@@ -1345,6 +1469,9 @@ components:
           required:
             - value
           properties:
+            description:
+              type: string
+              description: Explication simple du problème lié à l'attribut en erreur.
             value:
               type: integer
               minimum: 0
@@ -1377,34 +1504,6 @@ components:
             newConstruction:
               description: Indique si le bâtiment est neuf.
               type: boolean
-
-    Issue:
-      type: object
-      properties:
-        description:
-          type: string
-          description: Explication simple du problème lié à l'attribut en erreur.
-        toBlank:
-          type: boolean
-          description: |
-            Indique si l'attribut en erreur doit être mis à blanc.
-
-            Si la valeur est `true`, l'attribut en erreur sera mis à blanc.
-            Si la valeur est `false`, l'attribut en erreur ne sera pas mis à blanc.
-
-    IssueArray:
-      type: object
-      description: |
-        Le nombre d'éléments de la liste comprise dans value doit être égal à la taille du tableau `relatedEntity`
-        et les éléments doivent être dans le même ordre que les éléments du tableau `relatedEntity`.
-
-        Si l'OC ne souhaite pas renseigner ces valeurs, il peut mettre la valeur `null` dans la liste
-        et remplir de champs `description` pour expliquer pourquoi les valeurs ne sont pas renseignées.
-        (ex: "Les noms des bâtiments sont renseignés dans le fichier en PJ.")
-      properties:
-        description:
-          type: string
-          description: Explication simple du problème lié à l'attribut en erreur.
 
     Note:
       allOf:
