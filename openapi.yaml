@@ -973,6 +973,12 @@ components:
       externalDocs:
         url: https://datamodel.tmforum.org/en/latest/Common/TroubleTicket
 
+    AnomalieAdresseBaseRequiredProperties:
+      type: object
+      required:
+        - "@type"
+        - code_oc
+        - code_oi
     AnomalieAdresseBase:
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresse"
@@ -1073,10 +1079,10 @@ components:
                 - ZMD
               readOnly: true
               type: string
-      required:
-        - "@type"
-        - code_oc
-        - code_oi
+      # required:
+      #   - "@type"
+      #   - code_oc
+      #   - code_oi
       example:
         statusChangeReason: ALREADY_RESOLVED
         complexity: SIMPLE
@@ -1144,6 +1150,7 @@ components:
         sur le bailleur et le promoteur immobilier grâce aux champs `realEstateLessor` et `realEstateDeveloper`.
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseBase"
+        - $ref: "#/components/schemas/AnomalieAdresseBaseRequiredProperties"
         - required:
             - building
           properties:
@@ -1173,6 +1180,7 @@ components:
         *AnomalieAdresseNewBuilding* permet de rajouter un nouveau bâtiment à une adresse existante dans l'IPE.
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseBase"
+        - $ref: "#/components/schemas/AnomalieAdresseBaseRequiredProperties"
         - properties:
             "@type":
               type: string
@@ -1202,6 +1210,7 @@ components:
     AnomalieAdresseUpdate:
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseBase"
+        - $ref: "#/components/schemas/AnomalieAdresseBaseRequiredProperties"
         - properties:
             "@type":
               type: string
