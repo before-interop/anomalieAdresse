@@ -916,10 +916,6 @@ components:
         # - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/TroubleTicket.openapi.yaml#/components/schemas/TroubleTicket
         - $ref: https://raw.githubusercontent.com/christophelach/defecto-interop-common/refs/heads/generic-troubleTicket-model-for_codeGen/common/schemas/TroubleTicket.openapi.yaml#/components/schemas/TroubleTicket
         - properties:
-            "@baseType":
-              type: string
-            "@type":
-              type: string
             priority:
               type: string
               enum:
