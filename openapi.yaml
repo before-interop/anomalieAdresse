@@ -1071,8 +1071,6 @@ components:
               type: string
       required:
         - "@type"
-        - code_oc
-        - code_oi
       example:
         statusChangeReason: ALREADY_RESOLVED
         complexity: SIMPLE
