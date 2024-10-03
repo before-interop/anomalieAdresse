@@ -979,7 +979,6 @@ components:
         - "@type"
         - code_oc
         - code_oi
-
     AnomalieAdresseBase:
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresse"
