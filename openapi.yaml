@@ -906,9 +906,6 @@ components:
       type: object
       description: Liste des coordonnées géographiques de l'adresse corrigée.
       properties:
-        description:
-          type: string
-          description: Explication simple du problème lié à l'attribut en erreur.
         value:
           type: array
           items:
@@ -921,9 +918,6 @@ components:
 
         Ce champ est nommé `BatimentImmeuble` dans le fichier IPE.
       properties:
-        description:
-          type: string
-          description: Explication simple du problème lié à l'attribut en erreur.
         value:
           type: array
           items:
@@ -941,9 +935,6 @@ components:
 
         Ce champ est nommé `CommuneImmeuble` dans le fichier IPE.
       properties:
-        description:
-          type: string
-          description: Explication simple du problème lié à l'attribut en erreur.
         value:
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/allOf/1/properties/city
 
@@ -954,9 +945,6 @@ components:
 
         Ce champ est nommé `CodePostalImmeuble` dans le fichier IPE.
       properties:
-        description:
-          type: string
-          description: Explication simple du problème lié à l'attribut en erreur.
         value:
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/allOf/1/properties/postcode
 
@@ -967,9 +955,6 @@ components:
 
         Ce champ est nommé `NomVoieImmeuble` dans le fichier IPE.
       properties:
-        description:
-          type: string
-          description: Explication simple du problème lié à l'attribut en erreur.
         value:
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/allOf/1/properties/streetName
         toBlank:
@@ -987,9 +972,6 @@ components:
 
         Ce champ est nommé `NumeroVoieImmeuble` dans le fichier IPE.
       properties:
-        description:
-          type: string
-          description: Explication simple du problème lié à l'attribut en erreur.
         value:
           type: array
           items:
@@ -1009,9 +991,6 @@ components:
 
         Ce champ est nommé `ComplementNumeroVoieImmeuble` dans le fichier IPE.
       properties:
-        description:
-          type: string
-          description: Explication simple du problème lié à l'attribut en erreur.
         value:
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/allOf/1/properties/streetNrSuffix
         toBlank:
@@ -1029,9 +1008,6 @@ components:
 
         Ce champ est nommé `TypeVoieImmeuble` dans le fichier IPE.
       properties:
-        description:
-          type: string
-          description: Explication simple du problème lié à l'attribut en erreur.
         value:
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/allOf/1/properties/streetType
         toBlank:
@@ -1049,9 +1025,6 @@ components:
 
         Ce champ est nommé `CodeInseeImmeuble` dans le fichier IPE.
       properties:
-        description:
-          type: string
-          description: Explication simple du problème lié à l'attribut en erreur.
         value:
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/allOf/1/properties/code_insee
 
@@ -1062,9 +1035,6 @@ components:
 
         Ce champ est nommé `CodeAdresseImmeuble` dans le fichier IPE.
       properties:
-        description:
-          type: string
-          description: Explication simple du problème lié à l'attribut en erreur.
         value:
           type: array
           items:
@@ -1084,9 +1054,6 @@ components:
 
         Ce champ est nommé `CodeHexacleVoie` dans le fichier IPE.
       properties:
-        description:
-          type: string
-          description: Explication simple du problème lié à l'attribut en erreur.
         value:
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/allOf/1/properties/code_hexacle_voie
         toBlank:
@@ -1104,9 +1071,6 @@ components:
 
         Ce champ est nommé `CodeVoieRivoliImmeuble` dans le fichier IPE.
       properties:
-        description:
-          type: string
-          description: Explication simple du problème lié à l'attribut en erreur.
         value:
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/allOf/1/properties/code_rivoli
         toBlank:
@@ -1124,9 +1088,6 @@ components:
 
         Ce champ est nommé `CodeBAN` dans le fichier IPE.
       properties:
-        description:
-          type: string
-          description: Explication simple du problème lié à l'attribut en erreur.
         value:
           type: array
           items:
@@ -1146,9 +1107,6 @@ components:
 
         Ce champ est nommé `ReferencePM` dans le fichier IPE.
       properties:
-        description:
-          type: string
-          description: Explication simple du problème lié à l'attribut en erreur.
         value:
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/PM/properties/id
 
@@ -1191,9 +1149,6 @@ components:
           required:
             - value
           properties:
-            description:
-              type: string
-              description: Explication simple du problème lié à l'attribut en erreur.
             value:
               type: integer
               minimum: 0
