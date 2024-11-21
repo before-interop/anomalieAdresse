@@ -283,7 +283,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Note"
+                  $ref: "#/components/schemas/AnomalieAdresseNote"
         "400": *response400
         "404": *response404
         default:
@@ -322,14 +322,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Note"
+              $ref: "#/components/schemas/AnomalieAdresseNote"
       responses:
         "201":
           description: The created note
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Note"
+                $ref: "#/components/schemas/AnomalieAdresseNote"
           headers:
             ETag:
               $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/update.openapi.yaml#/components/headers/ETag
@@ -363,7 +363,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Attachment"
+                  $ref: "#/components/schemas/AnomalieAdresseAttachment"
         "400": *response400
         "404": *response404
         default:
@@ -402,14 +402,14 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/AttachmentFormData"
+              $ref: "#/components/schemas/AnomalieAdresseAttachmentFormData"
       responses:
         "201":
           description: The created attachment
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Attachment"
+                $ref: "#/components/schemas/AnomalieAdresseAttachment"
           headers:
             ETag:
               $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/update.openapi.yaml#/components/headers/ETag
@@ -474,7 +474,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Event"
+                  $ref: "#/components/schemas/EventAnomalieAdresse"
         "400": *response400
         default:
           $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
@@ -511,7 +511,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Event"
+              $ref: "#/components/schemas/EventAnomalieAdresse"
       responses:
         "200":
           description: The event has been received
@@ -574,73 +574,102 @@ components:
         example: 123e4567-e89b-12d3-a456-426614174000
 
   schemas:
-    AnomalieAdresseBase:
+    AnomalieAdresseAttachmentFormData:
       allOf:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/TroubleTicket.openapi.yaml#/components/schemas/TroubleTicket
-        - discriminator:
-            propertyName: "@type"
-            mapping:
-              AnomalieAdresse.creation: "#/components/schemas/AnomalieAdresseCreation"
-              AnomalieAdresse.newBuilding: "#/components/schemas/AnomalieAdresseNewBuilding"
-              AnomalieAdresse.modification: "#/components/schemas/AnomalieAdresseUpdateImb"
-              AnomalieAdresse.nbLogements: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
-          required:
-            - code_oi
-            - code_oc
-            - "@type"
-          properties:
-            id:
-              type: string
-              format: uuid
-              readOnly: true
+        - $ref: "https://raw.githubusercontent.com/before-interop/common/refs/heads/v1/tools/attachment/attachment.openapi.yaml#/components/schemas/AttachmentFormData"
+        - properties:
+            attachment:
+              $ref: "#/components/schemas/AnomalieAdresseAttachment"
+      required:
+        - attachment
+
+    AnomalieAdresseAttachment:
+      allOf:
+        - $ref: "https://raw.githubusercontent.com/christophelach/defecto-interop-common/refs/heads/generic-troubleTicket-model-for_codeGen/common/schemas/Attachment.openapi.yaml#/components/schemas/TroubleTicketAttachment"
+        - properties:
             "@baseType":
               type: string
               default: "AnomalieAdresse"
-            "@type":
+            mimeType:
+              enum:
+                - text/csv
+                - image/jpeg
+                - image/png
+                - image/svg+xml
+                - application/pdf
+                - application/vnd.oasis.opendocument.spreadsheet
+                - application/vnd.oasis.opendocument.text
+                - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+                - application/vnd.openxmlformats-officedocument.wordprocessingml.document
               type: string
-              readOnly: false
-              example: AnomalieAdresse.creation
+            relatedEntity:
               description: |
-                Type de ticket.
+                Relation entre la pièce jointe et l'anomalie.
+                Ce champ est renseigné par l'OI lors de la création de la pièce jointe.
+              items:
+                $ref: "#/components/schemas/RelatedAnomalie"
+              maxItems: 1
+              minItems: 1
+              readOnly: true
+              type: array
+      required:
+        - "@baseType"
+
+    AnomalieAdresseNote:
+      allOf:
+        - $ref: https://raw.githubusercontent.com/christophelach/defecto-interop-common/refs/heads/generic-troubleTicket-model-for_codeGen/common/schemas/Note.openapi.yaml#/components/schemas/TroubleTicketNote
+        - properties:
+            "@baseType":
+              type: string
+              default: "AnomalieAdresse"
+            relatedEntity:
+              description: |
+                Relation entre la note et l'anomalie.
+                Ce champ est renseigné par l'OI lors de la création de la note.
+              items:
+                $ref: "#/components/schemas/RelatedAnomalie"
+              maxItems: 1
+              minItems: 1
+              readOnly: true
+              type: array
+
+    AnomalieAdresse:
+      allOf:
+        # - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/TroubleTicket.openapi.yaml#/components/schemas/TroubleTicket
+        - $ref: https://raw.githubusercontent.com/christophelach/defecto-interop-common/refs/heads/generic-troubleTicket-model-for_codeGen/common/schemas/TroubleTicket.openapi.yaml#/components/schemas/TroubleTicket
+        - properties:
+            priority:
+              type: string
+              enum:
+                - LOW
+                - MEDIUM
+                - HIGH
+            severity:
+              type: string
+            ticketType:
+              type: string
+              enum:
+                - OC_REQUEST
+                - CUSTOMER_REQUEST
+              description: |
+                Types de ticket.
 
                 Les valeurs possibles sont:
 
-                * `AnomalieAdresse.creation`: "#/components/schemas/AnomalieAdresseCreation"
-                * `AnomalieAdresse.newBuilding`: "#/components/schemas/AnomalieAdresseNewBuilding"
-                * `AnomalieAdresse.modification`: "#/components/schemas/AnomalieAdresseUpdateImb"
-                * `AnomalieAdresse.nbLogements`: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
+                * `CUSTOMER_REQUEST`: Ticket créé par l'OC suite à  une demande client final
+                  qui souhaite passer commande.
+                * `OC_REQUEST`: Ticket créé par l'OC sans demande client final.
+
+                La valeur est renseignée par l'OC à  la création du ticket.
+                    default: OC_REQUEST
+            relatedEntity:
+              type: object
+            relatedParty:
+              items:
+                $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/RelatedEntity.openapi.yaml#/components/schemas/RelatedEntity
+              type: array
             status:
-              description: |
-                Le status du ticket.
-
-                Les valeurs possibles sont:
-
-                * `ACKNOWLEDGED`: Le ticket peut être traité par l'OI.
-
-                  Ce status est positionné lorsque la création du ticket est terminée.
-
-                * `IN_PROGRESS`: Qualification du ticket par l'OI (cas simple ou complexe).
-
-                * `PENDING`: Le ticket est en attente d'une action de l'OC.
-
-                  L'OI a besoin d'informations complémentaires pour traiter le ticket.
-
-                * `RESOLVED`: Le ticket est résolu et en attente de validation par l'OC.
-
-                * `CLOSED`: Cloture du ticket par l'OI ou l'OC.
-
-                * `REJECTED`: Le ticket est rejeté par l'OC.
-
-                * `CANCELED`: Le ticket est annulé par l'OC.
-
-
-                **Notes:**
-
-                * Le changement de status peut être accompagné d'une raison dans `statusChangeReason`.
-
-                * Le changement de status peut être accompagné d'une description dans `statusChangeDetails`.
-
-              default: ACKNOWLEDGED
+              type: string
               enum:
                 - ACKNOWLEDGED
                 - IN_PROGRESS
@@ -649,41 +678,64 @@ components:
                 - CLOSED
                 - REJECTED
                 - CANCELED
-            relatedEntity:
-              type: array
-              items:
-                $ref: "#/components/schemas/RelatedBuilding"
-            acknowledgedDuration:
-              type: integer
-              readOnly: true
-              description: Temps cumulé du ticket dans le status `ACKNOWLEDGED`.
-            totalInProgressDuration:
-              type: integer
-              readOnly: true
-              description: Temps cumulé du ticket dans le status `IN_PROGRESS`.
-            totalPendingDuration:
-              type: integer
-              readOnly: true
-              description: Temps cumulé du ticket dans le status `PENDING`.
-            totalDuration:
-              type: integer
-              readOnly: true
-              description: Temps cumulé du ticket dans les status `ACKNOWLEDGED` et `IN_PROGRESS`.
-            resolvedToAcknowledgedDuration:
-              type: integer
-              readOnly: true
-              description: Temps cumulé du ticket dans les status `RESOLVED` avant le passage à `ACKNOWLEDGED`.
-            resolvedToClosedDuration:
-              type: integer
-              readOnly: true
-              description: Temps cumulé du ticket dans les status `RESOLVED` avant le passage à `CLOSED`.
-            expectedResolutionDate:
-              description: The expected resolution date
-                determined by the trouble ticket system.
+      discriminator:
+        propertyName: "@type"
+        mapping:
+          AnomalieAdresse.creation: "#/components/schemas/AnomalieAdresseCreation"
+          AnomalieAdresse.newBuilding: "#/components/schemas/AnomalieAdresseNewBuilding"
+          AnomalieAdresse.modification: "#/components/schemas/AnomalieAdresseUpdateImb"
+          AnomalieAdresse.nbLogements: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
+      description:
+        "A trouble ticket is a record of an issue that is created, tracked,\
+        \ and managed by a trouble ticket management system"
+      externalDocs:
+        url: https://datamodel.tmforum.org/en/latest/Common/TroubleTicket
+
+    AnomalieAdresseBase:
+      allOf:
+        - $ref: "#/components/schemas/AnomalieAdresse"
+        - properties:
+            "@type":
               type: string
+              default: "AnomalieAdresse"
+            acknowledgedDuration:
+              description: Temps cumulé du ticket dans le status `ACKNOWLEDGED`.
+              readOnly: true
+              type: integer
+            totalInProgressDuration:
+              description: Temps cumulé du ticket dans le status `IN_PROGRESS`.
+              readOnly: true
+              type: integer
+            totalPendingDuration:
+              description: Temps cumulé du ticket dans le status `PENDING`.
+              readOnly: true
+              type: integer
+            totalDuration:
+              description:
+                Temps cumulé du ticket dans les status `ACKNOWLEDGED` et
+                `IN_PROGRESS`.
+              readOnly: true
+              type: integer
+            resolvedToAcknowledgedDuration:
+              description:
+                Temps cumulé du ticket dans les status `RESOLVED` avant
+                le passage à  `ACKNOWLEDGED`.
+              readOnly: true
+              type: integer
+            resolvedToClosedDuration:
+              description:
+                Temps cumulé du ticket dans les status `RESOLVED` avant
+                le passage à  `CLOSED`.
+              readOnly: true
+              type: integer
+            expectedResolutionDate:
+              description:
+                The expected resolution date determined by the trouble ticket
+                system.
               format: date-time
               nullable: true
               readOnly: true
+              type: string
             statusChangeReason:
               enum:
                 - ALREADY_RESOLVED
@@ -701,24 +753,11 @@ components:
                 - UNKNOWN_ZONE
                 - UNRESOLVABLE
                 - WAITING_INFORMATION
-            priority:
-              readOnly: false
               type: string
-              enum:
-                - LOW
-                - MEDIUM
-                - HIGH
-              default: LOW
             complexity:
-              type: string
-              readOnly: true
-              enum:
-                - SIMPLE
-                - COMPLEX
-                - MASSE
               description: |
                 Complexité du ticket.
-                La valeur est renseignée par l'OI lors du passage à l'état `IN_PROGRESS`.
+                La valeur est renseignée par l'OI lors du passage à  l'état `IN_PROGRESS`.
 
                 Les valeurs possibles sont:
 
@@ -726,46 +765,84 @@ components:
                   pas d'intervention sur le réseau ou de réalignement de référentiels.
                 * `COMPLEX`: cas qui n'est pas un cas simple.
                 * `MASSE`: cas qui concerne les anomalies en masse.
-            code_oi: # Code ARCEP de l'OI.
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
-
-            code_oc: # Code ARCEP de l'OC.
-              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
+              enum:
+                - SIMPLE
+                - COMPLEX
+                - MASSE
+              readOnly: true
+              type: string
             externalId:
               description: Référence interne du ticket de l'OC.
               type: string
-            ticketType:
-              description: |
-                Types de ticket.
-
-                Les valeurs possibles sont:
-
-                * `CUSTOMER_REQUEST`: Ticket créé par l'OC suite à une demande client final
-                  qui souhaite passer commande.
-                * `OC_REQUEST`: Ticket créé par l'OC sans demande client final.
-
-                La valeur est renseignée par l'OC à la création du ticket.
-              default: OC_REQUEST
-              enum:
-                - OC_REQUEST
-                - CUSTOMER_REQUEST
             siren:
-              type: string
               description: Numéro SIREN de l'entreprise cliente.
+              type: string
             siret:
-              type: string
               description: Numéro SIRET de l'entreprise cliente.
-            zone:
               type: string
-              enum:
-                - ZTD
-                - ZMD
-              readOnly: true
+            zone:
               description: |
                 Zone de traitement du ticket.
 
                 La valeur est renseignée par l'OI lors de la qualification du ticket
                 et du passage au status `IN_PROGRESS`.
+              enum:
+                - ZTD
+                - ZMD
+              readOnly: true
+              type: string
+      required:
+        - "@type"
+      example:
+        statusChangeReason: ALREADY_RESOLVED
+        complexity: SIMPLE
+        siren: siren
+        code_oc: FTEL
+        "@type": "@type"
+        resolutionDate: 2000-01-23T04:56:07.000+00:00
+        description: description
+        siret: siret
+        code_oi: FTEL
+        "@baseType": AnomalieAdresse
+        acknowledgedDuration: 0
+        zone: ZTD
+        totalPendingDuration: 1
+        resolvedToClosedDuration: 2
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        "@schemaLocation": https://raw.githubusercontent.com/tmforum-apis/Open_Api_And_Data_Model/master/schemas/Common/TroubleTicket.schema.json
+        requestedResolutionDate: 2000-01-23T04:56:07.000+00:00
+        severity: severity
+        totalDuration: 5
+        totalInProgressDuration: 6
+        relatedEntity:
+          - "@referredType": Building
+            role: building
+            "@baseType": RelatedEntity
+            "@type": RelatedEntity
+            id: id
+          - "@referredType": Building
+            role: building
+            "@baseType": RelatedEntity
+            "@type": RelatedEntity
+            id: id
+        resolvedToAcknowledgedDuration: 5
+        externalId: externalId
+        ticketType: OC_REQUEST
+        priority: LOW
+        relatedParty:
+          - "@referredType": "@referredType"
+            role: role
+            "@baseType": RelatedEntity
+            "@type": RelatedEntity
+            id: id
+          - "@referredType": "@referredType"
+            role: role
+            "@baseType": RelatedEntity
+            "@type": RelatedEntity
+            id: id
+        expectedResolutionDate: 2000-01-23T04:56:07.000+00:00
+        name: name
+        status: ACKNOWLEDGED
 
     AnomalieAdresseCreation:
       description: |
@@ -781,33 +858,41 @@ components:
 
         Pour les immeubles neufs, l'OC peut fournir les informations suivantes
         sur le bailleur et le promoteur immobilier grâce aux champs `realEstateLessor` et `realEstateDeveloper`.
-
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseBase"
         - required:
             - building
           properties:
+            relatedEntity:
+              items:
+                $ref: "#/components/schemas/RelatedBuilding"
+              type: array
+            "@type":
+              type: string
+              default: "AnomalieAdresse.creation"
             building:
               $ref: "#/components/schemas/AnomalieAdresseCreationBuilding"
+      required:
+        - "@type"
 
     AnomalieAdresseCreationBuilding:
       allOf:
-        - $ref: "#/components/schemas/Building"
-        - required:
-            - address
-            - geographicLocation
-            - newConstruction
-            - type
+        - $ref: "#/components/schemas/TroubleTicketBuilding"
+      required:
+        - address
+        - geographicLocation
+        - newConstruction
+        - type
 
     AnomalieAdresseNewBuilding:
       description: |
         *AnomalieAdresseNewBuilding* permet de rajouter un nouveau bâtiment à une adresse existante dans l'IPE.
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseBase"
-        - required:
-            - building
-            - relatedEntity
-          properties:
+        - properties:
+            "@type":
+              type: string
+              default: "AnomalieAdresse.newBuilding"
             relatedEntity:
               type: array
               minItems: 1
@@ -816,25 +901,50 @@ components:
                 $ref: "#/components/schemas/RelatedBuilding"
             building:
               $ref: "#/components/schemas/AnomalieAdresseNewBuildingBuilding"
+      required:
+        - building
+        - relatedEntity
+        - "@type"
 
     AnomalieAdresseNewBuildingBuilding:
       allOf:
-        - $ref: "#/components/schemas/Building"
-        - required:
-            - name
-            - geographicLocation
-            - newConstruction
-            - type
+        - $ref: "#/components/schemas/TroubleTicketBuilding"
+      required:
+        - name
+        - geographicLocation
+        - newConstruction
+        - type
 
     AnomalieAdresseUpdate:
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseBase"
-        - required:
-            - relatedEntity
-          properties:
-            "@baseType":
+        - properties:
+            "@type":
               type: string
-              default: "AnomalieAdresseUpdate"
+              default: "AnomalieAdresse.update"
+            sizeRefs:
+              type: integer
+              description: |
+                Nombre d'immeubles cibles de l'anomalie.
+
+                La valeur est renseignée par l'OI à la création du ticket.
+                Elle est égale à la taille du tableau `relatedEntity`.
+                Elle permet de rechercher plus efficacement les anomalies
+                et de facilement différencier les traitement unitaires et en masse.
+              readOnly: true
+      required:
+        - "@type"
+
+    AnomalieAdresseUpdateImb:
+      description: |
+        *AnomalieAdresseUpdateImb* est une anomalie de type `AnomalieAdresseUpdate`
+        qui permet de mettre à jour un des attributs en masse d'un ou plusieurs immeubles.
+      allOf:
+        - $ref: "#/components/schemas/AnomalieAdresseUpdate"
+        - properties:
+            "@type":
+              type: string
+              default: "AnomalieAdresse.modification"
             relatedEntity:
               description: |
                 Liste des immeubles cibles de l'anomalie.
@@ -846,28 +956,12 @@ components:
               minItems: 1
               items:
                 $ref: "#/components/schemas/RelatedBuilding"
-            sizeRefs:
-              type: integer
-              description: |
-                Nombre d'immeubles cibles de l'anomalie.
-
-                La valeur est renseignée par l'OI à la création du ticket.
-                Elle est égale à la taille du tableau `relatedEntity`.
-                Elle permet de rechercher plus efficacement les anomalies
-                et de facilement différencier les traitement unitaires et en masse.
-              readOnly: true
-
-    AnomalieAdresseUpdateImb:
-      description: |
-        *AnomalieAdresseUpdateImb* est une anomalie de type `AnomalieAdresseUpdate`
-        qui permet de mettre à jour un des attributs en masse d'un ou plusieurs immeubles.
-      allOf:
-        - $ref: "#/components/schemas/AnomalieAdresseUpdate"
-        - required:
-            - issues
-          properties:
             issues:
               $ref: "#/components/schemas/AnomalieAdresseUpdateImbIssues"
+      required:
+        - issues
+        - "@type"
+        - relatedEntity
 
     AnomalieAdresseUpdateImbIssues:
       description: "Les anomalies spécifiques en masse"
@@ -1120,10 +1214,10 @@ components:
         Cette anomalie ne peut contenir qu'une seule correction dont la clé vaut `building.housingsNumber`.
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseUpdate"
-        - required:
-            - issues
-            - relatedEntity
-          properties:
+        - properties:
+            "@type":
+              type: string
+              default: "AnomalieAdresse.nbLogements"
             relatedEntity:
               description: |
                 Liste des immeubles cibles de l'anomalie.
@@ -1138,6 +1232,10 @@ components:
                 $ref: "#/components/schemas/RelatedBuilding"
             issues:
               $ref: "#/components/schemas/AnomalieAdresseUpdateNbLogementsIssues"
+      required:
+        - issues
+        - relatedEntity
+        - "@type"
 
     AnomalieAdresseUpdateNbLogementsIssues:
       type: object
@@ -1157,7 +1255,7 @@ components:
 
             Ce champ est nommé `NombreLogementsAdresseIPE` dans le fichier IPE.
 
-    Building:
+    TroubleTicketBuilding:
       allOf:
         - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/Building
         - properties:
@@ -1182,128 +1280,70 @@ components:
               description: Indique si le bâtiment est neuf.
               type: boolean
 
-    Note:
-      allOf:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Note.openapi.yaml#/components/schemas/Note
-        - properties:
-            relatedEntity:
-              description: |
-                Relation entre la note et l'anomalie.
-                Ce champ est renseigné par l'OI lors de la création de la note.
-              type: array
-              minItems: 1
-              maxItems: 1
-              readOnly: true
-              items:
-                $ref: "#/components/schemas/RelatedAnomalie"
-
-    Attachment:
-      allOf:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/Attachment
-        - description: |
-            An attachment is a file that is attached to an entity.
-
-            Les extensions de fichier autorisées sont:
-
-            * `csv`
-            * `jpeg`
-            * `jpg`
-            * `png`
-            * `svg`
-            * `pdf`
-            * `ods`
-            * `odt`
-            * `xlsx`
-            * `docx`
-
-            Les fichiers contenant du code exécutable comme des scripts ou des macros sont interdits.
-          properties:
-            id:
-              type: string
-              format: uuid
-              readOnly: true
-            mimeType:
-              enum:
-                - text/csv
-                - image/jpeg
-                - image/png
-                - image/svg+xml
-                - application/pdf
-                - application/vnd.oasis.opendocument.spreadsheet
-                - application/vnd.oasis.opendocument.text
-                - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
-                - application/vnd.openxmlformats-officedocument.wordprocessingml.document
-            relatedEntity:
-              description: |
-                Relation entre l'attachment et l'anomalie.
-                Ce champ est renseigné par l'OI lors de la création de l'attachment.
-              type: array
-              minItems: 1
-              maxItems: 1
-              readOnly: true
-              items:
-                $ref: "#/components/schemas/RelatedAnomalie"
-            status:
-              enum:
-                - PENDING
-                - VALIDATED
-                - REJECTED
-
-    AttachmentFormData:
-      allOf:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/tools/attachment/attachment.openapi.yaml#/components/schemas/AttachmentFormData
-        - required:
-            - attachment
-          properties:
-            attachment:
-              $ref: "#/components/schemas/Attachment"
-
-    Event:
-      allOf:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/CloudEvent.openapi.yaml#/components/schemas/CloudEvent
-        - discriminator:
-            propertyName: type
-            mapping:
-              fr.interop.anomalieadresse.update: "#/components/schemas/EventAnomalieAdresse"
-              fr.interop.anomalieadresse.note.create: "#/components/schemas/EventAnomalieAdresseNote"
-              fr.interop.anomalieadresse.attachment.create: "#/components/schemas/EventAnomalieAdresseAttachment"
-              fr.interop.anomalieadresse.attachment.update: "#/components/schemas/EventAnomalieAdresseAttachment"
-          required:
-            - time
-            - subject
-            - type
-          properties:
-            subject:
-              description: Identifiant unique de l'anomalie.
-              type: string
-              format: uuid
-            type:
-              type: string
-            datacontenttype:
-              type: string
-              default: "application/json"
-              example: "application/json"
-
     EventAnomalieAdresse:
       allOf:
-        - $ref: "#/components/schemas/Event"
+        - $ref: https://raw.githubusercontent.com/christophelach/defecto-interop-common/refs/heads/generic-troubleTicket-model-for_codeGen/common/schemas/CloudEvent.openapi.yaml#/components/schemas/TroubleTicketEvent
+        - properties:
+            "@baseType":
+              type: string
+              default: "AnomalieAdresse"
+      discriminator:
+        propertyName: type
+        mapping:
+          fr.interop.anomalieadresse.update: "#/components/schemas/EventAnomalieAdresseUpdate"
+          fr.interop.anomalieadresse.note.create: "#/components/schemas/EventAnomalieAdresseNote"
+          fr.interop.anomalieadresse.attachment.create: "#/components/schemas/EventAnomalieAdresseCreateAttachment"
+          fr.interop.anomalieadresse.attachment.update: "#/components/schemas/EventAnomalieAdresseUpdateAttachment"
+      required:
+        - "@baseType"
+
+    EventAnomalieAdresseUpdate:
+      allOf:
+        - $ref: "#/components/schemas/EventAnomalieAdresse"
         - properties:
             data:
               $ref: "#/components/schemas/AnomalieAdresseBase"
+            type:
+              type: string
+              default: "fr.interop.anomalieadresse.update"
+      required:
+        - "type"
 
     EventAnomalieAdresseNote:
       allOf:
-        - $ref: "#/components/schemas/Event"
+        - $ref: "#/components/schemas/EventAnomalieAdresse"
         - properties:
             data:
-              $ref: "#/components/schemas/Note"
+              $ref: "#/components/schemas/AnomalieAdresseNote"
+            type:
+              type: string
+              default: "fr.interop.anomalieadresse.note.create"
+      required:
+        - "type"
 
-    EventAnomalieAdresseAttachment:
+    EventAnomalieAdresseCreateAttachment:
       allOf:
-        - $ref: "#/components/schemas/Event"
+        - $ref: "#/components/schemas/EventAnomalieAdresse"
         - properties:
             data:
-              $ref: "#/components/schemas/Attachment"
+              $ref: "#/components/schemas/AnomalieAdresseAttachment"
+            type:
+              type: string
+              default: "fr.interop.anomalieadresse.attachment.create"
+      required:
+        - "type"
+
+    EventAnomalieAdresseUpdateAttachment:
+      allOf:
+        - $ref: "#/components/schemas/EventAnomalieAdresse"
+        - properties:
+            data:
+              $ref: "#/components/schemas/AnomalieAdresseAttachment"
+            type:
+              type: string
+              default: fr.interop.anomalieadresse.attachment.update
+      required:
+        - "type"
 
     RelatedBuilding:
       allOf:
