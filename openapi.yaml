@@ -402,7 +402,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/AttachmentFormData"
+              $ref: "https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/AttachmentFormData"
       responses:
         "201":
           description: The created attachment
@@ -1248,15 +1248,6 @@ components:
                 - PENDING
                 - VALIDATED
                 - REJECTED
-
-    AttachmentFormData:
-      allOf:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/tools/attachment/attachment.openapi.yaml#/components/schemas/AttachmentFormData
-        - required:
-            - attachment
-          properties:
-            attachment:
-              $ref: "#/components/schemas/Attachment"
 
     Event:
       allOf:
