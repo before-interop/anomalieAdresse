@@ -1225,6 +1225,7 @@ components:
               format: uuid
               readOnly: true
             mimeType:
+              type: string
               enum:
                 - text/csv
                 - image/jpeg
@@ -1246,6 +1247,7 @@ components:
               items:
                 $ref: "#/components/schemas/RelatedAnomalie"
             status:
+              type: string
               enum:
                 - PENDING
                 - VALIDATED
