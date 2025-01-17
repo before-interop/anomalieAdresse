@@ -992,7 +992,9 @@ components:
         Ce champ est nommé `ComplementNumeroVoieImmeuble` dans le fichier IPE.
       properties:
         value:
-          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/allOf/1/properties/streetNrSuffix
+          type: array
+          items:
+            $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/GeographicAddress.openapi.yaml#/components/schemas/GeographicAddress/allOf/1/properties/streetNrSuffix
         toBlank:
           type: boolean
           description: |
