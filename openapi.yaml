@@ -616,6 +616,11 @@ components:
                 * `AnomalieAdresse.newBuilding`: "#/components/schemas/AnomalieAdresseNewBuilding"
                 * `AnomalieAdresse.modification`: "#/components/schemas/AnomalieAdresseUpdateImb"
                 * `AnomalieAdresse.nbLogements`: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
+            relatedEntity:
+              type: object
+              description: "An entity that is related to the ticket such as a bill,\
+                \ a product, etc. The entity against which the ticket is associated.
+                \ this property has to be overriden in child classes"
             status:
               description: |
                 Le status du ticket.
@@ -656,10 +661,6 @@ components:
                 - CLOSED
                 - REJECTED
                 - CANCELED
-            relatedEntity:
-              type: array
-              items:
-                $ref: "#/components/schemas/RelatedBuilding"
             acknowledgedDuration:
               type: integer
               readOnly: true
@@ -794,17 +795,21 @@ components:
         - required:
             - building
           properties:
+            relatedEntity:
+              type: array
+              items:
+                $ref: "#/components/schemas/RelatedBuilding"
             building:
               $ref: "#/components/schemas/AnomalieAdresseCreationBuilding"
 
     AnomalieAdresseCreationBuilding:
       allOf:
         - $ref: "#/components/schemas/Building"
-        - required:
-            - address
-            - geographicLocation
-            - newConstruction
-            - type
+      required:
+        - address
+        - geographicLocation
+        - newConstruction
+        - type
 
     AnomalieAdresseNewBuilding:
       description: |
@@ -836,23 +841,10 @@ components:
     AnomalieAdresseUpdate:
       allOf:
         - $ref: "#/components/schemas/AnomalieAdresseBase"
-        - required:
-            - relatedEntity
-          properties:
+        - properties:
             "@baseType":
               type: string
               default: "AnomalieAdresseUpdate"
-            relatedEntity:
-              description: |
-                Liste des immeubles cibles de l'anomalie.
-
-                Si cette liste est supérieure à 1, alors l'OI traite les cas possibles de la demande en masse
-                et demande la résolution du ticket.
-                L'OC pourra rouvrir un ticket unitaire si besoin pour chaque cas non résolus.
-              type: array
-              minItems: 1
-              items:
-                $ref: "#/components/schemas/RelatedBuilding"
             sizeRefs:
               type: integer
               description: |
@@ -872,7 +864,19 @@ components:
         - $ref: "#/components/schemas/AnomalieAdresseUpdate"
         - required:
             - issues
+            - relatedEntity
           properties:
+            relatedEntity:
+              description: |
+                Liste des immeubles cibles de l'anomalie.
+
+                Si cette liste est supérieure à 1, alors l'OI traite les cas possibles de la demande en masse
+                et demande la résolution du ticket.
+                L'OC pourra rouvrir un ticket unitaire si besoin pour chaque cas non résolus.
+              type: array
+              minItems: 1
+              items:
+                $ref: "#/components/schemas/RelatedBuilding"
             issues:
               $ref: "#/components/schemas/AnomalieAdresseUpdateImbIssues"
 
