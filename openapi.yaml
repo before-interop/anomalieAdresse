@@ -402,7 +402,14 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: "https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/AttachmentFormData"
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: The file to upload
+                attachment:
+                  $ref: "#/components/schemas/Attachment"
       responses:
         "201":
           description: The created attachment
@@ -1201,7 +1208,8 @@ components:
 
     Attachment:
       allOf:
-        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/Attachment
+        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/AttachmentBase
+        - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/AttachmentMonoPart
         - description: |
             An attachment is a file that is attached to an entity.
 
@@ -1220,10 +1228,6 @@ components:
 
             Les fichiers contenant du code exécutable comme des scripts ou des macros sont interdits.
           properties:
-            id:
-              type: string
-              format: uuid
-              readOnly: true
             mimeType:
               enum:
                 - text/csv
@@ -1245,11 +1249,6 @@ components:
               readOnly: true
               items:
                 $ref: "#/components/schemas/RelatedAnomalie"
-            status:
-              enum:
-                - PENDING
-                - VALIDATED
-                - REJECTED
 
     Event:
       allOf:
