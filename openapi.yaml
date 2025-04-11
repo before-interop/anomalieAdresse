@@ -622,7 +622,8 @@ components:
               readOnly: true
             relatedEntity:
               type: object
-              description: "An entity that is related to the ticket such as a bill,\
+              description:
+                "An entity that is related to the ticket such as a bill,\
                 \ a product, etc. The entity against which the ticket is associated.
                 \ this property has to be overriden in child classes"
             status:
@@ -1266,8 +1267,8 @@ components:
             mapping:
               fr.interop.anomalieadresse.update: "#/components/schemas/EventAnomalieAdresse"
               fr.interop.anomalieadresse.note.create: "#/components/schemas/EventAnomalieAdresseNote"
-              fr.interop.anomalieadresse.attachment.create: "#/components/schemas/EventAnomalieAdresseAttachment"
-              fr.interop.anomalieadresse.attachment.update: "#/components/schemas/EventAnomalieAdresseAttachment"
+              fr.interop.anomalieadresse.attachment.create: "#/components/schemas/EventAnomalieAdresseAttachmentCreation"
+              fr.interop.anomalieadresse.attachment.update: "#/components/schemas/EventAnomalieAdresseAttachmentUpdate"
           required:
             - time
             - subject
@@ -1298,7 +1299,14 @@ components:
             data:
               $ref: "#/components/schemas/Note"
 
-    EventAnomalieAdresseAttachment:
+    EventAnomalieAdresseAttachmentCreation:
+      allOf:
+        - $ref: "#/components/schemas/Event"
+        - properties:
+            data:
+              $ref: "#/components/schemas/Attachment"
+
+    EventAnomalieAdresseAttachmentUpdate:
       allOf:
         - $ref: "#/components/schemas/Event"
         - properties:
