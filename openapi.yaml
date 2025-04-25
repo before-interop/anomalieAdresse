@@ -616,6 +616,10 @@ components:
                 * `AnomalieAdresse.newBuilding`: "#/components/schemas/AnomalieAdresseNewBuilding"
                 * `AnomalieAdresse.modification`: "#/components/schemas/AnomalieAdresseUpdateImb"
                 * `AnomalieAdresse.nbLogements`: "#/components/schemas/AnomalieAdresseUpdateNbLogements"
+            name:
+              type: string
+              description: Le champ `name` est rempli par l'oi au moment de la création du ticket.
+              readOnly: true
             relatedEntity:
               type: object
               description: "An entity that is related to the ticket such as a bill,\
