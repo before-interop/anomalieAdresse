@@ -714,6 +714,7 @@ components:
                 - UNKNOWN_ZONE
                 - UNRESOLVABLE
                 - WAITING_INFORMATION
+                - OC_CANCELATION
             priority:
               readOnly: false
               type: string
